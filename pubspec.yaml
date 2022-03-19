@@ -1,4 +1,4 @@
-name: awrep
+name: metar
 description: An aviation weather METAR/SPECI parser library.
 version: 0.0.1
 
