@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:metar/aviation_weather_report.dart';
+import 'package:awrep/aviation_weather_report.dart';
 
 void main() {
   test('Check if report was aviation weather parsed completely', () {
