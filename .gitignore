@@ -22,3 +22,6 @@ doc/api/
 
 # Conventional directory for build output
 build/
+
+# Exclude .idea configuration files
+.idea/
