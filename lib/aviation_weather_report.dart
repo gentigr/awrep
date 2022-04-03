@@ -1,17 +1,20 @@
 class BodySection {
   ReportType _type;
   String _stationId;
+  ReportDateTime _dateTime;
   ReportModifier _modifier;
 
   BodySection(String body)
       : _type = BodySectionParser.getReportType(body),
         _stationId = BodySectionParser.getStationId(body),
+        _dateTime = BodySectionParser.getDateTime(body),
         _modifier = BodySectionParser.getReportModifier(body);
 
   @override
   String toString() {
     return "${_getReportTypeStr(_type)}"
         " $_stationId"
+        " $_dateTime"
         " ${_getReportModifierStr(_modifier)}";
   }
 
@@ -44,6 +47,15 @@ class ReportDateTime {
   final int minute;
 
   const ReportDateTime(this.day, this.hour, this.minute);
+
+  @override
+  String toString() {
+    return "${_format(day)}${_format(hour)}${_format(minute)}Z";
+  }
+
+  static String _format(int num) {
+    return num.toString().padLeft(2, '0');
+  }
 }
 
 enum ReportModifier {

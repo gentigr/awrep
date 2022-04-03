@@ -2,6 +2,9 @@ import 'package:awrep/aviation_weather_report.dart';
 import 'package:test/test.dart';
 
 void main() {
+  group('reportDateTime', () {
+    reportDateTime();
+  });
   group('aviationWeatherReport', () {
     aviationWeatherReport();
   });
@@ -15,6 +18,29 @@ void main() {
     bodySectionParser();
   });
 }
+
+void reportDateTime() {
+  group('toString', () {
+    reportDateTimeToString();
+  });
+}
+
+void reportDateTimeToString() {
+  test('test day less than 10', () {
+    ReportDateTime rdt = ReportDateTime(1, 12, 12);
+
+    expect(rdt.toString(), "011212Z");
+  });
+  test('test hour less than 10', () {
+    ReportDateTime rdt = ReportDateTime(10, 1, 12);
+
+    expect(rdt.toString(), "100112Z");
+  });
+  test('test minute less than 10', () {
+    ReportDateTime rdt = ReportDateTime(12, 12, 1);
+
+    expect(rdt.toString(), "121201Z");
+  });}
 
 void aviationWeatherReport() {
   test('Check if aviation weather report was parsed completely; with rmk', () {
@@ -59,7 +85,7 @@ void bodySectionToString() {
         "SPECI KJFK 190351Z AUTO 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
 
     BodySection bs = BodySection(body);
-    expect(bs.toString(), "SPECI KJFK AUTO");
+    expect(bs.toString(), "SPECI KJFK 190351Z AUTO");
   });
 }
 
