@@ -69,18 +69,20 @@ class BodySectionParser {
   }
 
   static String getStationId(String body) {
-    checkFormat(body);
-    return bodyRegex.firstMatch(body)!.namedGroup("station_id")!.trim();
+    return _getNamedGroup(body, "station_id");
   }
 
   static ReportDateTime getDateTime(String body) {
-    checkFormat(body);
-    String dateTime =
-        bodyRegex.firstMatch(body)!.namedGroup("date_and_time")!.trim();
+    String dateTime = _getNamedGroup(body, "date_and_time");
     return ReportDateTime(
         int.parse(dateTime.substring(0, 2)),
         int.parse(dateTime.substring(2, 4)),
         int.parse(dateTime.substring(4, 6)));
+  }
+
+  static String _getNamedGroup(String body, String name) {
+    checkFormat(body);
+    return bodyRegex.firstMatch(body)!.namedGroup(name)!.trim();
   }
 }
 
