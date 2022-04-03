@@ -1,10 +1,7 @@
 class BodySection {
   late ReportType _type;
 
-  BodySection(String body) {
-    BodySectionParser.checkFormat(body);
-    _type = BodySectionParser.getReportType(body);
-  }
+  BodySection(String body) : _type = BodySectionParser.getReportType(body);
 
   @override
   String toString() {
@@ -20,16 +17,16 @@ class BodySection {
 }
 
 class BodySectionParserException implements Exception {
-  final String errorMessage;
+  final String message;
 
-  const BodySectionParserException(this.errorMessage);
+  const BodySectionParserException(this.message);
 
-  String errMsg() => this.errorMessage;
+  String errMsg() => this.message;
 }
 
 class BodySectionParser {
   static final bodyRegex =
-      RegExp(r'^(?<type>[^ ]{5} )?(?<station>[^ ]{4} )?(?<all>.*)$');
+      RegExp(r'^(?<type>[^ ]{5} )?(?<station>[^ ]{4} )(?<all>.*)$');
 
   static void checkFormat(String body) {
     if (!bodyRegex.hasMatch(body)) {
@@ -43,11 +40,17 @@ class BodySectionParser {
   }
 
   static ReportType getReportType(String body) {
-    if (body.startsWith("METAR ")) {
-      return ReportType.metar;
-    }
-    if (body.startsWith("SPECI ")) {
-      return ReportType.speci;
+    checkFormat(body);
+    String? type = bodyRegex.firstMatch(body)!.namedGroup("type");
+    if (type != null) {
+      switch (type!.trim()) {
+        case "METAR":
+          return ReportType.metar;
+        case "SPECI":
+          return ReportType.speci;
+        default:
+          return ReportType.undefined;
+      }
     }
     return ReportType.none;
   }
@@ -60,6 +63,7 @@ class RemarksSection {
 }
 
 enum ReportType {
+  undefined,
   none,
   metar,
   speci,

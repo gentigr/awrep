@@ -39,6 +39,32 @@ void aviationWeatherReportParser() {
 }
 
 void bodySectionParser() {
+  test('Test format exception: no station', () {
+    final body = "190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.checkFormat(body),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message == "Failed to parse body section of weather report")));
+  });
+  test('Test format exception: multiple matches', () {
+    final body =
+        "KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.checkFormat("$body\n$body"),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message ==
+                "Too many matches were found in body section of weather report")));
+  }, skip: 'currently failing due to lack of complete regex');
+  test('Test report type: undefined', () {
+    final body =
+        "UNDEF KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getReportType(body), ReportType.undefined);
+  });
   test('Test report type: none', () {
     final body =
         "KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
