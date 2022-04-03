@@ -93,12 +93,21 @@ class ReportWind {
         vrbTo = 0;
   const ReportWind.vrb(this.direction, this.velocity, this.vrbFrom, this.vrbTo)
       : gust = 0;
+  const ReportWind.lgt(this.velocity)
+      : direction = -1,
+        gust = 0,
+        vrbFrom = 0,
+        vrbTo = 0;
   const ReportWind.all(
       this.direction, this.velocity, this.gust, this.vrbFrom, this.vrbTo);
 
   @override
   String toString() {
     String directionStr = direction.toString().padLeft(3, '0');
+    if (direction < 0) {
+      // light variable direction
+      directionStr = "VRB";
+    }
     String velocityStr = velocity.toString().padLeft(2, '0');
     String gustStr = (gust == 0 ? "" : "G${gust.toString().padLeft(2, '0')}");
     String vrbStr = "";
@@ -117,7 +126,7 @@ class BodySectionParser {
   static final _dateAndTime = "(?<date_and_time>[0-9^ ]{6}Z )";
   static final _modifier = "(?<modifier>[^ ]{3,4} )?";
   static final _windStd =
-      "(?<wind_direction>[0-9]{3})(?<wind_velocity>[0-9]{2,3})";
+      "(?<wind_direction>[0-9]{3}|VRB)(?<wind_velocity>[0-9]{2,3})";
   static final _windGst = "(([G]{1})(?<wind_gust>[0-9]{2,3}))?";
   static final _windVrb =
       "( (?<wind_vrb_from>[0-9]{3})V(?<wind_vrb_to>[0-9]{3}))?";
@@ -187,6 +196,10 @@ class BodySectionParser {
   static ReportWind getWind(String body) {
     String direction = _getNamedGroup(body, "wind_direction");
     String velocity = _getNamedGroup(body, "wind_velocity");
+    if (direction == "VRB") {
+      return ReportWind.lgt(int.parse(velocity));
+    }
+
     String gust = _getNamedGroupOptional(body, "wind_gust") ?? "0";
     String vrbFrom = _getNamedGroupOptional(body, "wind_vrb_from") ?? "0";
     String vrbTo = _getNamedGroupOptional(body, "wind_vrb_to") ?? "0";

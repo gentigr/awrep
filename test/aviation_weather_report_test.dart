@@ -86,6 +86,9 @@ void windToString() {
   test('test variable wind', () {
     expect(ReportWind.vrb(100, 5, 70, 130).toString(), "10005KT 070V130");
   });
+  test('test variable light wind', () {
+    expect(ReportWind.lgt(6).toString(), "VRB06KT");
+  });
   test('test variable gust wind', () {
     expect(ReportWind.all(30, 15, 25, 0, 60).toString(), "03015G25KT 000V060");
   });
@@ -390,6 +393,12 @@ void bodySectionParserGetWind() {
   test('test variable wind', () {
     final body = "KJFK 190351Z COR 10005KT 070V130 1/4SM BR OVC002 08/08 A3002";
     final ReportWind expected = ReportWind.all(100, 5, 0, 70, 130);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test variable light wind', () {
+    final body = "KJFK 190351Z COR VRB06KT 070V130 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.lgt(6);
     final ReportWind actual = BodySectionParser.getWind(body);
     compareReportWindObjects(actual, expected);
   });
