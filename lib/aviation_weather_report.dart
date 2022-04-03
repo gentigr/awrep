@@ -32,13 +32,22 @@ class ReportDateTime {
   const ReportDateTime(this.day, this.hour, this.minute);
 }
 
+enum ReportModifier {
+  undefined,
+  none,
+  auto,
+  cor,
+}
+
 class BodySectionParser {
   static final _typeOfReport = "(?<type>[^ ]{5} )?";
   static final _stationIdentifier = "(?<station_id>[a-zA-Z^ ]{4} )";
   static final _dateAndTime = "(?<date_and_time>[0-9^ ]{6}Z )";
+  static final _modifier = "(?<modifier>[^ ]{3,4} )?";
   static final bodyRegex = RegExp('^$_typeOfReport'
       '$_stationIdentifier'
       '$_dateAndTime'
+      '$_modifier'
       '(?<all>.*)\$');
 
   static void checkFormat(String body) {
@@ -78,6 +87,22 @@ class BodySectionParser {
         int.parse(dateTime.substring(0, 2)),
         int.parse(dateTime.substring(2, 4)),
         int.parse(dateTime.substring(4, 6)));
+  }
+
+  static ReportModifier getReportModifier(String body) {
+    checkFormat(body);
+    String? modifier = bodyRegex.firstMatch(body)!.namedGroup("modifier");
+    if (modifier == null) {
+      return ReportModifier.none;
+    }
+    switch (modifier.trim()) {
+      case "AUTO":
+        return ReportModifier.auto;
+      case "COR":
+        return ReportModifier.cor;
+      default:
+        return ReportModifier.undefined;
+    }
   }
 
   static String _getNamedGroup(String body, String name) {

@@ -57,6 +57,9 @@ void bodySectionParser() {
   group('getDateTime', () {
     bodySectionParserGetDateTime();
   });
+  group('getReportModifier', () {
+    bodySectionParserGetReportModifier();
+  });
 }
 
 void bodySectionParserCheckFormat() {
@@ -165,5 +168,42 @@ void bodySectionParserGetDateTime() {
     expect(actualDateTime.day, expectedDateTime.day);
     expect(actualDateTime.hour, expectedDateTime.hour);
     expect(actualDateTime.minute, expectedDateTime.minute);
+  });
+}
+
+void bodySectionParserGetReportModifier() {
+  test('test bad format', () {
+    final body =
+        "190351Z COR 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.getReportModifier(body),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message == "Failed to parse body section of weather report")));
+  });
+  test('test undefined report modifier', () {
+    final body =
+        "KJFK 190351Z CCC 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getReportModifier(body), ReportModifier.undefined);
+  });
+  test('test no report modifier', () {
+    final body =
+        "KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getReportModifier(body), ReportModifier.none);
+  });
+  test('test auto report type', () {
+    final body =
+        "METAR KJFK 190351Z AUTO 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getReportModifier(body), ReportModifier.auto);
+  });
+  test('test cor report type', () {
+    final body =
+        "SPECI KJFK 190351Z COR 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getReportModifier(body), ReportModifier.cor);
   });
 }
