@@ -80,6 +80,15 @@ void bodySectionParserCheckFormat() {
 }
 
 void bodySectionParserGetReportType() {
+  test('test bad format', () {
+    final body = "190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.getReportType(body),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message == "Failed to parse body section of weather report")));
+  });
   test('test undefined report type', () {
     final body =
         "UNDEF KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
