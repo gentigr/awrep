@@ -3,19 +3,22 @@ class BodySection {
   String _stationId;
   ReportDateTime _dateTime;
   ReportModifier _modifier;
+  ReportWind _wind;
 
   BodySection(String body)
       : _type = BodySectionParser.getReportType(body),
         _stationId = BodySectionParser.getStationId(body),
         _dateTime = BodySectionParser.getDateTime(body),
-        _modifier = BodySectionParser.getReportModifier(body);
+        _modifier = BodySectionParser.getReportModifier(body),
+        _wind = BodySectionParser.getWind(body);
 
   @override
   String toString() {
     return "${_getReportTypeStr(_type)}"
         " $_stationId"
         " $_dateTime"
-        " ${_getReportModifierStr(_modifier)}";
+        " ${_getReportModifierStr(_modifier)}"
+        " $_wind";
   }
 
   static String _getReportTypeStr(ReportType reportType) {
@@ -110,10 +113,17 @@ class BodySectionParser {
   static final _stationIdentifier = "(?<station_id>[a-zA-Z^ ]{4} )";
   static final _dateAndTime = "(?<date_and_time>[0-9^ ]{6}Z )";
   static final _modifier = "(?<modifier>[^ ]{3,4} )?";
+  static final _windStd =
+      "(?<wind_direction>[0-9]{3})(?<wind_velocity>[0-9]{2,3})";
+  static final _windGst = "(([G]{1})(?<wind_gust>[0-9]{2,3}))?";
+  static final _windVrb =
+      "( (?<wind_vrb_from>[0-9]{3})V(?<wind_vrb_to>[0-9]{3}))?";
+  static final _wind = '$_windStd$_windGst\KT$_windVrb';
   static final bodyRegex = RegExp('^$_typeOfReport'
       '$_stationIdentifier'
       '$_dateAndTime'
       '$_modifier'
+      '$_wind'
       '(?<all>.*)\$');
 
   static void checkFormat(String body) {
@@ -169,6 +179,17 @@ class BodySectionParser {
       default:
         return ReportModifier.undefined;
     }
+  }
+
+  static ReportWind getWind(String body) {
+    String direction = _getNamedGroup(body, "wind_direction");
+    String velocity = _getNamedGroup(body, "wind_velocity");
+    String gust = bodyRegex.firstMatch(body)!.namedGroup("wind_gust") ?? "0";
+    String vrbFrom =
+        bodyRegex.firstMatch(body)!.namedGroup("wind_vrb_from") ?? "0";
+    String vrbTo = bodyRegex.firstMatch(body)!.namedGroup("wind_vrb_to") ?? "0";
+    return ReportWind.all(int.parse(direction), int.parse(velocity),
+        int.parse(gust), int.parse(vrbFrom), int.parse(vrbTo));
   }
 
   static String _getNamedGroup(String body, String name) {
