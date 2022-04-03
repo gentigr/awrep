@@ -56,7 +56,7 @@ class BodySectionParser {
     checkFormat(body);
     String? type = bodyRegex.firstMatch(body)!.namedGroup("type");
     if (type != null) {
-      switch (type!.trim()) {
+      switch (type.trim()) {
         case "METAR":
           return ReportType.metar;
         case "SPECI":
