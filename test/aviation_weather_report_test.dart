@@ -154,6 +154,9 @@ void bodySectionParser() {
   group('getReportModifier', () {
     bodySectionParserGetReportModifier();
   });
+  group('getWind', () {
+    bodySectionParserGetWind();
+  });
   group('getVisibility', () {
     bodySectionParserGetVisibility();
   });
@@ -302,6 +305,100 @@ void bodySectionParserGetReportModifier() {
         "SPECI KJFK 190351Z COR 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
 
     expect(BodySectionParser.getReportModifier(body), ReportModifier.cor);
+  });
+}
+
+void compareReportWindObjects(ReportWind src, ReportWind dst) {
+  expect(src.direction, dst.direction);
+  expect(src.velocity, dst.velocity);
+  expect(src.gust, dst.gust);
+  expect(src.vrbFrom, dst.vrbFrom);
+  expect(src.vrbTo, dst.vrbTo);
+}
+
+void bodySectionParserGetWind() {
+  test('test bad format', () {
+    final body = "KJFK 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.getWind(body),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message == "Failed to parse body section of weather report")));
+  });
+  test('test calm wind', () {
+    final body = "KJFK 190351Z COR 00000KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(0, 0, 0, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test one-symbol velocity wind', () {
+    final body = "KJFK 190351Z COR 10008KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(100, 8, 0, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test two-symbol velocity wind', () {
+    final body = "KJFK 190351Z COR 10088KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(100, 88, 0, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test three-symbol velocity wind', () {
+    final body = "KJFK 190351Z COR 100888KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(100, 888, 0, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test one-symbol direction wind', () {
+    final body = "KJFK 190351Z COR 00205KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(2, 5, 0, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test two-symbol direction wind', () {
+    final body = "KJFK 190351Z COR 02005KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(20, 5, 0, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test three-symbol direction wind', () {
+    final body = "KJFK 190351Z COR 20005KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(200, 5, 0, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test one-symbol gust wind', () {
+    expect(ReportWind.gst(100, 5, 9).toString(), "10005G09KT");
+    final body = "KJFK 190351Z COR 10005G09KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(100, 5, 9, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test two-symbol gust wind', () {
+    final body = "KJFK 190351Z COR 10005G90KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(100, 5, 90, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test three-symbol gust wind', () {
+    final body = "KJFK 190351Z COR 10005G900KT 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(100, 5, 900, 0, 0);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test variable wind', () {
+    final body = "KJFK 190351Z COR 10005KT 070V130 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(100, 5, 0, 70, 130);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
+  });
+  test('test variable gust wind', () {
+    final body =
+        "KJFK 190351Z COR 03015G25KT 000V060 1/4SM BR OVC002 08/08 A3002";
+    final ReportWind expected = ReportWind.all(30, 15, 25, 0, 60);
+    final ReportWind actual = BodySectionParser.getWind(body);
+    compareReportWindObjects(actual, expected);
   });
 }
 
