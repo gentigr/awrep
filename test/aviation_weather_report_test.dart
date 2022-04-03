@@ -54,6 +54,9 @@ void bodySectionParser() {
   group('getStationId', () {
     bodySectionParserGetStationId();
   });
+  group('getDateTime', () {
+    bodySectionParserGetDateTime();
+  });
 }
 
 void bodySectionParserCheckFormat() {
@@ -140,5 +143,27 @@ void bodySectionParserGetStationId() {
         "SPECI KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
 
     expect(BodySectionParser.getStationId(body), "KJFK");
+  });
+}
+
+void bodySectionParserGetDateTime() {
+  test('test no time', () {
+    final body = "KJFK 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.getDateTime(body),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message == "Failed to parse body section of weather report")));
+  });
+  test('test correct date time', () {
+    final body =
+        "SPECI KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    final expectedDateTime = ReportDateTime(19, 03, 51);
+    final actualDateTime = BodySectionParser.getDateTime(body);
+    expect(actualDateTime.day, expectedDateTime.day);
+    expect(actualDateTime.hour, expectedDateTime.hour);
+    expect(actualDateTime.minute, expectedDateTime.minute);
   });
 }

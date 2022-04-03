@@ -24,10 +24,22 @@ class BodySectionParserException implements Exception {
   String errMsg() => this.message;
 }
 
+class ReportDateTime {
+  final int day;
+  final int hour;
+  final int minute;
+
+  const ReportDateTime(this.day, this.hour, this.minute);
+}
+
 class BodySectionParser {
   static final _typeOfReport = "(?<type>[^ ]{5} )?";
   static final _stationIdentifier = "(?<station_id>[a-zA-Z^ ]{4} )";
-  static final bodyRegex = RegExp('^$_typeOfReport$_stationIdentifier(?<all>.*)\$');
+  static final _dateAndTime = "(?<date_and_time>[0-9^ ]{6}Z )";
+  static final bodyRegex = RegExp('^$_typeOfReport'
+      '$_stationIdentifier'
+      '$_dateAndTime'
+      '(?<all>.*)\$');
 
   static void checkFormat(String body) {
     if (!bodyRegex.hasMatch(body)) {
@@ -55,9 +67,20 @@ class BodySectionParser {
     }
     return ReportType.none;
   }
+
   static String getStationId(String body) {
     checkFormat(body);
     return bodyRegex.firstMatch(body)!.namedGroup("station_id")!.trim();
+  }
+
+  static ReportDateTime getDateTime(String body) {
+    checkFormat(body);
+    String dateTime =
+        bodyRegex.firstMatch(body)!.namedGroup("date_and_time")!.trim();
+    return ReportDateTime(
+        int.parse(dateTime.substring(0, 2)),
+        int.parse(dateTime.substring(2, 4)),
+        int.parse(dateTime.substring(4, 6)));
   }
 }
 
