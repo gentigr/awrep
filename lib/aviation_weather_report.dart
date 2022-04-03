@@ -65,6 +65,46 @@ enum ReportModifier {
   cor,
 }
 
+class ReportWind {
+  final int direction;
+  final int velocity;
+  final int gust;
+  final int vrbFrom;
+  final int vrbTo;
+
+  const ReportWind.clm()
+      : direction = 0,
+        velocity = 0,
+        gust = 0,
+        vrbFrom = 0,
+        vrbTo = 0;
+  const ReportWind.std(this.direction, this.velocity)
+      : gust = 0,
+        vrbFrom = 0,
+        vrbTo = 0;
+  const ReportWind.gst(this.direction, this.velocity, this.gust)
+      : vrbFrom = 0,
+        vrbTo = 0;
+  const ReportWind.vrb(this.direction, this.velocity, this.vrbFrom, this.vrbTo)
+      : gust = 0;
+  const ReportWind.all(
+      this.direction, this.velocity, this.gust, this.vrbFrom, this.vrbTo);
+
+  @override
+  String toString() {
+    String directionStr = direction.toString().padLeft(3, '0');
+    String velocityStr = velocity.toString().padLeft(2, '0');
+    String gustStr = (gust == 0 ? "" : "G${gust.toString().padLeft(2, '0')}");
+    String vrbStr = "";
+    if (vrbFrom > 0 || vrbTo > 0) {
+      String vrbFromStr = vrbFrom.toString().padLeft(3, '0');
+      String vrbToStr = vrbTo.toString().padLeft(3, '0');
+      vrbStr = " $vrbFromStr\V$vrbToStr";
+    }
+    return "$directionStr$velocityStr$gustStr\KT$vrbStr";
+  }
+}
+
 class BodySectionParser {
   static final _typeOfReport = "(?<type>[^ ]{5} )?";
   static final _stationIdentifier = "(?<station_id>[a-zA-Z^ ]{4} )";

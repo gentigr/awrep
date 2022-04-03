@@ -5,6 +5,9 @@ void main() {
   group('reportDateTime', () {
     reportDateTime();
   });
+  group('wind', () {
+    wind();
+  });
   group('aviationWeatherReport', () {
     aviationWeatherReport();
   });
@@ -40,7 +43,53 @@ void reportDateTimeToString() {
     ReportDateTime rdt = ReportDateTime(12, 12, 1);
 
     expect(rdt.toString(), "121201Z");
-  });}
+  });
+}
+
+void wind() {
+  group('toString', () {
+    windToString();
+  });
+}
+
+void windToString() {
+  test('test calm wind', () {
+    expect(ReportWind.clm().toString(), "00000KT");
+  });
+  test('test one-symbol velocity wind', () {
+    expect(ReportWind.std(100, 8).toString(), "10008KT");
+  });
+  test('test two-symbol velocity wind', () {
+    expect(ReportWind.std(100, 88).toString(), "10088KT");
+  });
+  test('test three-symbol velocity wind', () {
+    expect(ReportWind.std(100, 888).toString(), "100888KT");
+  });
+  test('test one-symbol direction wind', () {
+    expect(ReportWind.std(2, 5).toString(), "00205KT");
+  });
+  test('test two-symbol direction wind', () {
+    expect(ReportWind.std(20, 5).toString(), "02005KT");
+  });
+  test('test three-symbol direction wind', () {
+    expect(ReportWind.std(200, 5).toString(), "20005KT");
+  });
+  test('test one-symbol gust wind', () {
+    expect(ReportWind.gst(100, 5, 9).toString(), "10005G09KT");
+  });
+  test('test two-symbol gust wind', () {
+    expect(ReportWind.gst(100, 5, 90).toString(), "10005G90KT");
+  });
+  test('test three-symbol gust wind', () {
+    expect(ReportWind.gst(100, 5, 900).toString(), "10005G900KT");
+  });
+  test('test variable wind', () {
+    expect(ReportWind.vrb(100, 5, 70, 130).toString(), "10005KT 070V130");
+  });
+  test('test variable gust wind', () {
+    expect(ReportWind.all(30, 15, 25, 0, 60).toString(), "03015G25KT 000V060");
+  });
+}
 
 void aviationWeatherReport() {
   test('Check if aviation weather report was parsed completely; with rmk', () {
