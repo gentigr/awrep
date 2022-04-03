@@ -1,7 +1,10 @@
 class BodySection {
-  ReportType _type;
+  late ReportType _type;
 
-  BodySection(String body) : _type = BodySectionParser.getReportType(body) {}
+  BodySection(String body) {
+    BodySectionParser.checkFormat(body);
+    _type = BodySectionParser.getReportType(body);
+  }
 
   @override
   String toString() {
@@ -16,7 +19,29 @@ class BodySection {
   }
 }
 
+class BodySectionParserException implements Exception {
+  final String errorMessage;
+
+  const BodySectionParserException(this.errorMessage);
+
+  String errMsg() => this.errorMessage;
+}
+
 class BodySectionParser {
+  static final bodyRegex =
+      RegExp(r'^(?<type>[^ ]{5} )?(?<station>[^ ]{4} )?(?<all>.*)$');
+
+  static void checkFormat(String body) {
+    if (!bodyRegex.hasMatch(body)) {
+      throw new BodySectionParserException(
+          "Failed to parse body section of weather report");
+    }
+    if (bodyRegex.allMatches(body).length > 1) {
+      throw new BodySectionParserException(
+          "Too many matches were found in body section of weather report");
+    }
+  }
+
   static ReportType getReportType(String body) {
     if (body.startsWith("METAR ")) {
       return ReportType.metar;
