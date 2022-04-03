@@ -2,9 +2,15 @@ import 'package:awrep/aviation_weather_report.dart';
 import 'package:test/test.dart';
 
 void main() {
-  aviationWeatherReport();
-  aviationWeatherReportParser();
-  bodySectionParser();
+  group('aviationWeatherReport', () {
+    aviationWeatherReport();
+  });
+  group('aviationWeatherReportParser', () {
+    aviationWeatherReportParser();
+  });
+  group('bodySectionParser', () {
+    bodySectionParser();
+  });
 }
 
 void aviationWeatherReport() {
