@@ -25,8 +25,9 @@ class BodySectionParserException implements Exception {
 }
 
 class BodySectionParser {
-  static final bodyRegex =
-      RegExp(r'^(?<type>[^ ]{5} )?(?<station>[^ ]{4} )(?<all>.*)$');
+  static final _typeOfReport = "(?<type>[^ ]{5} )?";
+  static final _stationIdentifier = "(?<station_id>[a-zA-Z^ ]{4} )";
+  static final bodyRegex = RegExp('^$_typeOfReport$_stationIdentifier(?<all>.*)\$');
 
   static void checkFormat(String body) {
     if (!bodyRegex.hasMatch(body)) {
@@ -53,6 +54,10 @@ class BodySectionParser {
       }
     }
     return ReportType.none;
+  }
+  static String getStationIdentifier(String body) {
+    checkFormat(body);
+    return bodyRegex.firstMatch(body)!.namedGroup("station_id")!.trim();
   }
 }
 

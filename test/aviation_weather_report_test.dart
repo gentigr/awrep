@@ -89,4 +89,29 @@ void bodySectionParser() {
 
     expect(BodySectionParser.getReportType(body), ReportType.speci);
   });
+  test('Test station identifier: no station', () {
+    final body = "190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.getStationIdentifier(body),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message == "Failed to parse body section of weather report")));
+  });
+  test('Test station identifier: non-alphabetic station', () {
+    final body =
+        "K1JF 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.getStationIdentifier(body),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message == "Failed to parse body section of weather report")));
+  });
+  test('Test station identifier: success', () {
+    final body =
+        "SPECI KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getStationIdentifier(body), "KJFK");
+  });
 }
