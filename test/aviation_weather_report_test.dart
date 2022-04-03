@@ -440,4 +440,14 @@ void bodySectionParserGetVisibility() {
 
     expect(BodySectionParser.getVisibility(body), "30");
   });
+  test('test plus visibility', () {
+    final body = "METAR KJFK 190351Z AUTO 18004KT P30SM BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getVisibility(body), "P30");
+  });
+  test('test minus visibility', () {
+    final body = "METAR KJFK 190351Z AUTO 18004KT M30SM BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getVisibility(body), "M30");
+  });
 }

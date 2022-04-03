@@ -131,7 +131,7 @@ class BodySectionParser {
   static final _windVrb =
       "( (?<wind_vrb_from>[0-9]{3})V(?<wind_vrb_to>[0-9]{3}))?";
   static final _wind = '$_windStd$_windGst\KT$_windVrb';
-  static final _visibility = '( (?<visibility>[0-9 \/]+)SM)';
+  static final _visibility = '( (?<visibility>[0-9 \/pPmM]+)SM)';
   static final bodyRegex = RegExp('^$_typeOfReport'
       '$_stationIdentifier'
       '$_dateAndTime'
