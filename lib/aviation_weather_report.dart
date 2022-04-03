@@ -138,8 +138,7 @@ class BodySectionParser {
   }
 
   static ReportType getReportType(String body) {
-    checkFormat(body);
-    String? type = bodyRegex.firstMatch(body)!.namedGroup("type");
+    String? type = _getNamedGroupOptional(body, "type");
     if (type != null) {
       switch (type.trim()) {
         case "METAR":
@@ -166,8 +165,7 @@ class BodySectionParser {
   }
 
   static ReportModifier getReportModifier(String body) {
-    checkFormat(body);
-    String? modifier = bodyRegex.firstMatch(body)!.namedGroup("modifier");
+    String? modifier = _getNamedGroupOptional(body, "modifier");
     if (modifier == null) {
       return ReportModifier.none;
     }
@@ -184,10 +182,9 @@ class BodySectionParser {
   static ReportWind getWind(String body) {
     String direction = _getNamedGroup(body, "wind_direction");
     String velocity = _getNamedGroup(body, "wind_velocity");
-    String gust = bodyRegex.firstMatch(body)!.namedGroup("wind_gust") ?? "0";
-    String vrbFrom =
-        bodyRegex.firstMatch(body)!.namedGroup("wind_vrb_from") ?? "0";
-    String vrbTo = bodyRegex.firstMatch(body)!.namedGroup("wind_vrb_to") ?? "0";
+    String gust = _getNamedGroupOptional(body, "wind_gust") ?? "0";
+    String vrbFrom = _getNamedGroupOptional(body, "wind_vrb_from") ?? "0";
+    String vrbTo = _getNamedGroupOptional(body, "wind_vrb_to") ?? "0";
     return ReportWind.all(int.parse(direction), int.parse(velocity),
         int.parse(gust), int.parse(vrbFrom), int.parse(vrbTo));
   }
@@ -195,6 +192,11 @@ class BodySectionParser {
   static String _getNamedGroup(String body, String name) {
     checkFormat(body);
     return bodyRegex.firstMatch(body)!.namedGroup(name)!.trim();
+  }
+
+  static String? _getNamedGroupOptional(String body, String name) {
+    checkFormat(body);
+    return bodyRegex.firstMatch(body)!.namedGroup(name);
   }
 }
 
