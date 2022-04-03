@@ -55,7 +55,7 @@ class BodySectionParser {
     }
     return ReportType.none;
   }
-  static String getStationIdentifier(String body) {
+  static String getStationId(String body) {
     checkFormat(body);
     return bodyRegex.firstMatch(body)!.namedGroup("station_id")!.trim();
   }
