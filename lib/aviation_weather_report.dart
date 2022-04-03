@@ -1,11 +1,15 @@
 class BodySection {
   ReportType _type;
+  String _stationId;
 
-  BodySection(String body) : _type = BodySectionParser.getReportType(body);
+  BodySection(String body)
+      : _type = BodySectionParser.getReportType(body),
+        _stationId = BodySectionParser.getStationId(body);
 
   @override
   String toString() {
-    return "${_getReportTypeStr(_type)}";
+    return "${_getReportTypeStr(_type)}"
+        " $_stationId";
   }
 
   static String _getReportTypeStr(ReportType reportType) {

@@ -8,6 +8,9 @@ void main() {
   group('aviationWeatherReportParser', () {
     aviationWeatherReportParser();
   });
+  group('bodySection', () {
+    bodySection();
+  });
   group('bodySectionParser', () {
     bodySectionParser();
   });
@@ -41,6 +44,22 @@ void aviationWeatherReportParser() {
     expect(AviationWeatherReportParser.getBodySectionFromReport(report), body);
     expect(AviationWeatherReportParser.getRemarksSectionFromReport(report),
         remarks);
+  });
+}
+
+void bodySection() {
+  group('toString', () {
+    bodySectionToString();
+  });
+}
+
+void bodySectionToString() {
+  test('test speci report type', () {
+    final body =
+        "SPECI KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    BodySection bs = BodySection(body);
+    expect(bs.toString(), "SPECI KJFK");
   });
 }
 
