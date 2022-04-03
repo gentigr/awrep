@@ -4,13 +4,15 @@ class BodySection {
   ReportDateTime _dateTime;
   ReportModifier _modifier;
   ReportWind _wind;
+  String _visibility;
 
   BodySection(String body)
       : _type = BodySectionParser.getReportType(body),
         _stationId = BodySectionParser.getStationId(body),
         _dateTime = BodySectionParser.getDateTime(body),
         _modifier = BodySectionParser.getReportModifier(body),
-        _wind = BodySectionParser.getWind(body);
+        _wind = BodySectionParser.getWind(body),
+        _visibility = BodySectionParser.getVisibility(body);
 
   @override
   String toString() {
@@ -18,7 +20,8 @@ class BodySection {
         " $_stationId"
         " $_dateTime"
         " ${_getReportModifierStr(_modifier)}"
-        " $_wind";
+        " $_wind"
+        " $_visibility\SM";
   }
 
   static String _getReportTypeStr(ReportType reportType) {
@@ -119,11 +122,13 @@ class BodySectionParser {
   static final _windVrb =
       "( (?<wind_vrb_from>[0-9]{3})V(?<wind_vrb_to>[0-9]{3}))?";
   static final _wind = '$_windStd$_windGst\KT$_windVrb';
+  static final _visibility = '( (?<visibility>[0-9 \/]+)SM)';
   static final bodyRegex = RegExp('^$_typeOfReport'
       '$_stationIdentifier'
       '$_dateAndTime'
       '$_modifier'
       '$_wind'
+      '$_visibility'
       '(?<all>.*)\$');
 
   static void checkFormat(String body) {
@@ -187,6 +192,10 @@ class BodySectionParser {
     String vrbTo = _getNamedGroupOptional(body, "wind_vrb_to") ?? "0";
     return ReportWind.all(int.parse(direction), int.parse(velocity),
         int.parse(gust), int.parse(vrbFrom), int.parse(vrbTo));
+  }
+
+  static String getVisibility(String body) {
+    return _getNamedGroup(body, "visibility");
   }
 
   static String _getNamedGroup(String body, String name) {
