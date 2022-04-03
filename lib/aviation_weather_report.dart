@@ -40,16 +40,6 @@ enum ReportType {
   speci,
 }
 
-class ReportParsingUtils {
-  static getBodySectionFromReport(String report) {
-    return report.split(" RMK ")[0].trim();
-  }
-
-  static getRemarksSectionFromReport(String report) {
-    return report.split(" RMK ")[1].trim();
-  }
-}
-
 class AviationWeatherReport {
   final BodySection _body;
   final RemarksSection _remarks;
@@ -68,10 +58,16 @@ class AviationWeatherReport {
 
 class AviationWeatherReportParser {
   static getBodySectionFromReport(String report) {
-    return report.split(" RMK ")[0].trim();
+    if (report.contains(" RMK ")) {
+      return report.split(" RMK ")[0].trim();
+    }
+    return report;
   }
 
   static getRemarksSectionFromReport(String report) {
-    return report.split(" RMK ")[1].trim();
+    if (report.contains(" RMK ")) {
+      return report.split(" RMK ")[1].trim();
+    }
+    return "";
   }
 }
