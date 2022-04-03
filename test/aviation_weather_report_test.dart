@@ -56,10 +56,10 @@ void bodySection() {
 void bodySectionToString() {
   test('test speci report type', () {
     final body =
-        "SPECI KJFK 190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+        "SPECI KJFK 190351Z AUTO 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
 
     BodySection bs = BodySection(body);
-    expect(bs.toString(), "SPECI KJFK");
+    expect(bs.toString(), "SPECI KJFK AUTO");
   });
 }
 

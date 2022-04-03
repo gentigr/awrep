@@ -1,15 +1,18 @@
 class BodySection {
   ReportType _type;
   String _stationId;
+  ReportModifier _modifier;
 
   BodySection(String body)
       : _type = BodySectionParser.getReportType(body),
-        _stationId = BodySectionParser.getStationId(body);
+        _stationId = BodySectionParser.getStationId(body),
+        _modifier = BodySectionParser.getReportModifier(body);
 
   @override
   String toString() {
     return "${_getReportTypeStr(_type)}"
-        " $_stationId";
+        " $_stationId"
+        " ${_getReportModifierStr(_modifier)}";
   }
 
   static String _getReportTypeStr(ReportType reportType) {
@@ -17,6 +20,13 @@ class BodySection {
       return "";
     }
     return reportType.name.toUpperCase();
+  }
+
+  static String _getReportModifierStr(ReportModifier modifier) {
+    if (modifier == ReportModifier.none) {
+      return "";
+    }
+    return modifier.name.toUpperCase();
   }
 }
 
