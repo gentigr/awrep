@@ -1,5 +1,5 @@
 class BodySection {
-  late ReportType _type;
+  ReportType _type;
 
   BodySection(String body) : _type = BodySectionParser.getReportType(body);
 
