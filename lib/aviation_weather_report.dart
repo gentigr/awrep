@@ -120,6 +120,32 @@ class ReportWind {
   }
 }
 
+enum ReportRunwaySide {
+  none,
+  left,
+  center,
+  right,
+}
+
+class ReportRunway {
+  final ReportRunwaySide _side;
+  final int _number;
+
+  const ReportRunway(this._number, this._side);
+  const ReportRunway.single(this._number) : this._side = ReportRunwaySide.none;
+
+  @override
+  String toString() {
+    String numberStr = _number.toString().padLeft(2, '0');
+    String sideStr = _side.name.toString().toUpperCase()[0];
+    if (_side == ReportRunwaySide.none) {
+      sideStr = "";
+    }
+    return "$numberStr$sideStr";
+  }
+}
+
+
 class BodySectionParser {
   static final _typeOfReport = "(?<type>[^ ]{5} )?";
   static final _stationIdentifier = "(?<station_id>[a-zA-Z^ ]{4} )";

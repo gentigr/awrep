@@ -8,6 +8,9 @@ void main() {
   group('wind', () {
     wind();
   });
+  group('reportRunway', () {
+    reportRunway();
+  });
   group('aviationWeatherReport', () {
     aviationWeatherReport();
   });
@@ -91,6 +94,24 @@ void windToString() {
   });
   test('test variable gust wind', () {
     expect(ReportWind.all(30, 15, 25, 0, 60).toString(), "03015G25KT 000V060");
+  });
+}
+
+void reportRunway() {
+  group('toString', () {
+    runwayToString();
+  });
+}
+
+void runwayToString() {
+  test('test runway with side', () {
+    expect(ReportRunway(11, ReportRunwaySide.left).toString(), '11L');
+  });
+  test('test runway without side', () {
+    expect(ReportRunway.single(22).toString(), '22');
+  });
+  test('test one symbol runway', () {
+    expect(ReportRunway.single(3).toString(), '03');
   });
 }
 
