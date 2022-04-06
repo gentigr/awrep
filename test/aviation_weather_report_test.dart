@@ -11,6 +11,9 @@ void main() {
   group('reportRunway', () {
     reportRunway();
   });
+  group('reportLength', () {
+    reportLength();
+  });
   group('aviationWeatherReport', () {
     aviationWeatherReport();
   });
@@ -112,6 +115,30 @@ void runwayToString() {
   });
   test('test one symbol runway', () {
     expect(ReportRunway.single(3).toString(), '03');
+  });
+}
+
+void reportLength() {
+  group('toString', () {
+    reportLengthToString();
+  });
+}
+
+void reportLengthToString() {
+  test('test only length', () {
+    expect(ReportLength(1100).toString(), '1100');
+  });
+  test('test length and plus modifier', () {
+    expect(ReportLength.mod(1100, ReportLengthModifier.plus).toString(), 'P1100');
+  });
+  test('test length and minus modifier', () {
+    expect(ReportLength.mod(1100, ReportLengthModifier.minus).toString(), 'M1100');
+  });
+  test('test empty report length', () {
+    expect(ReportLength.empty().toString(), '0000');
+  });
+  test('test two symbols length', () {
+    expect(ReportLength(10).toString(), '0010');
   });
 }
 

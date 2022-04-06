@@ -145,6 +145,31 @@ class ReportRunway {
   }
 }
 
+enum ReportLengthModifier {
+  none,
+  minus,
+  plus,
+}
+
+class ReportLength {
+  final ReportLengthModifier _lengthModifier;
+  final int _length;
+  const ReportLength(this._length)
+      : this._lengthModifier = ReportLengthModifier.none;
+  const ReportLength.mod(this._length, this._lengthModifier);
+  const ReportLength.empty()
+      : this._length = 0,
+        this._lengthModifier = ReportLengthModifier.none;
+  @override
+  String toString() {
+    String lengthModifierStr = _lengthModifier.name.toString().toUpperCase()[0];
+    if (_lengthModifier == ReportLengthModifier.none) {
+      lengthModifierStr = "";
+    }
+    String lengthStr = _length.toString().padLeft(4, '0');
+    return "$lengthModifierStr$lengthStr";
+  }
+}
 
 class BodySectionParser {
   static final _typeOfReport = "(?<type>[^ ]{5} )?";
