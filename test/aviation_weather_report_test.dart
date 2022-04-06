@@ -14,6 +14,9 @@ void main() {
   group('reportLength', () {
     reportLength();
   });
+  group('reportRunwayVisualRange', () {
+    reportRunwayVisualRange();
+  });
   group('aviationWeatherReport', () {
     aviationWeatherReport();
   });
@@ -129,16 +132,39 @@ void reportLengthToString() {
     expect(ReportLength(1100).toString(), '1100');
   });
   test('test length and plus modifier', () {
-    expect(ReportLength.mod(1100, ReportLengthModifier.plus).toString(), 'P1100');
+    expect(
+        ReportLength.mod(1100, ReportLengthModifier.plus).toString(), 'P1100');
   });
   test('test length and minus modifier', () {
-    expect(ReportLength.mod(1100, ReportLengthModifier.minus).toString(), 'M1100');
+    expect(
+        ReportLength.mod(1100, ReportLengthModifier.minus).toString(), 'M1100');
   });
   test('test empty report length', () {
     expect(ReportLength.empty().toString(), '0000');
   });
   test('test two symbols length', () {
     expect(ReportLength(10).toString(), '0010');
+  });
+}
+
+void reportRunwayVisualRange() {
+  group('toString', () {
+    reportRunwayVisualRangeToString();
+  });
+}
+
+void reportRunwayVisualRangeToString() {
+  test('test stable length', () {
+    ReportRunway runway = ReportRunway.single(1);
+    ReportLength length = ReportLength(10);
+    expect(ReportRunwayVisualRange(runway, length).toString(), 'R01/0010FT');
+  });
+  test('test variable length', () {
+    ReportRunway runway = ReportRunway.single(1);
+    ReportLength lengthFrom = ReportLength(10);
+    ReportLength lengthTo = ReportLength(100);
+    expect(ReportRunwayVisualRange.vrb(runway, lengthFrom, lengthTo).toString(),
+        'R01/0010V0100FT');
   });
 }
 

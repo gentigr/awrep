@@ -171,6 +171,31 @@ class ReportLength {
   }
 }
 
+const ReportLength emptyReportLength = ReportLength.empty();
+
+class ReportRunwayVisualRange {
+  final ReportRunway _runway;
+  final ReportLength _stbLength;
+  final ReportLength _vrbFromLength;
+  final ReportLength _vrbToLength;
+  const ReportRunwayVisualRange(this._runway, this._stbLength)
+      : _vrbFromLength = emptyReportLength,
+        _vrbToLength = emptyReportLength;
+  const ReportRunwayVisualRange.vrb(
+      this._runway, this._vrbFromLength, this._vrbToLength)
+      : _stbLength = emptyReportLength;
+  @override
+  String toString() {
+    String runwayStr = _runway.toString();
+    String visualRangeStr = _stbLength.toString();
+    if (_stbLength == emptyReportLength) {
+      visualRangeStr =
+      "${_vrbFromLength.toString()}V${_vrbToLength.toString()}";
+    }
+    return "R$runwayStr/$visualRangeStr\FT";
+  }
+}
+
 class BodySectionParser {
   static final _typeOfReport = "(?<type>[^ ]{5} )?";
   static final _stationIdentifier = "(?<station_id>[a-zA-Z^ ]{4} )";
