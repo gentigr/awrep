@@ -121,6 +121,7 @@ class ReportWind {
 }
 
 enum ReportRunwaySide {
+  undefined,
   none,
   left,
   center,
