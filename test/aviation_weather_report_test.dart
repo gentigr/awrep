@@ -237,6 +237,9 @@ void bodySectionParser() {
   group('getVisibility', () {
     bodySectionParserGetVisibility();
   });
+  group('getRunwayVisualRange', () {
+    bodySectionParserGetRunwayVisualRange();
+  });
 }
 
 void bodySectionParserCheckFormat() {
@@ -523,5 +526,131 @@ void bodySectionParserGetVisibility() {
     final body = "METAR KJFK 190351Z AUTO 18004KT M30SM BR OVC002 08/08 A3002";
 
     expect(BodySectionParser.getVisibility(body), "M30");
+  });
+}
+
+void bodySectionParserGetRunwayVisualRange() {
+  test('test bad format', () {
+    final body =
+        "190351Z COR 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002";
+
+    expect(
+        () => BodySectionParser.getRunwayVisualRange(body),
+        throwsA(predicate((e) =>
+            e is BodySectionParserException &&
+            e.message == "Failed to parse body section of weather report")));
+  });
+  test('test no runway visual range', () {
+    final body = "KJFK 190351Z 18004KT 10SM BR OVC002 08/08 A3002";
+
+    expect(BodySectionParser.getRunwayVisualRange(body), List.empty());
+  });
+
+  test('test standard runway visual range', () {
+    final body = "KJFK 190351Z 18004KT 10SM R04/2000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange(
+        ReportRunway(4, ReportRunwaySide.none), ReportLength(2000));
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test standard runway visual range - left', () {
+    final body = "KJFK 190351Z 18004KT 10SM R04L/2000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange(
+        ReportRunway(4, ReportRunwaySide.left), ReportLength(2000));
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test standard runway visual range - center', () {
+    final body = "KJFK 190351Z 18004KT 10SM R04C/2000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange(
+        ReportRunway(4, ReportRunwaySide.center), ReportLength(2000));
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test standard runway visual range - right', () {
+    final body = "KJFK 190351Z 18004KT 10SM R04R/2000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange(
+        ReportRunway(4, ReportRunwaySide.right), ReportLength(2000));
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test standard runway visual range - minus', () {
+    final body = "KJFK 190351Z 18004KT 10SM R04/M2000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange(
+        ReportRunway(4, ReportRunwaySide.none),
+        ReportLength.mod(2000, ReportLengthModifier.minus));
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test standard runway visual range - plus', () {
+    final body = "KJFK 190351Z 18004KT 10SM R04/P2000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange(
+        ReportRunway(4, ReportRunwaySide.none),
+        ReportLength.mod(2000, ReportLengthModifier.plus));
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test variable runway visual range', () {
+    final body =
+        "KJFK 190351Z 18004KT 10SM R04/2000V3000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange.vrb(
+      ReportRunway(4, ReportRunwaySide.none),
+      ReportLength(2000),
+      ReportLength(3000),
+    );
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test variable runway visual range - minus', () {
+    final body =
+        "KJFK 190351Z 18004KT 10SM R04/M2000V3000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange.vrb(
+      ReportRunway(4, ReportRunwaySide.none),
+      ReportLength.mod(2000, ReportLengthModifier.minus),
+      ReportLength(3000),
+    );
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test variable runway visual range - plus', () {
+    final body =
+        "KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT BR OVC002 08/08 A3002";
+
+    ReportRunwayVisualRange range = ReportRunwayVisualRange.vrb(
+      ReportRunway(4, ReportRunwaySide.none),
+      ReportLength.mod(2000, ReportLengthModifier.minus),
+      ReportLength.mod(3000, ReportLengthModifier.plus),
+    );
+    List<ReportRunwayVisualRange> ranges = [range];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
+  });
+  test('test multiple runway visual ranges', () {
+    final body =
+        "KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT R17C/M0100FT BR OVC002 08/08 A3002";
+
+    List<ReportRunwayVisualRange> ranges = [
+      ReportRunwayVisualRange.vrb(
+        ReportRunway(4, ReportRunwaySide.none),
+        ReportLength.mod(2000, ReportLengthModifier.minus),
+        ReportLength.mod(3000, ReportLengthModifier.plus),
+      ),
+      ReportRunwayVisualRange(
+        ReportRunway(10, ReportRunwaySide.none),
+        ReportLength(200),
+      ),
+      ReportRunwayVisualRange(
+        ReportRunway(17, ReportRunwaySide.center),
+        ReportLength.mod(100, ReportLengthModifier.minus),
+      ),
+    ];
+    expect(BodySectionParser.getRunwayVisualRange(body), ranges);
   });
 }

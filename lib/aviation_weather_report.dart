@@ -226,7 +226,7 @@ class ReportRunwayVisualRange {
     String visualRangeStr = _stbLength.toString();
     if (_stbLength == emptyReportLength) {
       visualRangeStr =
-      "${_vrbFromLength.toString()}V${_vrbToLength.toString()}";
+          "${_vrbFromLength.toString()}V${_vrbToLength.toString()}";
     }
     return "R$runwayStr/$visualRangeStr\FT";
   }
@@ -244,12 +244,14 @@ class BodySectionParser {
       "( (?<wind_vrb_from>[0-9]{3})V(?<wind_vrb_to>[0-9]{3}))?";
   static final _wind = '$_windStd$_windGst\KT$_windVrb';
   static final _visibility = '( (?<visibility>[0-9 \/pPmM]+)SM)';
+  static final _runwayVisual = '( (?<runway_visual>R.*FT))?';
   static final bodyRegex = RegExp('^$_typeOfReport'
       '$_stationIdentifier'
       '$_dateAndTime'
       '$_modifier'
       '$_wind'
       '$_visibility'
+      '$_runwayVisual'
       '(?<all>.*)\$');
 
   static void checkFormat(String body) {
@@ -321,6 +323,89 @@ class BodySectionParser {
 
   static String getVisibility(String body) {
     return _getNamedGroup(body, "visibility");
+  }
+
+  static ReportLengthModifier _getReportLengthModifier(String? modifier) {
+    if (modifier == null) {
+      return ReportLengthModifier.none;
+    }
+    switch (modifier) {
+      case "M":
+        return ReportLengthModifier.minus;
+      case "P":
+        return ReportLengthModifier.plus;
+      default:
+        return ReportLengthModifier.undefined;
+    }
+  }
+
+  static ReportRunwaySide _getReportRunwaySide(String? side) {
+    if (side == null) {
+      return ReportRunwaySide.none;
+    }
+    switch (side) {
+      case "L":
+        return ReportRunwaySide.left;
+      case "C":
+        return ReportRunwaySide.center;
+      case "R":
+        return ReportRunwaySide.right;
+      default:
+        return ReportRunwaySide.undefined;
+    }
+  }
+
+  static List<ReportRunwayVisualRange> getRunwayVisualRange(String body) {
+    var ranges = <ReportRunwayVisualRange>[];
+    String? rangesStr = _getNamedGroupOptional(body, "runway_visual");
+    if (rangesStr == null) {
+      return ranges;
+    }
+    final rangesRegex = RegExp('( '
+        'R(?<runway_visual_code>[0-9]{2}'
+        '(?<runway_side>R|C|L)?)\/'
+        '(?<runway_visual_visibility>'
+        '(?<runway_visual_value_mod>[PM])?'
+        '(?<runway_visual_value>[0-9]{4})|'
+        '(?<runway_visual_range>'
+        '(?<runway_vr_start_mod>M)?'
+        '(?<runway_visual_range_start>[0-9]{4})V'
+        '(?<runway_vr_end_mod>P)?'
+        '(?<runway_visual_range_end>[0-9]{4})))FT)');
+    if (!rangesRegex.hasMatch(body)) {
+      return ranges;
+    }
+    for (var range in rangesRegex.allMatches(body)) {
+      int runwayNum =
+          int.parse(range.namedGroup('runway_visual_code')!.substring(0, 2));
+      ReportRunwaySide runwaySide =
+          _getReportRunwaySide(range.namedGroup('runway_side'));
+      ReportRunway runway = ReportRunway(runwayNum, runwaySide);
+      String? valueStr = range.namedGroup('runway_visual_value');
+      String? rangeStr = range.namedGroup('runway_visual_range');
+
+      if (valueStr != null) {
+        ReportLengthModifier modifier = _getReportLengthModifier(
+            range.namedGroup('runway_visual_value_mod'));
+        int length = int.parse(range.namedGroup('runway_visual_value')!);
+        ReportLength value = ReportLength.mod(length, modifier);
+        ranges.add(ReportRunwayVisualRange(runway, value));
+      } else if (rangeStr != null) {
+        ReportLengthModifier startModifier =
+            _getReportLengthModifier(range.namedGroup('runway_vr_start_mod'));
+        ReportLengthModifier endModifier =
+            _getReportLengthModifier(range.namedGroup('runway_vr_end_mod'));
+        int startLength =
+            int.parse(range.namedGroup('runway_visual_range_start')!);
+        int endLength = int.parse(range.namedGroup('runway_visual_range_end')!);
+        ReportLength startValue = ReportLength.mod(startLength, startModifier);
+        ReportLength endValue = ReportLength.mod(endLength, endModifier);
+        ranges.add(ReportRunwayVisualRange.vrb(runway, startValue, endValue));
+      } else {
+        // TODO: throw exception
+      }
+    }
+    return ranges;
   }
 
   static String _getNamedGroup(String body, String name) {
