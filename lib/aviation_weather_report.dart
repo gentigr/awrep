@@ -134,6 +134,16 @@ class ReportRunway {
 
   const ReportRunway(this._number, this._side);
   const ReportRunway.single(this._number) : this._side = ReportRunwaySide.none;
+  @override
+  bool operator ==(Object other) {
+    return other is ReportRunway &&
+        runtimeType == other.runtimeType &&
+        _side == other._side &&
+        _number == other._number;
+  }
+
+  @override
+  int get hashCode => Object.hash(_side, _number);
 
   @override
   String toString() {
