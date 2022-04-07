@@ -173,6 +173,16 @@ class ReportLength {
       : this._length = 0,
         this._lengthModifier = ReportLengthModifier.none;
   @override
+  bool operator ==(Object other) {
+    return other is ReportLength &&
+        runtimeType == other.runtimeType &&
+        _lengthModifier == other._lengthModifier &&
+        _length == other._length;
+  }
+
+  @override
+  int get hashCode => Object.hash(_lengthModifier, _length);
+  @override
   String toString() {
     String lengthModifierStr = _lengthModifier.name.toString().toUpperCase()[0];
     if (_lengthModifier == ReportLengthModifier.none) {
