@@ -207,6 +207,20 @@ class ReportRunwayVisualRange {
       this._runway, this._vrbFromLength, this._vrbToLength)
       : _stbLength = emptyReportLength;
   @override
+  bool operator ==(Object other) {
+    return other is ReportRunwayVisualRange &&
+        runtimeType == other.runtimeType &&
+        _runway == other._runway &&
+        _stbLength == other._stbLength &&
+        _vrbFromLength == other._vrbFromLength &&
+        _vrbToLength == other._vrbToLength;
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(_runway, _stbLength, _vrbFromLength, _vrbToLength);
+
+  @override
   String toString() {
     String runwayStr = _runway.toString();
     String visualRangeStr = _stbLength.toString();
