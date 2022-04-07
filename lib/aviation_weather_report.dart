@@ -5,6 +5,7 @@ class BodySection {
   ReportModifier _modifier;
   ReportWind _wind;
   String _visibility;
+  List<ReportRunwayVisualRange> _runwayVisualRanges;
 
   BodySection(String body)
       : _type = BodySectionParser.getReportType(body),
@@ -12,7 +13,8 @@ class BodySection {
         _dateTime = BodySectionParser.getDateTime(body),
         _modifier = BodySectionParser.getReportModifier(body),
         _wind = BodySectionParser.getWind(body),
-        _visibility = BodySectionParser.getVisibility(body);
+        _visibility = BodySectionParser.getVisibility(body),
+        _runwayVisualRanges = BodySectionParser.getRunwayVisualRange(body);
 
   @override
   String toString() {
@@ -21,7 +23,8 @@ class BodySection {
         " $_dateTime"
         " ${_getReportModifierStr(_modifier)}"
         " $_wind"
-        " $_visibility\SM";
+        " $_visibility\SM"
+        " ${_getRunwayVisualRangesStr(_runwayVisualRanges)}";
   }
 
   static String _getReportTypeStr(ReportType reportType) {
@@ -36,6 +39,15 @@ class BodySection {
       return "";
     }
     return modifier.name.toUpperCase();
+  }
+
+  static String _getRunwayVisualRangesStr(
+      List<ReportRunwayVisualRange> ranges) {
+    String rangesStr = "";
+    for (var range in ranges) {
+      rangesStr += " $range";
+    }
+    return rangesStr.trimLeft();
   }
 }
 
