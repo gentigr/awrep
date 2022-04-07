@@ -157,6 +157,7 @@ class ReportRunway {
 }
 
 enum ReportLengthModifier {
+  undefined,
   none,
   minus,
   plus,
