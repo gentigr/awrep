@@ -3,24 +3,15 @@ import 'package:test/test.dart';
 
 void main() {
   group('Body', () {
-    group('toString', () {
-      bodyToString();
-    });
     group('equalityOperator', () {
       bodyEqualityOperator();
     });
     group('hashCode', () {
       bodyHashCode();
     });
-  });
-}
-
-void bodyToString() {
-  test('Test basic string output format', () {
-    final body =
-        'SPECI KJFK 190351Z AUTO 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002';
-
-    expect(Body(body).toString(), body);
+    group('toString', () {
+      bodyToString();
+    });
   });
 }
 
@@ -51,5 +42,14 @@ void bodyHashCode() {
     final body2 = 'SPECI KMMU 190351Z AUTO 18004KT 1/4SM BR OVC002 08/08 A3002';
 
     expect(Body(body1).hashCode == Body(body2).hashCode, true);
+  });
+}
+
+void bodyToString() {
+  test('Test basic string output format', () {
+    final body =
+        'SPECI KJFK 190351Z AUTO 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002';
+
+    expect(Body(body).toString(), body);
   });
 }
