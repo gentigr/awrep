@@ -12,7 +12,7 @@ class Report {
   final String _report;
 
   /// Initializes Report class with string representation of METAR/SPECI report.
-  Report(this._report);
+  const Report(this._report);
 
   /// Compares Report objects for logical equality.
   @override
