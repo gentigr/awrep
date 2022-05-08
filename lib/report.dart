@@ -16,6 +16,6 @@ class Report {
     if (_remarks.toString().isEmpty) {
       return _body.toString();
     }
-    return "$_body RMK $_remarks";
+    return "$_body $_remarks";
   }
 }
