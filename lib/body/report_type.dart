@@ -29,11 +29,11 @@ extension ReportTypeExtension on ReportType {
 
 /// This is a constructor method for [ReportType] from String.
 ReportType stringAsReportType(String? type) {
-  if (type == null || type.isEmpty) {
+  if (type == null || type.trim().isEmpty) {
     return ReportType.none;
   }
   try {
-    return ReportType.values.byName(type.toLowerCase());
+    return ReportType.values.byName(type.trim().toLowerCase());
   } on ArgumentError catch (e) {
     throw ReportTypeException(
         'Unexpected report type value: `$type`, error: `$e`');

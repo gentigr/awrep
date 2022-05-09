@@ -40,6 +40,15 @@ void reportTypeStringAsReportType() {
   test('Test constructor with random case string input', () {
     expect(stringAsReportType('SpeCi'), ReportType.speci);
   });
+  test('Test constructor with leading space string input', () {
+    expect(stringAsReportType(' speci'), ReportType.speci);
+  });
+  test('Test constructor with trailing space string input', () {
+    expect(stringAsReportType('speci '), ReportType.speci);
+  });
+  test('Test constructor with leading and trailing spaces string input', () {
+    expect(stringAsReportType(' speci '), ReportType.speci);
+  });
   test('Test constructor with unexpected input', () {
     String message = 'Unexpected report type value: `UNEXPECTED`';
     String error =
