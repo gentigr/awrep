@@ -7,6 +7,9 @@ void main() {
     group('reportType', () {
       bodyReportType();
     });
+    group('stationId', () {
+      bodyStationId();
+    });
     group('equalityOperator', () {
       bodyEqualityOperator();
     });
@@ -47,6 +50,60 @@ void bodyReportType() {
     final body = 'SPECI KJFK 190351Z 18004KT 1/4SM OVC002 08/08 A3002';
 
     expect(Body(body).reportType, ReportType.speci);
+  });
+}
+
+void bodyStationId() {
+  test('Test no station id', () {
+    final body = '190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002';
+    var msg = 'Failed to find RegEx `RegExp: pattern=^([^ ]{5} )?'
+        '(?<station_id>[A-Za-z]{4} )(.*)\$ flags=` in report body '
+        '`190351Z 18004KT 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002`';
+
+    expect(() => Body(body).stationId,
+        throwsA(predicate((e) => e is BodyException && e.message == msg)));
+  });
+
+  test('Test too short station id', () {
+    final body = 'KJ 190351Z 18004KT 1/4SM OVC002 08/08 A3002';
+    var msg = 'Failed to find RegEx `RegExp: pattern=^([^ ]{5} )?'
+        '(?<station_id>[A-Za-z]{4} )(.*)\$ flags=` in report body '
+        '`KJ 190351Z 18004KT 1/4SM OVC002 08/08 A3002`';
+
+    expect(() => Body(body).stationId,
+        throwsA(predicate((e) => e is BodyException && e.message == msg)));
+  });
+
+  test('Test too long station id', () {
+    final body = 'KJFKK 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002';
+    var msg = 'Failed to find RegEx `RegExp: pattern=^([^ ]{5} )?'
+        '(?<station_id>[A-Za-z]{4} )(.*)\$ flags=` in report body '
+        '`KJFKK 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002`';
+
+    expect(() => Body(body).stationId,
+        throwsA(predicate((e) => e is BodyException && e.message == msg)));
+  });
+
+  test('Test non-alphabetic station id', () {
+    final body = 'K1JF 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002';
+    var msg = 'Failed to find RegEx `RegExp: pattern=^([^ ]{5} )?'
+        '(?<station_id>[A-Za-z]{4} )(.*)\$ flags=` in report body '
+        '`K1JF 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002`';
+
+    expect(() => Body(body).stationId,
+        throwsA(predicate((e) => e is BodyException && e.message == msg)));
+  });
+
+  test('Test correct station id with report type', () {
+    final body = 'SPECI KJFK 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002';
+
+    expect(Body(body).stationId, 'KJFK');
+  });
+
+  test('Test correct station id without report type', () {
+    final body = 'KTEB 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002';
+
+    expect(Body(body).stationId, 'KTEB');
   });
 }
 

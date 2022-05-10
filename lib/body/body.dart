@@ -21,6 +21,12 @@ class Body {
     return stringAsReportType(_regexMatch(regExp, 'report_type'));
   }
 
+  /// Returns station identifier from report.
+  String get stationId {
+    var regExp = RegExp('^([^ ]{5} )?(?<station_id>[A-Za-z]{4} )(.*)\$');
+    return _regexMatch(regExp, 'station_id')!.trim();
+  }
+
   @override
   bool operator ==(Object other) {
     return other is Body && this.hashCode == other.hashCode;
@@ -36,10 +42,13 @@ class Body {
 
   void _checkRegexMatch(RegExp regExp) {
     if (!regExp.hasMatch(_body)) {
+      print('Failed to find RegEx `$regExp` in report body `$_body`');
       throw BodyException(
           'Failed to find RegEx `$regExp` in report body `$_body`');
     }
     if (regExp.allMatches(_body).length > 1) {
+      print('Too many matches were found by RegEx `$regExp` '
+          'in report body `$_body`');
       throw BodyException('Too many matches were found by RegEx `$regExp` '
           'in report body `$_body`');
     }
