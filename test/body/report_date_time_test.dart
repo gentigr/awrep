@@ -193,7 +193,25 @@ void reportDateTimeHashCode() {
 }
 
 void reportDateTimeToString() {
-  test('Test basic string output format, leading zeros', () {
+  test('Test basic string output format, day leading zeros', () {
+    final timedate = '011213Z';
+
+    expect(ReportDateTime(timedate).toString(), timedate);
+  });
+
+  test('Test basic string output format, hour leading zeros', () {
+    final timedate = '110213Z';
+
+    expect(ReportDateTime(timedate).toString(), timedate);
+  });
+
+  test('Test basic string output format, minute leading zeros', () {
+    final timedate = '111203Z';
+
+    expect(ReportDateTime(timedate).toString(), timedate);
+  });
+
+  test('Test basic string output format, all leading zeros', () {
     final timedate = '010203Z';
 
     expect(ReportDateTime(timedate).toString(), timedate);
