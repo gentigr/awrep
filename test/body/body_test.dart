@@ -6,8 +6,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('Body', () {
-    group('reportType', () {
-      bodyReportType();
+    group('type', () {
+      bodyType();
     });
     group('stationId', () {
       bodyStationId();
@@ -30,14 +30,14 @@ void main() {
   });
 }
 
-void bodyReportType() {
+void bodyType() {
   test('Test undefined report type exception is not caught', () {
     final String body = 'UNDEF KJFK 190351Z 18004KT BR OVC002 08/08 A3002';
     var msg = 'Unexpected report type value: `UNDEF `';
     var err = 'Invalid argument (name): No enum value with that name: "undef"';
 
     expect(
-        () => Body(body).reportType,
+        () => Body(body).type,
         throwsA(predicate((e) =>
             e is ReportTypeException && e.message == '$msg, error: `$err`')));
   });
@@ -45,19 +45,19 @@ void bodyReportType() {
   test('Test no report type body', () {
     final body = 'KJFK 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002';
 
-    expect(Body(body).reportType, ReportType.none);
+    expect(Body(body).type, ReportType.none);
   });
 
   test('Test metar report type body', () {
     final body = 'METAR KJFK 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002';
 
-    expect(Body(body).reportType, ReportType.metar);
+    expect(Body(body).type, ReportType.metar);
   });
 
   test('Test speci report type speci', () {
     final body = 'SPECI KJFK 190351Z 18004KT 1/4SM OVC002 08/08 A3002';
 
-    expect(Body(body).reportType, ReportType.speci);
+    expect(Body(body).type, ReportType.speci);
   });
 }
 

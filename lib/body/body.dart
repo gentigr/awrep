@@ -19,7 +19,7 @@ class Body {
   Body(this._body);
 
   /// Returns type of report in [ReportType] format.
-  ReportType get reportType {
+  ReportType get type {
     var regExp = RegExp('^(?<report_type>[^ ]{5} )?(.*)\$');
     return stringAsReportType(_regexMatch(regExp, 'report_type'));
   }
