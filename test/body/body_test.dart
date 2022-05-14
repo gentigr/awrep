@@ -1,4 +1,5 @@
 import 'package:awrep/body/body.dart';
+import 'package:awrep/body/report_date_time.dart';
 import 'package:awrep/body/report_type.dart';
 import 'package:test/test.dart';
 
@@ -9,6 +10,9 @@ void main() {
     });
     group('stationId', () {
       bodyStationId();
+    });
+    group('dateTime', () {
+      bodyDateTime();
     });
     group('equalityOperator', () {
       bodyEqualityOperator();
@@ -104,6 +108,33 @@ void bodyStationId() {
     final body = 'KTEB 190351Z 18004KT 1/4SM BR OVC002 08/08 A3002';
 
     expect(Body(body).stationId, 'KTEB');
+  });
+}
+
+void bodyDateTime() {
+  test('Test no date and time specified', () {
+    final body = 'KJFK 18004KT 1/4SM BR OVC002 08/08 A3002';
+    var msg = 'Failed to find RegEx `RegExp: pattern=(?<date_time>\\d{6}Z) '
+        'flags=` in report body `KJFK 18004KT 1/4SM BR OVC002 08/08 A3002`';
+
+    expect(() => Body(body).dateTime,
+        throwsA(predicate((e) => e is BodyException && e.message == msg)));
+  });
+
+  test('Test more than one date and time specified', () {
+    final body = 'KJFK 120354Z 211355Z 18004KT 1/4SM BR OVC002 08/08 A3002';
+    var msg = 'Too many matches were found by RegEx `RegExp: '
+        'pattern=(?<date_time>\\d{6}Z) flags=` in report body '
+        '`KJFK 120354Z 211355Z 18004KT 1/4SM BR OVC002 08/08 A3002`';
+
+    expect(() => Body(body).dateTime,
+        throwsA(predicate((e) => e is BodyException && e.message == msg)));
+  });
+
+  test('Test correct date time specified', () {
+    final body = 'KJFK 120354Z 18004KT 1/4SM OVC002 08/08 A3002';
+
+    expect(Body(body).dateTime, ReportDateTime('120354Z'));
   });
 }
 

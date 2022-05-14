@@ -1,3 +1,5 @@
+import 'package:awrep/body/report_date_time.dart';
+
 import 'report_type.dart';
 
 /// [BodyException] is thrown when there is a report parsing issue.
@@ -25,6 +27,12 @@ class Body {
   String get stationId {
     var regExp = RegExp('^([^ ]{5} )?(?<station_id>[A-Za-z]{4} )(.*)\$');
     return _regexMatch(regExp, 'station_id')!.trim();
+  }
+
+  /// Returns date and time of the report.
+  ReportDateTime get dateTime {
+    var regExp = RegExp('(?<date_time>\\d{6}Z)');
+    return ReportDateTime(_regexMatch(regExp, 'date_time')!);
   }
 
   @override
