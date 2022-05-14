@@ -1,5 +1,6 @@
 import 'package:awrep/body/body.dart';
 import 'package:awrep/body/report_date_time.dart';
+import 'package:awrep/body/report_modifier.dart';
 import 'package:awrep/body/report_type.dart';
 import 'package:test/test.dart';
 
@@ -13,6 +14,9 @@ void main() {
     });
     group('dateTime', () {
       bodyDateTime();
+    });
+    group('modifier', () {
+      bodyModifier();
     });
     group('equalityOperator', () {
       bodyEqualityOperator();
@@ -135,6 +139,36 @@ void bodyDateTime() {
     final body = 'KJFK 120354Z 18004KT 1/4SM OVC002 08/08 A3002';
 
     expect(Body(body).dateTime, ReportDateTime('120354Z'));
+  });
+}
+
+void bodyModifier() {
+  test('Test no report modifier', () {
+    final body = 'KJFK 190351Z CCC 18004KT 1/4SM BR OVC002 08/08 A3002';
+
+    expect(Body(body).modifier, ReportModifier.none);
+  });
+
+  test('Test auto report modifier', () {
+    final body = 'METAR KJFK 190351Z AUTO 18004KT 1/4SM BR OVC002 08/08 A3002';
+
+    expect(Body(body).modifier, ReportModifier.auto);
+  });
+
+  test('Test cor report modifier', () {
+    final body = 'SPECI KJFK 190351Z COR 18004KT 1/4SM OVC002 08/08 A3002';
+
+    expect(Body(body).modifier, ReportModifier.cor);
+  });
+
+  test('Test more than one report modifier specified', () {
+    final body = 'KJFK 120354Z COR 18004KT AUTO 1/4SM BR OVC002 08/08 A3002';
+    var msg = 'Too many matches were found by RegEx `RegExp: pattern= '
+        '(?<modifier>AUTO|COR)  flags=` in report body `KJFK 120354Z COR '
+        '18004KT AUTO 1/4SM BR OVC002 08/08 A3002`';
+
+    expect(() => Body(body).modifier,
+        throwsA(predicate((e) => e is BodyException && e.message == msg)));
   });
 }
 

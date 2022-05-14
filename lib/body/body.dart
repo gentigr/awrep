@@ -1,4 +1,5 @@
 import 'package:awrep/body/report_date_time.dart';
+import 'package:awrep/body/report_modifier.dart';
 
 import 'report_type.dart';
 
@@ -35,6 +36,12 @@ class Body {
     return ReportDateTime(_regexMatch(regExp, 'date_time')!);
   }
 
+  /// Returns modifier of report in [ReportModifier] format.
+  ReportModifier get modifier {
+    var regExp = RegExp(' (?<modifier>AUTO|COR) ');
+    return stringAsReportModifier(_regexMatchOptional(regExp, 'modifier'));
+  }
+
   @override
   bool operator ==(Object other) {
     return other is Body && this.hashCode == other.hashCode;
@@ -48,22 +55,43 @@ class Body {
     return this._body;
   }
 
-  void _checkRegexMatch(RegExp regExp) {
-    if (!regExp.hasMatch(_body)) {
-      print('Failed to find RegEx `$regExp` in report body `$_body`');
-      throw BodyException(
-          'Failed to find RegEx `$regExp` in report body `$_body`');
+  bool _checkRegexHasMatch(RegExp regExp, {bool noThrow = false}) {
+    if (regExp.hasMatch(_body)) {
+      return true;
     }
-    if (regExp.allMatches(_body).length > 1) {
-      print('Too many matches were found by RegEx `$regExp` '
-          'in report body `$_body`');
-      throw BodyException('Too many matches were found by RegEx `$regExp` '
-          'in report body `$_body`');
+    if (noThrow) {
+      return false;
     }
+    var err = 'Failed to find RegEx `$regExp` in report body `$_body`';
+    print(err);
+    throw BodyException(err);
+  }
+
+  bool _checkRegexHasOnlyOneMatch(RegExp regExp, {bool noThrow = false}) {
+    if (regExp.allMatches(_body).length == 1) {
+      return true;
+    }
+    if (noThrow) {
+      return false;
+    }
+    var err = 'Too many matches were found by RegEx `$regExp` '
+        'in report body `$_body`';
+    print(err);
+    throw BodyException(err);
   }
 
   String? _regexMatch(RegExp regExp, String name) {
-    _checkRegexMatch(regExp);
+    _checkRegexHasMatch(regExp);
+    _checkRegexHasOnlyOneMatch(regExp);
+    return regExp.firstMatch(_body)!.namedGroup(name);
+  }
+
+  String? _regexMatchOptional(RegExp regExp, String name) {
+    bool hasMatch = _checkRegexHasMatch(regExp, noThrow: true);
+    if (!hasMatch) {
+      return null;
+    }
+    _checkRegexHasOnlyOneMatch(regExp);
     return regExp.firstMatch(_body)!.namedGroup(name);
   }
 }
