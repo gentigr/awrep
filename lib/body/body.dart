@@ -1,5 +1,6 @@
 import 'package:awrep/body/report_date_time.dart';
 import 'package:awrep/body/report_modifier.dart';
+import 'package:awrep/body/report_wind.dart';
 
 import 'report_type.dart';
 
@@ -21,25 +22,32 @@ class Body {
   /// Returns type of report in [ReportType] format.
   ReportType get type {
     var regExp = RegExp('^(?<report_type>[^ ]{5} )?(.*)\$');
-    return stringAsReportType(_regexMatch(regExp, 'report_type'));
+    return stringAsReportType(_regexMatchOptional(regExp, 'report_type'));
   }
 
   /// Returns station identifier from report.
   String get stationId {
     var regExp = RegExp('^([^ ]{5} )?(?<station_id>[A-Za-z]{4} )(.*)\$');
-    return _regexMatch(regExp, 'station_id')!.trim();
+    return _regexMatch(regExp, 'station_id').trim();
   }
 
   /// Returns date and time of the report.
   ReportDateTime get dateTime {
     var regExp = RegExp('(?<date_time>\\d{6}Z)');
-    return ReportDateTime(_regexMatch(regExp, 'date_time')!);
+    return ReportDateTime(_regexMatch(regExp, 'date_time'));
   }
 
   /// Returns modifier of report in [ReportModifier] format.
   ReportModifier get modifier {
     var regExp = RegExp(' (?<modifier>AUTO|COR) ');
     return stringAsReportModifier(_regexMatchOptional(regExp, 'modifier'));
+  }
+
+  /// Returns wind of report in [ReportWind] format.
+  ReportWind get wind {
+    var regExp =
+        RegExp('(?<wind>(\\d{3}|VRB)\\d{2,3}(G\\d{2,3})?KT( \\d{3}V\\d{3})?)');
+    return ReportWind(_regexMatch(regExp, 'wind'));
   }
 
   @override
@@ -80,10 +88,10 @@ class Body {
     throw BodyException(err);
   }
 
-  String? _regexMatch(RegExp regExp, String name) {
+  String _regexMatch(RegExp regExp, String name) {
     _checkRegexHasMatch(regExp);
     _checkRegexHasOnlyOneMatch(regExp);
-    return regExp.firstMatch(_body)!.namedGroup(name);
+    return regExp.firstMatch(_body)!.namedGroup(name)!;
   }
 
   String? _regexMatchOptional(RegExp regExp, String name) {
