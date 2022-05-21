@@ -220,39 +220,55 @@ void reportWindToString() {
   test('Test calm wind', () {
     expect(ReportWind('00000KT').toString(), '00000KT');
   });
+
   test('Test one-symbol velocity wind', () {
     expect(ReportWind('10008KT').toString(), '10008KT');
   });
+
   test('Test two-symbol velocity wind', () {
     expect(ReportWind('10088KT').toString(), '10088KT');
   });
+
   test('Test three-symbol velocity wind', () {
     expect(ReportWind('100888KT').toString(), '100888KT');
   });
+
   test('Test one-symbol direction wind', () {
     expect(ReportWind('00205KT').toString(), '00205KT');
   });
+
   test('Test two-symbol direction wind', () {
     expect(ReportWind('02005KT').toString(), '02005KT');
   });
+
   test('Test three-symbol direction wind', () {
     expect(ReportWind('20005KT').toString(), '20005KT');
   });
+
   test('Test one-symbol gust wind', () {
     expect(ReportWind('10005G09KT').toString(), '10005G09KT');
   });
+
   test('Test two-symbol gust wind', () {
     expect(ReportWind('10005G90KT').toString(), '10005G90KT');
   });
+
   test('Test three-symbol gust wind', () {
     expect(ReportWind('10005G900KT').toString(), '10005G900KT');
   });
+
   test('Test variable wind', () {
     expect(ReportWind('10005KT 070V130').toString(), '10005KT 070V130');
   });
+
   test('Test variable light wind', () {
     expect(ReportWind('VRB06KT').toString(), 'VRB06KT');
   });
+
+  test('Test variable light wind with directions', () {
+    expect(ReportWind('VRB06KT 100V160').toString(), 'VRB06KT');
+  });
+
   test('Test variable gust wind', () {
     expect(ReportWind('03015G25KT 000V060').toString(), '03015G25KT 000V060');
   });

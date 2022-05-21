@@ -94,7 +94,9 @@ class ReportWind {
     String speedStr = _format(speed, 2);
     String gustStr = (gust == null) ? '' : 'G${_format(gust!, 2)}';
     String vrbStr = '';
-    if (directionVrbRangeStart != null && directionVrbRangeEnd != null) {
+    if (direction != null &&
+        directionVrbRangeStart != null &&
+        directionVrbRangeEnd != null) {
       String vrbStartStr = _format(directionVrbRangeStart!, 3);
       String vrbEndStr = _format(directionVrbRangeEnd!, 3);
       vrbStr = ' $vrbStartStr\V$vrbEndStr';
