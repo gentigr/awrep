@@ -45,8 +45,8 @@ class Body {
 
   /// Returns wind of report in [ReportWind] format.
   ReportWind get wind {
-    var regExp =
-        RegExp('(?<wind>(\\d{3}|VRB)\\d{2,3}(G\\d{2,3})?KT( \\d{3}V\\d{3})?)');
+    var regExp = RegExp('(?<wind>(\\d{3}|VRB)\\d{2,3}'
+        '(G\\d{2,3})?KT( \\d{3}V\\d{3})?)');
     return ReportWind(_regexMatch(regExp, 'wind'));
   }
 
