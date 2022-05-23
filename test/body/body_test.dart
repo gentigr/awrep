@@ -2,6 +2,7 @@ import 'package:awrep/body/body.dart';
 import 'package:awrep/body/report_date_time.dart';
 import 'package:awrep/body/report_modifier.dart';
 import 'package:awrep/body/report_type.dart';
+import 'package:awrep/body/report_visibility.dart';
 import 'package:awrep/body/report_wind.dart';
 import 'package:test/test.dart';
 
@@ -21,6 +22,9 @@ void main() {
     });
     group('wind', () {
       bodyWind();
+    });
+    group('visibility', () {
+      bodyVisibility();
     });
     group('equalityOperator', () {
       bodyEqualityOperator();
@@ -265,6 +269,50 @@ void bodyWind() {
   test('Test variable gust wind', () {
     final body = 'KJFK 190351Z COR 03015G25KT 000V060 1/4SM OVC002 08/08';
     expect(Body(body).wind, ReportWind('03015G25KT 000V060'));
+  });
+}
+
+void bodyVisibility() {
+  test('Test no visibility specified', () {
+    final body = '190351Z COR 18004KT R04R/2000V3000FT BR OVC002 08/08 A3002';
+    var err = 'Failed to find RegEx `RegExp: pattern= '
+        '(?<visibility>[0-9 /pPmM]{1,5}SM)  flags=` in report body '
+        '`190351Z COR 18004KT R04R/2000V3000FT BR OVC002 08/08 A3002`';
+    expect(() => Body(body).visibility,
+        throwsA(predicate((e) => e is BodyException && e.message == err)));
+  });
+
+  test('Test zero visibility', () {
+    final body =
+        'KJFK 190351Z CCC 18004KT 0SM R04R/2000V3000FT BR OVC002 08/08 A3002';
+
+    expect(Body(body).visibility, ReportVisibility('0SM'));
+  });
+
+  test('Test fractional visibility', () {
+    final body =
+        'KJFK 190351Z 18004KT 1 1/4SM R04R/2000V3000FT BR OVC002 08/08 A3002';
+
+    expect(Body(body).visibility, ReportVisibility('1 1/4SM'));
+  });
+
+  test('Test grand visibility', () {
+    final body =
+        'METAR KJFK 190351Z AUTO 18004KT 30SM R04R/2000V3000FT BR OVC002 08/08 A3002';
+
+    expect(Body(body).visibility, ReportVisibility('30SM'));
+  });
+
+  test('Test plus visibility', () {
+    final body = 'METAR KJFK 190351Z AUTO 18004KT P30SM BR OVC002 08/08 A3002';
+
+    expect(Body(body).visibility, ReportVisibility('P30SM'));
+  });
+
+  test('Test minus visibility', () {
+    final body = 'METAR KJFK 190351Z AUTO 18004KT M30SM BR OVC002 08/08 A3002';
+
+    expect(Body(body).visibility, ReportVisibility('M30SM'));
   });
 }
 

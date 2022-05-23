@@ -1,5 +1,6 @@
 import 'package:awrep/body/report_date_time.dart';
 import 'package:awrep/body/report_modifier.dart';
+import 'package:awrep/body/report_visibility.dart';
 import 'package:awrep/body/report_wind.dart';
 
 import 'report_type.dart';
@@ -48,6 +49,12 @@ class Body {
     var regExp = RegExp('(?<wind>(\\d{3}|VRB)\\d{2,3}'
         '(G\\d{2,3})?KT( \\d{3}V\\d{3})?)');
     return ReportWind(_regexMatch(regExp, 'wind'));
+  }
+
+  /// Returns visibility of report in [ReportVisibility] format.
+  ReportVisibility get visibility {
+    var regExp = RegExp(' (?<visibility>[0-9 \/pPmM]{1,5}SM) ');
+    return ReportVisibility(_regexMatch(regExp, 'visibility'));
   }
 
   @override
