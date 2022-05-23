@@ -198,72 +198,72 @@ void bodyWind() {
   });
 
   test('Test calm wind', () {
-    final body = "KJFK 190351Z COR 00000KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 00000KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('00000KT'));
   });
 
   test('Test one-symbol velocity wind', () {
-    final body = "KJFK 190351Z COR 10008KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 10008KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('10008KT'));
   });
 
   test('Test two-symbol velocity wind', () {
-    final body = "KJFK 190351Z COR 10088KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 10088KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('10088KT'));
   });
 
   test('Test three-symbol velocity wind', () {
-    final body = "KJFK 190351Z COR 100888KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 100888KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('100888KT'));
   });
 
   test('Test one-symbol direction wind', () {
-    final body = "KJFK 190351Z COR 00205KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 00205KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('00205KT'));
   });
 
   test('Test two-symbol direction wind', () {
-    final body = "KJFK 190351Z COR 02005KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 02005KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('02005KT'));
   });
 
   test('Test three-symbol direction wind', () {
-    final body = "KJFK 190351Z COR 20005KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 20005KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('20005KT'));
   });
 
   test('Test one-symbol gust wind', () {
-    final body = "KJFK 190351Z COR 10005G09KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 10005G09KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('10005G09KT'));
   });
 
   test('Test two-symbol gust wind', () {
-    final body = "KJFK 190351Z COR 10005G90KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 10005G90KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('10005G90KT'));
   });
 
   test('Test three-symbol gust wind', () {
-    final body = "KJFK 190351Z COR 10005G900KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 10005G900KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('10005G900KT'));
   });
 
   test('Test variable wind', () {
-    final body = "KJFK 190351Z COR 10005KT 070V130 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR 10005KT 070V130 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('10005KT 070V130'));
   });
 
   test('Test variable light wind', () {
-    final body = "KJFK 190351Z COR VRB06KT 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR VRB06KT 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('VRB06KT'));
   });
 
   test('Test variable light wind, directions specified', () {
-    final body = "KJFK 190351Z COR VRB06KT 070V130 1/4SM BR OVC002 08/08 A3002";
+    final body = 'KJFK 190351Z COR VRB06KT 070V130 1/4SM BR OVC002 08/08 A3002';
     expect(Body(body).wind, ReportWind('VRB06KT 070V130'));
   });
 
   test('Test variable gust wind', () {
-    final body = "KJFK 190351Z COR 03015G25KT 000V060 1/4SM OVC002 08/08";
+    final body = 'KJFK 190351Z COR 03015G25KT 000V060 1/4SM OVC002 08/08';
     expect(Body(body).wind, ReportWind('03015G25KT 000V060'));
   });
 }
