@@ -98,7 +98,7 @@ class ReportVisibility {
   String? _regexMatch(RegExp regExp, String name) {
     _checkRegexHasMatch(regExp);
     _checkRegexHasOnlyOneMatch(regExp);
-    return regExp.firstMatch(_visibility)!.namedGroup(name);
+    return regExp.firstMatch(_visibility.trim())!.namedGroup(name);
   }
 
   String? _regexMatchOptional(RegExp regExp, String name) {
@@ -107,6 +107,6 @@ class ReportVisibility {
       return null;
     }
     _checkRegexHasOnlyOneMatch(regExp);
-    return regExp.firstMatch(_visibility)!.namedGroup(name);
+    return regExp.firstMatch(_visibility.trim())!.namedGroup(name);
   }
 }

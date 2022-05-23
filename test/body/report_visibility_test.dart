@@ -241,6 +241,10 @@ void reportVisibilityToString() {
     expect(ReportVisibility('6SM').toString(), '6SM');
   });
 
+  test('Test zero visibility', () {
+    expect(ReportVisibility('0SM').toString(), '0SM');
+  });
+
   test('Test greater than common visibility', () {
     expect(ReportVisibility('P6SM').toString(), 'P6SM');
   });
