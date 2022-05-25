@@ -1,83 +1,76 @@
-import 'package:awrep/src/common/report_runway_approach_direction.dart';
+import 'package:awrep/src/common/runway_approach_direction.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('ReportRunwayApproachDirection', () {
+  group('RunwayApproachDirection', () {
     group('string', () {
-      reportRunwayApproachDirectionString();
+      runwayApproachDirectionString();
     });
     group('stringAsReportModifier', () {
-      reportRunwayApproachDirectionStringAsReportRunwayApproachDirection();
+      runwayApproachDirectionStringAsRunwayApproachDirection();
     });
   });
 }
 
-void reportRunwayApproachDirectionString() {
+void runwayApproachDirectionString() {
   test('Test string representation of non-present runway direction', () {
-    expect(ReportRunwayApproachDirection.none.string.isEmpty, true);
+    expect(RunwayApproachDirection.none.string.isEmpty, true);
   });
   test('Test string representation of left runway direction', () {
-    expect(ReportRunwayApproachDirection.left.string, 'L');
+    expect(RunwayApproachDirection.left.string, 'L');
   });
   test('Test string representation of center runway direction', () {
-    expect(ReportRunwayApproachDirection.center.string, 'C');
+    expect(RunwayApproachDirection.center.string, 'C');
   });
   test('Test string representation of right runway direction', () {
-    expect(ReportRunwayApproachDirection.right.string, 'R');
+    expect(RunwayApproachDirection.right.string, 'R');
   });
 }
 
-void reportRunwayApproachDirectionStringAsReportRunwayApproachDirection() {
+void runwayApproachDirectionStringAsRunwayApproachDirection() {
   test('Test constructor with empty string input', () {
-    expect(stringAsReportRunwayApproachDirection(''),
-        ReportRunwayApproachDirection.none);
+    expect(stringAsRunwayApproachDirection(''), RunwayApproachDirection.none);
   });
 
   test('Test constructor with null string input', () {
-    expect(stringAsReportRunwayApproachDirection(null),
-        ReportRunwayApproachDirection.none);
+    expect(stringAsRunwayApproachDirection(null), RunwayApproachDirection.none);
   });
 
   test('Test constructor with left string input', () {
-    expect(stringAsReportRunwayApproachDirection('l'),
-        ReportRunwayApproachDirection.left);
+    expect(stringAsRunwayApproachDirection('l'), RunwayApproachDirection.left);
   });
 
   test('Test constructor with center string input', () {
-    expect(stringAsReportRunwayApproachDirection('c'),
-        ReportRunwayApproachDirection.center);
+    expect(
+        stringAsRunwayApproachDirection('c'), RunwayApproachDirection.center);
   });
 
   test('Test constructor with right string input', () {
-    expect(stringAsReportRunwayApproachDirection('r'),
-        ReportRunwayApproachDirection.right);
+    expect(stringAsRunwayApproachDirection('r'), RunwayApproachDirection.right);
   });
 
   test('Test constructor with random case string input', () {
-    expect(stringAsReportRunwayApproachDirection('R'),
-        ReportRunwayApproachDirection.right);
+    expect(stringAsRunwayApproachDirection('R'), RunwayApproachDirection.right);
   });
 
   test('Test constructor with leading space string input', () {
-    expect(stringAsReportRunwayApproachDirection(' L'),
-        ReportRunwayApproachDirection.left);
+    expect(stringAsRunwayApproachDirection(' L'), RunwayApproachDirection.left);
   });
 
   test('Test constructor with trailing space string input', () {
-    expect(stringAsReportRunwayApproachDirection('L '),
-        ReportRunwayApproachDirection.left);
+    expect(stringAsRunwayApproachDirection('L '), RunwayApproachDirection.left);
   });
 
   test('Test constructor with leading and trailing spaces string input', () {
-    expect(stringAsReportRunwayApproachDirection(' C '),
-        ReportRunwayApproachDirection.center);
+    expect(
+        stringAsRunwayApproachDirection(' C '), RunwayApproachDirection.center);
   });
 
   test('Test constructor with unexpected input', () {
     var err = 'Unexpected report runway approach direction value: `UNEXPECTED`';
     expect(
-        () => stringAsReportRunwayApproachDirection('UNEXPECTED'),
-        throwsA(predicate((e) =>
-            e is ReportRunwayApproachDirectionException && e.message == err)));
+        () => stringAsRunwayApproachDirection('UNEXPECTED'),
+        throwsA(predicate(
+            (e) => e is RunwayApproachDirectionException && e.message == err)));
   });
 }

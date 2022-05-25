@@ -1,53 +1,50 @@
-/// Approach Direction of [ReportRunway]
+/// Runway approach direction (left/center/right).
 ///
-/// [none] determines situation when no specific type is provided by report.
-enum ReportRunwayApproachDirection {
+/// [none] determines situation when no direction is provided.
+enum RunwayApproachDirection {
   none,
   left,
   center,
   right,
 }
 
-/// [ReportRunwayApproachDirectionException] is thrown when there is no
-/// corresponding [ReportRunwayApproachDirection] for provided string
+/// [RunwayApproachDirectionException] is thrown when there is no
+/// corresponding [RunwayApproachDirection] for provided string
 /// representation.
-class ReportRunwayApproachDirectionException implements Exception {
+class RunwayApproachDirectionException implements Exception {
   final String message;
 
-  const ReportRunwayApproachDirectionException(this.message);
+  const RunwayApproachDirectionException(this.message);
 
   String errMsg() => this.message;
 }
 
-/// The extension adds [string] getter to represent
-/// [ReportRunwayApproachDirectionException] enum value.
-extension ReportRunwayApproachDirectionExtension
-    on ReportRunwayApproachDirection {
+/// The extension for [RunwayApproachDirection] enum.
+extension RunwayApproachDirectionExtension on RunwayApproachDirection {
+  /// Represents [RunwayApproachDirection] enum value as String value.
   String get string {
-    if (this == ReportRunwayApproachDirection.none) {
+    if (this == RunwayApproachDirection.none) {
       return '';
     }
     return this.name.toUpperCase()[0];
   }
 }
 
-/// The constructor function to create [ReportRunwayApproachDirection]
-/// from String.
-ReportRunwayApproachDirection stringAsReportRunwayApproachDirection(
-    String? direction) {
+/// The constructor function to create [RunwayApproachDirection] from String.
+RunwayApproachDirection stringAsRunwayApproachDirection(String? direction) {
   if (direction == null || direction.trim().isEmpty) {
-    return ReportRunwayApproachDirection.none;
+    return RunwayApproachDirection.none;
   }
-  switch (direction.trim().toLowerCase()[0]) {
-    case 'l':
-      return ReportRunwayApproachDirection.left;
-    case 'c':
-      return ReportRunwayApproachDirection.center;
-    case 'r':
-      return ReportRunwayApproachDirection.right;
+  switch (direction.trim().toUpperCase()[0]) {
+    case 'L':
+      return RunwayApproachDirection.left;
+    case 'C':
+      return RunwayApproachDirection.center;
+    case 'R':
+      return RunwayApproachDirection.right;
     default:
       print('Unexpected report runway approach direction value: `$direction`');
-      throw ReportRunwayApproachDirectionException(
+      throw RunwayApproachDirectionException(
           'Unexpected report runway approach direction value: `$direction`');
   }
 }
