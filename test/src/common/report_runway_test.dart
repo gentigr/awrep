@@ -1,5 +1,7 @@
 import 'package:awrep/src/common/report_runway.dart';
+/* switch off this API until Runway Approach class is settled
 import 'package:awrep/src/common/report_runway_approach_direction.dart';
+*/
 import 'package:test/test.dart';
 
 void main() {
@@ -7,18 +9,22 @@ void main() {
     group('number', () {
       reportRunwayNumber();
     });
+    /* switch off this API until Runway Approach class is settled
     group('direction', () {
       reportRunwayDirection();
     });
+    */
     group('equalityOperator', () {
       reportRunwayEqualityOperator();
     });
     group('hashCode', () {
       reportRunwayHashCode();
     });
+    /* switch off this API until Runway Approach class is settled
     group('toString', () {
       reportRunwayToString();
     });
+    */
   });
 }
 
@@ -70,6 +76,7 @@ void reportRunwayNumber() {
   });
 }
 
+/* switch off this API until Runway Approach class is settled
 void reportRunwayDirection() {
   test('Test no match', () {
     expect(ReportRunway('01').direction, ReportRunwayApproachDirection.none);
@@ -99,6 +106,7 @@ void reportRunwayDirection() {
     expect(ReportRunway('03r').direction, ReportRunwayApproachDirection.right);
   });
 }
+ */
 
 void reportRunwayEqualityOperator() {
   test('Test equality operator for non-equality, no approach', () {
@@ -136,6 +144,7 @@ void reportRunwayHashCode() {
   });
 }
 
+/* switch off this API until Runway Approach class is settled
 void reportRunwayToString() {
   test('Test one-sign number value', () {
     expect(ReportRunway('01').toString(), '01');
@@ -169,3 +178,4 @@ void reportRunwayToString() {
     expect(ReportRunway('10R').toString(), '10R');
   });
 }
+ */

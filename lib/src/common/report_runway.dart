@@ -1,4 +1,6 @@
+/* switch off this API until Runway Approach class is settled
 import 'package:awrep/src/common/report_runway_approach_direction.dart';
+*/
 
 /// [ReportRunwayException] is thrown when there is a parsing error occurred
 /// during the creation of [ReportRunway] object.
@@ -27,13 +29,14 @@ class ReportRunway {
     _checkBoundaries('runway', value, 1, 36);
     return value;
   }
-
+  /* switch off this API until Runway Approach class is settled
   /// Returns runway approach direction.
   ReportRunwayApproachDirection get direction {
     var regExp = RegExp('(?<direction>[L|l|C|c|R|r])\$');
     var direction = _regexMatchOptional(regExp, 'direction');
     return stringAsReportRunwayApproachDirection(direction);
   }
+   */
 
   @override
   bool operator ==(Object other) {
@@ -43,10 +46,12 @@ class ReportRunway {
   @override
   int get hashCode => _runway.hashCode;
 
+  /* switch off this API until Runway Approach class is settled
   @override
   String toString() {
     return '${_format(number)}${direction.string}';
   }
+   */
 
   int _integer(String name, String value) {
     try {
