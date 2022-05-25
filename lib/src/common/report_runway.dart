@@ -1,4 +1,4 @@
-import 'package:awrep/body/report_runway_approach_direction.dart';
+import 'package:awrep/src/common/report_runway_approach_direction.dart';
 
 /// [ReportRunwayException] is thrown when there is a parsing error occurred
 /// during the creation of [ReportRunway] object.

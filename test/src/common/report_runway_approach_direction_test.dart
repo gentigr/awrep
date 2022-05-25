@@ -1,4 +1,4 @@
-import 'package:awrep/body/report_runway_approach_direction.dart';
+import 'package:awrep/src/common/report_runway_approach_direction.dart';
 import 'package:test/test.dart';
 
 void main() {
