@@ -1,50 +1,53 @@
-/// Runway approach direction (left/center/right).
-///
-/// [none] determines situation when no direction is provided.
+/// The runway approach direction.
 enum RunwayApproachDirection {
-  none,
-  left,
-  center,
-  right,
-}
+  /// The value represents situation when no direction is provided.
+  none._instance(''),
 
-/// [RunwayApproachDirectionException] is thrown when there is no
-/// corresponding [RunwayApproachDirection] for provided string
-/// representation.
-class RunwayApproachDirectionException implements Exception {
-  final String message;
+  /// The value represents situation when the direction of approach is LEFT.
+  left._instance('L'),
 
-  const RunwayApproachDirectionException(this.message);
+  /// The value represents situation when the direction of approach is CENTER.
+  center._instance('C'),
 
-  String errMsg() => this.message;
-}
+  /// The value represents situation when the direction of approach is RIGHT.
+  right._instance('R');
 
-/// The extension for [RunwayApproachDirection] enum.
-extension RunwayApproachDirectionExtension on RunwayApproachDirection {
-  /// Represents [RunwayApproachDirection] enum value as String value.
-  String get string {
-    if (this == RunwayApproachDirection.none) {
-      return '';
+  final String _value;
+
+  const RunwayApproachDirection._instance(this._value);
+
+  /// Creates enum object from its string representation.
+  ///
+  /// Throws a [FormatException] if specified [runwayApproachDirection] value
+  /// does not correspond to expected format (such as null, empty or one
+  /// non-space symbol).
+  factory RunwayApproachDirection(String? runwayApproachDirection) {
+    if (runwayApproachDirection == null) {
+      return none;
     }
-    return this.name.toUpperCase()[0];
+    String value = runwayApproachDirection.trim().toUpperCase();
+    if (value.isEmpty) {
+      return none;
+    }
+    if (value.length > 1) {
+      throw FormatException('Runway approach direction must consist only of 1 '
+          'non-space character, provided `$runwayApproachDirection`');
+    }
+    switch (value) {
+      case 'L':
+        return left;
+      case 'C':
+        return center;
+      case 'R':
+        return right;
+      default:
+        throw FormatException('Unexpected runway approach direction, '
+            'provided: `$runwayApproachDirection`');
+    }
   }
-}
 
-/// The constructor function to create [RunwayApproachDirection] from String.
-RunwayApproachDirection stringAsRunwayApproachDirection(String? direction) {
-  if (direction == null || direction.trim().isEmpty) {
-    return RunwayApproachDirection.none;
-  }
-  switch (direction.trim().toUpperCase()[0]) {
-    case 'L':
-      return RunwayApproachDirection.left;
-    case 'C':
-      return RunwayApproachDirection.center;
-    case 'R':
-      return RunwayApproachDirection.right;
-    default:
-      print('Unexpected report runway approach direction value: `$direction`');
-      throw RunwayApproachDirectionException(
-          'Unexpected report runway approach direction value: `$direction`');
+  @override
+  String toString() {
+    return _value;
   }
 }
