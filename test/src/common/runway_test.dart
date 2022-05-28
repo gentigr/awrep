@@ -1,181 +1,154 @@
-import 'package:awrep/src/common/report_runway.dart';
-/* switch off this API until Runway Approach class is settled
-import 'package:awrep/src/common/report_runway_approach_direction.dart';
-*/
+import 'package:awrep/src/common/runway.dart';
+import 'package:awrep/src/common/runway_approach_direction.dart';
+import 'package:awrep/src/common/runway_number.dart';
+
 import 'package:test/test.dart';
 
+import '../../test_utils.dart';
+
 void main() {
-  group('ReportRunway', () {
+  group('Runway', () {
+    group('constructor', () {
+      runwayConstructor();
+    });
     group('number', () {
-      reportRunwayNumber();
+      runwayNumber();
     });
-    /* switch off this API until Runway Approach class is settled
     group('direction', () {
-      reportRunwayDirection();
+      runwayDirection();
     });
-    */
+    group('toString', () {
+      runwayToString();
+    });
     group('equalityOperator', () {
-      reportRunwayEqualityOperator();
+      runwayEqualityOperator();
     });
     group('hashCode', () {
-      reportRunwayHashCode();
+      runwayHashCode();
     });
-    /* switch off this API until Runway Approach class is settled
-    group('toString', () {
-      reportRunwayToString();
-    });
-    */
   });
 }
 
-void reportRunwayNumber() {
-  test('Test no match', () {
-    var err = 'Failed to find RegEx `RegExp: pattern=^(?<number>\\d{2}) '
-        'flags=` in runway coding `L`';
-
-    expect(
-        () => ReportRunway('L').number,
-        throwsA(
-            predicate((e) => e is ReportRunwayException && e.message == err)));
+void runwayConstructor() {
+  test('Test compliance with format, negative', () {
+    var err = 'Expected to find one match of `Runway` format in `01 01`, but '
+        'found `0` using `RegExp: pattern=^\\d{2}[L|C|R]?\$ flags=`';
+    expectFormatException(() => Runway('01 01'), err);
   });
 
+  test('Test compliance with format, negative with direction', () {
+    var err = 'Expected to find one match of `Runway` format in `1RR`, but '
+        'found `0` using `RegExp: pattern=^\\d{2}[L|C|R]?\$ flags=`';
+    expectFormatException(() => Runway('1RR'), err);
+  });
+
+  test('Test compliance with format, positive', () {
+    expect(Runway('01R'), isA<Runway>());
+  });
+}
+
+void runwayNumber() {
   test('Test with leading zero, no approach', () {
-    expect(ReportRunway('01').number, 1);
+    expect(Runway('01').number, RunwayNumber(1));
   });
 
   test('Test with leading zero, with approach', () {
-    expect(ReportRunway('01R').number, 1);
+    expect(Runway('01R').number, RunwayNumber(1));
   });
 
   test('Test without leading zero, no approach', () {
-    expect(ReportRunway('20').number, 20);
+    expect(Runway('20').number, RunwayNumber(20));
   });
 
   test('Test without leading zero, with approach', () {
-    expect(ReportRunway('20R').number, 20);
-  });
-
-  test('Test lower limit', () {
-    var err = 'Report runway value must be within [1; 36] range, '
-        'provided: `0` from `00`';
-
-    expect(
-        () => ReportRunway('00').number,
-        throwsA(
-            predicate((e) => e is ReportRunwayException && e.message == err)));
-  });
-
-  test('Test upper limit', () {
-    var err = 'Report runway value must be within [1; 36] range, '
-        'provided: `37` from `37`';
-
-    expect(
-        () => ReportRunway('37').number,
-        throwsA(
-            predicate((e) => e is ReportRunwayException && e.message == err)));
+    expect(Runway('20R').number, RunwayNumber(20));
   });
 }
 
-/* switch off this API until Runway Approach class is settled
-void reportRunwayDirection() {
+void runwayDirection() {
   test('Test no match', () {
-    expect(ReportRunway('01').direction, ReportRunwayApproachDirection.none);
+    expect(Runway('01').direction, RunwayApproachDirection.none);
   });
 
   test('Test left approach', () {
-    expect(ReportRunway('20L').direction, ReportRunwayApproachDirection.left);
+    expect(Runway('20L').direction, RunwayApproachDirection.left);
   });
 
   test('Test center approach', () {
-    expect(ReportRunway('25C').direction, ReportRunwayApproachDirection.center);
+    expect(Runway('25C').direction, RunwayApproachDirection.center);
   });
 
   test('Test right approach', () {
-    expect(ReportRunway('03R').direction, ReportRunwayApproachDirection.right);
-  });
-
-  test('Test left approach, low case', () {
-    expect(ReportRunway('20l').direction, ReportRunwayApproachDirection.left);
-  });
-
-  test('Test center approach, low case', () {
-    expect(ReportRunway('25c').direction, ReportRunwayApproachDirection.center);
-  });
-
-  test('Test right approach, low case', () {
-    expect(ReportRunway('03r').direction, ReportRunwayApproachDirection.right);
+    expect(Runway('03R').direction, RunwayApproachDirection.right);
   });
 }
- */
 
-void reportRunwayEqualityOperator() {
+void runwayEqualityOperator() {
   test('Test equality operator for non-equality, no approach', () {
-    expect(ReportRunway('01') == ReportRunway('02'), false);
+    expect(Runway('01') == Runway('02'), false);
   });
 
   test('Test equality operator for non-equality, with approach', () {
-    expect(ReportRunway('02R') == ReportRunway('02C'), false);
+    expect(Runway('02R') == Runway('02C'), false);
   });
 
   test('Test equality operator for equality, no approach', () {
-    expect(ReportRunway('01') == ReportRunway('01'), true);
+    expect(Runway('01') == Runway('01'), true);
   });
 
   test('Test equality operator for equality, with approach', () {
-    expect(ReportRunway('02L') == ReportRunway('02L'), true);
+    expect(Runway('02L') == Runway('02L'), true);
   });
 }
 
-void reportRunwayHashCode() {
+void runwayHashCode() {
   test('Test hash generation for non-equality, no approach', () {
-    expect(ReportRunway('10').hashCode == ReportRunway('20').hashCode, false);
+    expect(Runway('10').hashCode == Runway('20').hashCode, false);
   });
 
   test('Test hash generation for non-equality, with approach', () {
-    expect(ReportRunway('20R').hashCode == ReportRunway('20C').hashCode, false);
+    expect(Runway('20R').hashCode == Runway('20C').hashCode, false);
   });
 
   test('Test hash generation for equality, no approach', () {
-    expect(ReportRunway('10').hashCode == ReportRunway('10').hashCode, true);
+    expect(Runway('10').hashCode == Runway('10').hashCode, true);
   });
 
   test('Test hash generation for equality, with approach', () {
-    expect(ReportRunway('20L').hashCode == ReportRunway('20L').hashCode, true);
+    expect(Runway('20L').hashCode == Runway('20L').hashCode, true);
   });
 }
 
-/* switch off this API until Runway Approach class is settled
-void reportRunwayToString() {
+void runwayToString() {
   test('Test one-sign number value', () {
-    expect(ReportRunway('01').toString(), '01');
+    expect(Runway('01').toString(), '01');
   });
 
   test('Test two-sign number value', () {
-    expect(ReportRunway('10').toString(), '10');
+    expect(Runway('10').toString(), '10');
   });
 
   test('Test one-sign number value, left approach', () {
-    expect(ReportRunway('01L').toString(), '01L');
+    expect(Runway('01L').toString(), '01L');
   });
 
   test('Test two-sign number value, left approach', () {
-    expect(ReportRunway('10l').toString(), '10L');
+    expect(Runway('10L').toString(), '10L');
   });
 
   test('Test one-sign number value, center approach', () {
-    expect(ReportRunway('01c').toString(), '01C');
+    expect(Runway('01C').toString(), '01C');
   });
 
   test('Test two-sign number value, center approach', () {
-    expect(ReportRunway('10C').toString(), '10C');
+    expect(Runway('10C').toString(), '10C');
   });
 
   test('Test one-sign number value, right approach', () {
-    expect(ReportRunway('01r').toString(), '01R');
+    expect(Runway('01R').toString(), '01R');
   });
 
   test('Test two-sign number value, right approach', () {
-    expect(ReportRunway('10R').toString(), '10R');
+    expect(Runway('10R').toString(), '10R');
   });
 }
- */

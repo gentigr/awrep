@@ -1,122 +1,46 @@
-/* switch off this API until Runway Approach class is settled
-import 'package:awrep/src/common/report_runway_approach_direction.dart';
-*/
+import 'regexp_decorator.dart';
+import 'runway_approach_direction.dart';
+import 'runway_number.dart';
 
-/// [ReportRunwayException] is thrown when there is a parsing error occurred
-/// during the creation of [ReportRunway] object.
-class ReportRunwayException implements Exception {
-  final String message;
-
-  const ReportRunwayException(this.message);
-
-  String errMsg() => this.message;
-}
-
-/// Runway identification used within [Report].
-class ReportRunway {
+/// The class represents runway identification used within [Report].
+class Runway {
   final String _runway;
 
-  /// Constructor of [ReportRunway] object, provided string is in DDA format,
-  /// where DD -> digital representation of runway number, and
-  /// A -> [ReportRunwayApproachDirection] if present.
-  const ReportRunway(this._runway);
+  /// Constructs a [Runway] from string representation.
+  ///
+  /// Provided string is in DDA format, where DD is a digital representation of
+  /// runway number, and A is a [RunwayApproachDirection] if present.
+  /// Throws [FormatException] if the provided value is not within described
+  /// format.
+  Runway(this._runway) {
+    var regExp = RegExpDecorator('^\\d{2}[L|C|R]?\$');
+    regExp.verifySingleMatch(_runway, this.runtimeType.toString());
+  }
 
   /// Returns runway number.
-  int get number {
-    var regExp = RegExp('^(?<number>\\d{2})');
-    var runway = _regexMatch(regExp, 'number')!;
-    int value = _integer('runway', runway);
-    _checkBoundaries('runway', value, 1, 36);
-    return value;
+  RunwayNumber get number {
+    var regExp = RegExpDecorator('^(?<number>\\d{2})');
+    var runway = regExp.getMatchByName(_runway, 'number');
+    return RunwayNumber.fromString(runway);
   }
-  /* switch off this API until Runway Approach class is settled
+
   /// Returns runway approach direction.
-  ReportRunwayApproachDirection get direction {
-    var regExp = RegExp('(?<direction>[L|l|C|c|R|r])\$');
-    var direction = _regexMatchOptional(regExp, 'direction');
-    return stringAsReportRunwayApproachDirection(direction);
+  RunwayApproachDirection get direction {
+    var regExp = RegExpDecorator('(?<direction>[L|C|R])\$');
+    var direction = regExp.getMatchByNameOptional(_runway, 'direction');
+    return RunwayApproachDirection(direction);
   }
-   */
+
+  @override
+  String toString() {
+    return '${number.toString()}${direction.toString()}';
+  }
 
   @override
   bool operator ==(Object other) {
-    return other is ReportRunway && this.hashCode == other.hashCode;
+    return other is Runway && this.hashCode == other.hashCode;
   }
 
   @override
   int get hashCode => _runway.hashCode;
-
-  /* switch off this API until Runway Approach class is settled
-  @override
-  String toString() {
-    return '${_format(number)}${direction.string}';
-  }
-   */
-
-  int _integer(String name, String value) {
-    try {
-      return int.parse(value);
-    } on FormatException catch (e) {
-      throw ReportRunwayException('Could not parse report $name part '
-          '`$value` of `$_runway`, error: `$e`');
-    }
-  }
-
-  void _checkBoundaries(
-      String name, int value, int minLimitInclusive, int maxLimitInclusive) {
-    if (value < minLimitInclusive || value > maxLimitInclusive) {
-      print('Report $name value must be within '
-          '[$minLimitInclusive; $maxLimitInclusive] range, provided: `$value` '
-          'from `$_runway`');
-      throw ReportRunwayException('Report $name value must be within '
-          '[$minLimitInclusive; $maxLimitInclusive] range, provided: `$value` '
-          'from `$_runway`');
-    }
-  }
-
-  static String _format(int num) {
-    return num.toString().padLeft(2, '0');
-  }
-
-  bool _checkRegexHasMatch(RegExp regExp, {bool noThrow = false}) {
-    if (regExp.hasMatch(_runway)) {
-      return true;
-    }
-    if (noThrow) {
-      return false;
-    }
-    var err = 'Failed to find RegEx `$regExp` in runway coding `$_runway`';
-    print(err);
-    throw ReportRunwayException(err);
-  }
-
-  bool _checkRegexHasOnlyOneMatch(RegExp regExp, {bool noThrow = false}) {
-    if (regExp.allMatches(_runway).length == 1) {
-      return true;
-    }
-    if (noThrow) {
-      return false;
-    }
-    print(regExp.allMatches(_runway).toList()[0].groupNames);
-    print(regExp.allMatches(_runway).toList()[1].groupNames);
-    var err = 'Too many matches were found by RegEx `$regExp` '
-        'in runway coding `$_runway`';
-    print(err);
-    throw ReportRunwayException(err);
-  }
-
-  String? _regexMatch(RegExp regExp, String name) {
-    _checkRegexHasMatch(regExp);
-    _checkRegexHasOnlyOneMatch(regExp);
-    return regExp.firstMatch(_runway.trim())!.namedGroup(name);
-  }
-
-  String? _regexMatchOptional(RegExp regExp, String name) {
-    bool hasMatch = _checkRegexHasMatch(regExp, noThrow: true);
-    if (!hasMatch) {
-      return null;
-    }
-    _checkRegexHasOnlyOneMatch(regExp);
-    return regExp.firstMatch(_runway.trim())!.namedGroup(name);
-  }
 }
