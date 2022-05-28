@@ -1,6 +1,8 @@
 import 'package:awrep/src/common/runway_approach_direction.dart';
 import 'package:test/test.dart';
 
+import '../../test_utils.dart';
+
 void main() {
   group('RunwayApproachDirection', () {
     group('factory', () {
@@ -16,14 +18,12 @@ void runwayApproachDirectionFactory() {
   test('Test constructor with unexpected long input', () {
     var err = 'Runway approach direction must consist only of 1 non-space '
         'character, provided `UNEXPECTED`';
-    expect(() => RunwayApproachDirection('UNEXPECTED'),
-        throwsA(predicate((e) => e is FormatException && e.message == err)));
+    expectFormatException(() => RunwayApproachDirection('UNEXPECTED'), err);
   });
 
   test('Test constructor with unexpected short input', () {
     var err = 'Unexpected runway approach direction, provided: `U`';
-    expect(() => RunwayApproachDirection('U'),
-        throwsA(predicate((e) => e is FormatException && e.message == err)));
+    expectFormatException(() => RunwayApproachDirection('U'), err);
   });
 
   test('Test constructor with empty string input', () {
