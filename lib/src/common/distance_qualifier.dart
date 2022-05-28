@@ -1,54 +1,50 @@
-/// Modifier of [Report] distance values
-///
-/// [none] determines situation when no specific modifier is provided.
-enum ReportDistanceModifier {
-  none,
-  less, // the distance is less than reported
-  greater, // the distance is greater than reported
-}
+/// The qualifier for distances to specify better or worse conditions.
+enum DistanceQualifier {
+  /// The value represents situation when no qualifier is provided.
+  none._instance(''),
 
-/// [ReportDistanceModifierException] is thrown when there is no corresponding
-/// [ReportDistanceModifier] for provided string representation.
-class ReportDistanceModifierException implements Exception {
-  final String message;
+  /// The value represents situation when the distance is less than reported.
+  less._instance('M'),
 
-  const ReportDistanceModifierException(this.message);
+  /// The value represents situation when the distance is more than reported.
+  more._instance('P');
 
-  String errMsg() => this.message;
-}
+  final String _value;
 
-/// The extension adds [string] getter to represent [ReportDistanceModifier]
-/// enum value.
-extension ReportDistanceModifierExtension on ReportDistanceModifier {
-  String get string {
-    switch (this) {
-      case ReportDistanceModifier.none:
-        return '';
-      case ReportDistanceModifier.less:
-        return 'M';
-      case ReportDistanceModifier.greater:
-        return 'P';
+  const DistanceQualifier._instance(this._value);
+
+  /// Creates [DistanceQualifier] enum object from its string representation.
+  ///
+  /// Throws a [FormatException] if specified [distanceQualifier] value
+  /// does not correspond to expected format (such as null, empty or one
+  /// non-space symbol such as 'M' or 'P').
+  factory DistanceQualifier(String? distanceQualifier) {
+    if (distanceQualifier == null) {
+      return none;
+    }
+    String value = distanceQualifier.trim().toUpperCase();
+    if (value.isEmpty) {
+      return none;
+    }
+    if (value.length > 1) {
+      throw FormatException(
+          'Distance qualifier must consist only of 1 non-space '
+          'character, provided `$distanceQualifier`');
+    }
+    switch (value) {
+      case 'M':
+        return less;
+      case 'P':
+        return more;
       default:
-        print('Not implemented ReportDistanceModifier value: `$this`');
-        throw ReportDistanceModifierException(
-            'Not implemented ReportDistanceModifier value: `$this`');
+        throw FormatException(
+            'Unexpected distance qualifier, must be [M|P] but '
+            ' provided: `$distanceQualifier`');
     }
   }
-}
 
-/// This is a constructor method for [ReportDistanceModifier] from String.
-ReportDistanceModifier stringAsReportDistanceModifier(String? modifier) {
-  if (modifier == null || modifier.trim().isEmpty) {
-    return ReportDistanceModifier.none;
-  }
-  switch (modifier.trim().toLowerCase()[0]) {
-    case 'm':
-      return ReportDistanceModifier.less;
-    case 'p':
-      return ReportDistanceModifier.greater;
-    default:
-      print('Unexpected report distance modifier value: `$modifier`');
-      throw ReportDistanceModifierException(
-          'Unexpected report distance modifier value: `$modifier`');
+  @override
+  String toString() {
+    return _value;
   }
 }
