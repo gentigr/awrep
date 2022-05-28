@@ -17,6 +17,12 @@ void main() {
     group('toString', () {
       runwayNumberToString();
     });
+    group('equalityOperator', () {
+      runwayNumberEqualityOperator();
+    });
+    group('hashCode', () {
+      runwayNumberHashCode();
+    });
   });
 }
 
@@ -60,5 +66,25 @@ void runwayNumberToString() {
 
   test('Test with no leading zero', () {
     expect(RunwayNumber(21).toString(), '21');
+  });
+}
+
+void runwayNumberEqualityOperator() {
+  test('Test equality operator for non-equality', () {
+    expect(RunwayNumber(1) == RunwayNumber(2), false);
+  });
+
+  test('Test equality operator for equality', () {
+    expect(RunwayNumber(1) == RunwayNumber(1), true);
+  });
+}
+
+void runwayNumberHashCode() {
+  test('Test hash generation for non-equality', () {
+    expect(RunwayNumber(1).hashCode == RunwayNumber(2).hashCode, false);
+  });
+
+  test('Test hash generation for equality', () {
+    expect(RunwayNumber(1).hashCode == RunwayNumber(1).hashCode, true);
   });
 }

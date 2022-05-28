@@ -22,9 +22,16 @@ class RunwayNumber {
     return _number;
   }
 
-  /// The runway number representation using string type.
   @override
   String toString() {
     return _number.toString().padLeft(2, '0');
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RunwayNumber && this.hashCode == other.hashCode;
+  }
+
+  @override
+  int get hashCode => _number.hashCode;
 }
