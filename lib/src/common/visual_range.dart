@@ -25,8 +25,8 @@ class VisualRange {
   /// The visual range qualifier.
   DistanceQualifier get qualifier {
     var regExp = RegExpDecorator('^(?<qualifier>[M|P])');
-    var modifier = regExp.getMatchByNameOptional(_visualRange, 'qualifier');
-    return DistanceQualifier(modifier);
+    var qualifier = regExp.getMatchByNameOptional(_visualRange, 'qualifier');
+    return DistanceQualifier(qualifier);
   }
 
   @override

@@ -102,46 +102,6 @@ void visualRangeQualifier() {
   });
 }
 
-void visualRangeEqualityOperator() {
-  test('Test equality operator for non-equality, no approach', () {
-    expect(VisualRange('0100FT') == VisualRange('0200FT'), false);
-  });
-
-  test('Test equality operator for non-equality, with approach', () {
-    expect(VisualRange('M0100FT') == VisualRange('0100FT'), false);
-  });
-
-  test('Test equality operator for equality, no approach', () {
-    expect(VisualRange('0100FT') == VisualRange('0100FT'), true);
-  });
-
-  test('Test equality operator for equality, with approach', () {
-    expect(VisualRange('P0200FT') == VisualRange('P0200FT'), true);
-  });
-}
-
-void visualRangeHashCode() {
-  test('Test hash generation for non-equality, no approach', () {
-    expect(VisualRange('0100FT').hashCode == VisualRange('0200FT').hashCode,
-        false);
-  });
-
-  test('Test hash generation for non-equality, with approach', () {
-    expect(VisualRange('M0100FT').hashCode == VisualRange('0100FT').hashCode,
-        false);
-  });
-
-  test('Test hash generation for equality, no approach', () {
-    expect(
-        VisualRange('0100FT').hashCode == VisualRange('0100FT').hashCode, true);
-  });
-
-  test('Test hash generation for equality, with approach', () {
-    expect(VisualRange('P0200FT').hashCode == VisualRange('P0200FT').hashCode,
-        true);
-  });
-}
-
 void visualRangeToString() {
   test('Test no leading zeros', () {
     expect(VisualRange('1000FT').toString(), '1000FT');
@@ -169,5 +129,45 @@ void visualRangeToString() {
 
   test('Test no leading zeros with MINUS modifier', () {
     expect(VisualRange('M5555FT').toString(), 'M5555FT');
+  });
+}
+
+void visualRangeEqualityOperator() {
+  test('Test equality operator for non-equality, no qualifier', () {
+    expect(VisualRange('0100FT') == VisualRange('0200FT'), false);
+  });
+
+  test('Test equality operator for non-equality, with qualifier', () {
+    expect(VisualRange('M0100FT') == VisualRange('0100FT'), false);
+  });
+
+  test('Test equality operator for equality, no qualifier', () {
+    expect(VisualRange('0100FT') == VisualRange('0100FT'), true);
+  });
+
+  test('Test equality operator for equality, with qualifier', () {
+    expect(VisualRange('P0200FT') == VisualRange('P0200FT'), true);
+  });
+}
+
+void visualRangeHashCode() {
+  test('Test hash generation for non-equality, no qualifier', () {
+    expect(VisualRange('0100FT').hashCode == VisualRange('0200FT').hashCode,
+        false);
+  });
+
+  test('Test hash generation for non-equality, with qualifier', () {
+    expect(VisualRange('M0100FT').hashCode == VisualRange('0100FT').hashCode,
+        false);
+  });
+
+  test('Test hash generation for equality, no qualifier', () {
+    expect(
+        VisualRange('0100FT').hashCode == VisualRange('0100FT').hashCode, true);
+  });
+
+  test('Test hash generation for equality, with qualifier', () {
+    expect(VisualRange('P0200FT').hashCode == VisualRange('P0200FT').hashCode,
+        true);
   });
 }
