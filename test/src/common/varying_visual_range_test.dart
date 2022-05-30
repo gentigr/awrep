@@ -194,6 +194,36 @@ void varyingVisualRangeHighestQualifier() {
   });
 }
 
+void varyingVisualRangeToString() {
+  test('Test no leading zeros', () {
+    expect(VaryingVisualRange('1000V2000FT').toString(), '1000V2000FT');
+  });
+
+  test('Test one leading zeros', () {
+    expect(VaryingVisualRange('0100V0200FT').toString(), '0100V0200FT');
+  });
+
+  test('Test two leading zeros', () {
+    expect(VaryingVisualRange('0010V0020FT').toString(), '0010V0020FT');
+  });
+
+  test('Test three leading zeros', () {
+    expect(VaryingVisualRange('0001V0002FT').toString(), '0001V0002FT');
+  });
+
+  test('Test four leading zeros', () {
+    expect(VaryingVisualRange('0000V0000FT').toString(), '0000V0000FT');
+  });
+
+  test('Test four leading zeros with PLUS modifier', () {
+    expect(VaryingVisualRange('0000VP0000FT').toString(), '0000VP0000FT');
+  });
+
+  test('Test no leading zeros with MINUS modifier', () {
+    expect(VaryingVisualRange('M5555V6666FT').toString(), 'M5555V6666FT');
+  });
+}
+
 void varyingVisualRangeEqualityOperator() {
   test('Test equality operator for non-equality, no qualifier', () {
     expect(
@@ -273,35 +303,5 @@ void varyingVisualRangeHashCode() {
         VaryingVisualRange('0100V1000FT').hashCode ==
             VaryingVisualRange('0100V1000FT').hashCode,
         true);
-  });
-}
-
-void varyingVisualRangeToString() {
-  test('Test no leading zeros', () {
-    expect(VaryingVisualRange('1000V2000FT').toString(), '1000V2000FT');
-  });
-
-  test('Test one leading zeros', () {
-    expect(VaryingVisualRange('0100V0200FT').toString(), '0100V0200FT');
-  });
-
-  test('Test two leading zeros', () {
-    expect(VaryingVisualRange('0010V0020FT').toString(), '0010V0020FT');
-  });
-
-  test('Test three leading zeros', () {
-    expect(VaryingVisualRange('0001V0002FT').toString(), '0001V0002FT');
-  });
-
-  test('Test four leading zeros', () {
-    expect(VaryingVisualRange('0000V0000FT').toString(), '0000V0000FT');
-  });
-
-  test('Test four leading zeros with PLUS modifier', () {
-    expect(VaryingVisualRange('0000VP0000FT').toString(), '0000VP0000FT');
-  });
-
-  test('Test no leading zeros with MINUS modifier', () {
-    expect(VaryingVisualRange('M5555V6666FT').toString(), 'M5555V6666FT');
   });
 }
