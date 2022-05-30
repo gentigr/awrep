@@ -1,4 +1,4 @@
-import 'package:awrep/src/common/visual_range.dart';
+import 'package:awrep/src/common/stable_visual_range.dart';
 import 'package:awrep/src/common/distance_qualifier.dart';
 
 import 'package:test/test.dart';
@@ -6,168 +6,178 @@ import 'package:test/test.dart';
 import '../../test_utils.dart';
 
 void main() {
-  group('VisualRange', () {
+  group('StableVisualRange', () {
     group('constructor', () {
-      visualRangeConstructor();
+      stableVisualRangeConstructor();
     });
     group('distance', () {
-      visualRangeDistance();
+      stableVisualRangeDistance();
     });
     group('qualifier', () {
-      visualRangeQualifier();
+      stableVisualRangeQualifier();
     });
     group('toString', () {
-      visualRangeToString();
+      stableVisualRangeToString();
     });
     group('equalityOperator', () {
-      visualRangeEqualityOperator();
+      stableVisualRangeEqualityOperator();
     });
     group('hashCode', () {
-      visualRangeHashCode();
+      stableVisualRangeHashCode();
     });
   });
 }
 
-void visualRangeConstructor() {
+void stableVisualRangeConstructor() {
   test('Test compliance with format, negative', () {
-    var err = 'Expected to find one match of `VisualRange` format in `01010`, '
-        'but found `0` using `RegExp: pattern=^[M|P]?\\d{4}FT\$ flags=`';
-    expectFormatException(() => VisualRange('01010'), err);
+    var err = 'Expected to find one match of `StableVisualRange` format in '
+        '`01010`, but found `0` using '
+        '`RegExp: pattern=^[M|P]?\\d{4}FT\$ flags=`';
+    expectFormatException(() => StableVisualRange('01010'), err);
   });
 
   test('Test compliance with format, negative with qualifier', () {
-    var err = 'Expected to find one match of `VisualRange` format in `RR101`, '
-        'but found `0` using `RegExp: pattern=^[M|P]?\\d{4}FT\$ flags=`';
-    expectFormatException(() => VisualRange('RR101'), err);
+    var err = 'Expected to find one match of `StableVisualRange` format in '
+        '`RR101`, but found `0` using '
+        '`RegExp: pattern=^[M|P]?\\d{4}FT\$ flags=`';
+    expectFormatException(() => StableVisualRange('RR101'), err);
   });
 
   test('Test compliance with format, positive', () {
-    expect(VisualRange('M1000FT'), isA<VisualRange>());
+    expect(StableVisualRange('M1000FT'), isA<StableVisualRange>());
   });
 }
 
-void visualRangeDistance() {
+void stableVisualRangeDistance() {
   test('Test with no leading zero, no qualifier', () {
-    expect(VisualRange('1000FT').distance, 1000);
+    expect(StableVisualRange('1000FT').distance, 1000);
   });
 
   test('Test with one leading zero, no qualifier', () {
-    expect(VisualRange('0100FT').distance, 100);
+    expect(StableVisualRange('0100FT').distance, 100);
   });
 
   test('Test with two leading zero, no qualifier', () {
-    expect(VisualRange('0010FT').distance, 10);
+    expect(StableVisualRange('0010FT').distance, 10);
   });
 
   test('Test with three leading zero, no qualifier', () {
-    expect(VisualRange('0001FT').distance, 1);
+    expect(StableVisualRange('0001FT').distance, 1);
   });
 
   test('Test with four leading zero, no qualifier', () {
-    expect(VisualRange('0000FT').distance, 0);
+    expect(StableVisualRange('0000FT').distance, 0);
   });
 
   test('Test with no leading zero, with qualifier', () {
-    expect(VisualRange('P2000FT').distance, 2000);
+    expect(StableVisualRange('P2000FT').distance, 2000);
   });
 
   test('Test with one leading zero, with qualifier', () {
-    expect(VisualRange('P0200FT').distance, 200);
+    expect(StableVisualRange('P0200FT').distance, 200);
   });
 
   test('Test with two leading zero, with qualifier', () {
-    expect(VisualRange('P0020FT').distance, 20);
+    expect(StableVisualRange('P0020FT').distance, 20);
   });
 
   test('Test with three leading zero, with qualifier', () {
-    expect(VisualRange('P0002FT').distance, 2);
+    expect(StableVisualRange('P0002FT').distance, 2);
   });
 
   test('Test with four leading zero, with qualifier', () {
-    expect(VisualRange('P0000FT').distance, 0);
+    expect(StableVisualRange('P0000FT').distance, 0);
   });
 }
 
-void visualRangeQualifier() {
+void stableVisualRangeQualifier() {
   test('Test no match', () {
-    expect(VisualRange('2000FT').qualifier, DistanceQualifier.none);
+    expect(StableVisualRange('2000FT').qualifier, DistanceQualifier.none);
   });
 
   test('Test MINUS qualifier', () {
-    expect(VisualRange('M1000FT').qualifier, DistanceQualifier.less);
+    expect(StableVisualRange('M1000FT').qualifier, DistanceQualifier.less);
   });
 
   test('Test PLUS qualifier', () {
-    expect(VisualRange('P5000FT').qualifier, DistanceQualifier.more);
+    expect(StableVisualRange('P5000FT').qualifier, DistanceQualifier.more);
   });
 }
 
-void visualRangeToString() {
+void stableVisualRangeToString() {
   test('Test no leading zeros', () {
-    expect(VisualRange('1000FT').toString(), '1000FT');
+    expect(StableVisualRange('1000FT').toString(), '1000FT');
   });
 
   test('Test one leading zeros', () {
-    expect(VisualRange('0100FT').toString(), '0100FT');
+    expect(StableVisualRange('0100FT').toString(), '0100FT');
   });
 
   test('Test two leading zeros', () {
-    expect(VisualRange('0010FT').toString(), '0010FT');
+    expect(StableVisualRange('0010FT').toString(), '0010FT');
   });
 
   test('Test three leading zeros', () {
-    expect(VisualRange('0001FT').toString(), '0001FT');
+    expect(StableVisualRange('0001FT').toString(), '0001FT');
   });
 
   test('Test four leading zeros', () {
-    expect(VisualRange('0000FT').toString(), '0000FT');
+    expect(StableVisualRange('0000FT').toString(), '0000FT');
   });
 
   test('Test four leading zeros with PLUS modifier', () {
-    expect(VisualRange('P0000FT').toString(), 'P0000FT');
+    expect(StableVisualRange('P0000FT').toString(), 'P0000FT');
   });
 
   test('Test no leading zeros with MINUS modifier', () {
-    expect(VisualRange('M5555FT').toString(), 'M5555FT');
+    expect(StableVisualRange('M5555FT').toString(), 'M5555FT');
   });
 }
 
-void visualRangeEqualityOperator() {
+void stableVisualRangeEqualityOperator() {
   test('Test equality operator for non-equality, no qualifier', () {
-    expect(VisualRange('0100FT') == VisualRange('0200FT'), false);
+    expect(StableVisualRange('0100FT') == StableVisualRange('0200FT'), false);
   });
 
   test('Test equality operator for non-equality, with qualifier', () {
-    expect(VisualRange('M0100FT') == VisualRange('0100FT'), false);
+    expect(StableVisualRange('M0100FT') == StableVisualRange('0100FT'), false);
   });
 
   test('Test equality operator for equality, no qualifier', () {
-    expect(VisualRange('0100FT') == VisualRange('0100FT'), true);
+    expect(StableVisualRange('0100FT') == StableVisualRange('0100FT'), true);
   });
 
   test('Test equality operator for equality, with qualifier', () {
-    expect(VisualRange('P0200FT') == VisualRange('P0200FT'), true);
+    expect(StableVisualRange('P0200FT') == StableVisualRange('P0200FT'), true);
   });
 }
 
-void visualRangeHashCode() {
+void stableVisualRangeHashCode() {
   test('Test hash generation for non-equality, no qualifier', () {
-    expect(VisualRange('0100FT').hashCode == VisualRange('0200FT').hashCode,
+    expect(
+        StableVisualRange('0100FT').hashCode ==
+            StableVisualRange('0200FT').hashCode,
         false);
   });
 
   test('Test hash generation for non-equality, with qualifier', () {
-    expect(VisualRange('M0100FT').hashCode == VisualRange('0100FT').hashCode,
+    expect(
+        StableVisualRange('M0100FT').hashCode ==
+            StableVisualRange('0100FT').hashCode,
         false);
   });
 
   test('Test hash generation for equality, no qualifier', () {
     expect(
-        VisualRange('0100FT').hashCode == VisualRange('0100FT').hashCode, true);
+        StableVisualRange('0100FT').hashCode ==
+            StableVisualRange('0100FT').hashCode,
+        true);
   });
 
   test('Test hash generation for equality, with qualifier', () {
-    expect(VisualRange('P0200FT').hashCode == VisualRange('P0200FT').hashCode,
+    expect(
+        StableVisualRange('P0200FT').hashCode ==
+            StableVisualRange('P0200FT').hashCode,
         true);
   });
 }
