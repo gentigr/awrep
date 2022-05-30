@@ -7,22 +7,22 @@ class VisualRange {
 
   /// Constructs a [VisualRange] from string representation.
   ///
-  /// Provided string is in DDDD format, where DDDD is a digital representation
-  /// of visual range distance.
+  /// Provided string is in DDDDFT format, where DDDD is a digital
+  /// representation of visual range distance.
   /// Throws [FormatException] if the provided value is not by format.
   VisualRange(this._visualRange) {
-    var regExp = RegExpDecorator('^[M|P]?\\d{4}\$');
+    var regExp = RegExpDecorator('^[M|P]?\\d{4}FT\$');
     regExp.verifySingleMatch(_visualRange, this.runtimeType.toString());
   }
 
-  /// Returns visual range distance.
+  /// The visual range distance.
   int get distance {
-    var regExp = RegExpDecorator('(?<distance>\\d{4})\$');
+    var regExp = RegExpDecorator('(?<distance>\\d{4})FT\$');
     var range = regExp.getMatchByName(_visualRange, 'distance');
     return int.parse(range);
   }
 
-  /// Returns visual range qualifier.
+  /// The visual range qualifier.
   DistanceQualifier get qualifier {
     var regExp = RegExpDecorator('^(?<qualifier>[M|P])');
     var modifier = regExp.getMatchByNameOptional(_visualRange, 'qualifier');
@@ -31,7 +31,7 @@ class VisualRange {
 
   @override
   String toString() {
-    return '${qualifier.toString()}${distance.toString().padLeft(4, '0')}';
+    return '${qualifier.toString()}${distance.toString().padLeft(4, '0')}FT';
   }
 
   @override
