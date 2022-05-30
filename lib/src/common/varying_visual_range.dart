@@ -1,8 +1,9 @@
 import 'distance_qualifier.dart';
 import 'regexp_decorator.dart';
+import 'visual_range.dart';
 
 /// The class represents varying visual range used within [Report].
-class VaryingVisualRange {
+class VaryingVisualRange implements VisualRange {
   final String _varyingVisualRange;
 
   /// Constructs a [VaryingVisualRange] from string representation.
@@ -18,6 +19,7 @@ class VaryingVisualRange {
   }
 
   /// The lowest visual range distance.
+  @override
   int get lowestDistance {
     var regExp = RegExpDecorator('^M?(?<distance>\\d{4})');
     var range = regExp.getMatchByName(_varyingVisualRange, 'distance');
@@ -25,6 +27,7 @@ class VaryingVisualRange {
   }
 
   /// The lowest visual range qualifier.
+  @override
   DistanceQualifier get lowestQualifier {
     var regExp = RegExpDecorator('^(?<qualifier>M)');
     var qualifier =
@@ -33,6 +36,7 @@ class VaryingVisualRange {
   }
 
   /// The highest visual range distance.
+  @override
   int get highestDistance {
     var regExp = RegExpDecorator('VP?(?<distance>\\d{4})FT\$');
     var range = regExp.getMatchByName(_varyingVisualRange, 'distance');
@@ -40,6 +44,7 @@ class VaryingVisualRange {
   }
 
   /// The highest visual range qualifier.
+  @override
   DistanceQualifier get highestQualifier {
     var regExp = RegExpDecorator('V(?<qualifier>P)?(\\d{4})FT\$');
     var qualifier =

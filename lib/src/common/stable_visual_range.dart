@@ -1,8 +1,9 @@
 import 'distance_qualifier.dart';
 import 'regexp_decorator.dart';
+import 'visual_range.dart';
 
 /// The class represents stable visual range used within [Report].
-class StableVisualRange {
+class StableVisualRange implements VisualRange {
   final String _stableVisualRange;
 
   /// Constructs a [StableVisualRange] from string representation.
@@ -29,6 +30,18 @@ class StableVisualRange {
         regExp.getMatchByNameOptional(_stableVisualRange, 'qualifier');
     return DistanceQualifier(qualifier);
   }
+
+  @override
+  int get highestDistance => distance;
+
+  @override
+  DistanceQualifier get highestQualifier => qualifier;
+
+  @override
+  int get lowestDistance => distance;
+
+  @override
+  DistanceQualifier get lowestQualifier => qualifier;
 
   @override
   String toString() {
