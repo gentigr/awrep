@@ -1,7 +1,6 @@
 import 'package:awrep/src/common/runway.dart';
 import 'package:awrep/src/common/runway_approach_direction.dart';
 import 'package:awrep/src/common/runway_number.dart';
-
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';

@@ -1,6 +1,5 @@
 import 'package:awrep/src/common/distance_qualifier.dart';
 import 'package:awrep/src/common/varying_visual_range.dart';
-
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';

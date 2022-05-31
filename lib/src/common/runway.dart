@@ -17,14 +17,14 @@ class Runway {
     regExp.verifySingleMatch(_runway, this.runtimeType.toString());
   }
 
-  /// Returns runway number.
+  /// The runway number.
   RunwayNumber get number {
     var regExp = RegExpDecorator('^(?<number>\\d{2})');
     var runway = regExp.getMatchByName(_runway, 'number');
     return RunwayNumber.fromString(runway);
   }
 
-  /// Returns runway approach direction.
+  /// The runway approach direction.
   RunwayApproachDirection get direction {
     var regExp = RegExpDecorator('(?<direction>[L|C|R])\$');
     var direction = regExp.getMatchByNameOptional(_runway, 'direction');
