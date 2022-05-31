@@ -1,62 +1,58 @@
-import 'package:awrep/body/report_type.dart';
+import 'package:awrep/src/body/type.dart';
 import 'package:test/test.dart';
 
+import '../../test_utils.dart';
+
 void main() {
-  group('ReportType', () {
-    group('string', () {
-      reportTypeString();
+  group('Type', () {
+    group('factory', () {
+      typeFactory();
     });
-    group('stringAsReportType', () {
-      reportTypeStringAsReportType();
+    group('toString', () {
+      typeToString();
     });
   });
 }
 
-void reportTypeString() {
-  test('Test string representation of non-present report type', () {
-    expect(ReportType.none.string.isEmpty, true);
+void typeFactory() {
+  test('Test constructor with unexpected long input', () {
+    var err = 'Report type must have 5 non-space characters length if not '
+        'empty, provided `UNEXPECTED`';
+    expectFormatException(() => Type('UNEXPECTED'), err);
   });
-  test('Test string representation of METAR report type', () {
-    expect(ReportType.metar.string, 'METAR');
-  });
-  test('Test string representation of SPECI report type', () {
-    expect(ReportType.speci.string, 'SPECI');
-  });
-}
 
-void reportTypeStringAsReportType() {
+  test('Test constructor with unexpected short input', () {
+    var err = 'Unexpected report type, provided: `LIVER`';
+    expectFormatException(() => Type('LIVER'), err);
+  });
+
   test('Test constructor with empty string input', () {
-    expect(stringAsReportType(''), ReportType.none);
+    expect(Type(''), Type.none);
   });
+
   test('Test constructor with null string input', () {
-    expect(stringAsReportType(null), ReportType.none);
+    expect(Type(null), Type.none);
   });
-  test('Test constructor with metar string input', () {
-    expect(stringAsReportType('metar'), ReportType.metar);
+
+  test('Test constructor with METAR string input', () {
+    expect(Type('METAR'), Type.metar);
   });
-  test('Test constructor with speci string input', () {
-    expect(stringAsReportType('speci'), ReportType.speci);
+
+  test('Test constructor with SPECI string input', () {
+    expect(Type('SPECI'), Type.speci);
   });
-  test('Test constructor with random case string input', () {
-    expect(stringAsReportType('SpeCi'), ReportType.speci);
+}
+
+void typeToString() {
+  test('Test string representation of non-present type', () {
+    expect(Type.none.toString().isEmpty, true);
   });
-  test('Test constructor with leading space string input', () {
-    expect(stringAsReportType(' speci'), ReportType.speci);
+
+  test('Test string representation of METAR', () {
+    expect(Type.metar.toString(), 'METAR');
   });
-  test('Test constructor with trailing space string input', () {
-    expect(stringAsReportType('speci '), ReportType.speci);
-  });
-  test('Test constructor with leading and trailing spaces string input', () {
-    expect(stringAsReportType(' speci '), ReportType.speci);
-  });
-  test('Test constructor with unexpected input', () {
-    String message = 'Unexpected report type value: `UNEXPECTED`';
-    String error =
-        'Invalid argument (name): No enum value with that name: "unexpected"';
-    expect(
-        () => stringAsReportType('UNEXPECTED'),
-        throwsA(predicate((e) =>
-            e is ReportTypeException &&
-            e.message == '$message, error: `$error`')));
+
+  test('Test string representation of SPECI', () {
+    expect(Type.speci.toString(), 'SPECI');
   });
 }

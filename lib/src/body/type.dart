@@ -1,41 +1,45 @@
-/// Type of Report
-///
-/// [none] determines situation when no specific type is provided by report.
-enum ReportType {
-  none,
-  metar,
-  speci,
-}
+/// The type of a [Report].
+enum Type {
+  /// The value represents situation when no specific type is provided.
+  none._instance(''),
 
-/// [ReportTypeException] is thrown when there is no corresponding Report Type
-/// for provided string representation.
-class ReportTypeException implements Exception {
-  final String message;
+  /// The value represents situation when 'METAR' type is provided.
+  metar._instance('METAR'),
 
-  const ReportTypeException(this.message);
+  /// The value represents situation when 'METAR' type is provided.
+  speci._instance('SPECI');
 
-  String errMsg() => this.message;
-}
+  final String _value;
 
-/// This extension adds [string] getter to represent [ReportType] enum value.
-extension ReportTypeExtension on ReportType {
-  String get string {
-    if (this == ReportType.none) {
-      return '';
+  const Type._instance(this._value);
+
+  /// Creates [Type] enum object from its string representation.
+  ///
+  /// Throws a [FormatException] if specified [type] value does not correspond
+  /// to expected format (such as null, empty or METAR/SPECI).
+  factory Type(String? type) {
+    if (type == null) {
+      return none;
     }
-    return this.name.toUpperCase();
+    if (type.isEmpty) {
+      return none;
+    }
+    if (type.length != 5) {
+      throw FormatException('Report type must have 5 non-space characters '
+          'length if not empty, provided `$type`');
+    }
+    switch (type) {
+      case 'METAR':
+        return metar;
+      case 'SPECI':
+        return speci;
+      default:
+        throw FormatException('Unexpected report type, provided: `$type`');
+    }
   }
-}
 
-/// This is a constructor method for [ReportType] from String.
-ReportType stringAsReportType(String? type) {
-  if (type == null || type.trim().isEmpty) {
-    return ReportType.none;
-  }
-  try {
-    return ReportType.values.byName(type.trim().toLowerCase());
-  } on ArgumentError catch (e) {
-    throw ReportTypeException(
-        'Unexpected report type value: `$type`, error: `$e`');
+  @override
+  String toString() {
+    return _value;
   }
 }
