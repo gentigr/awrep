@@ -1,89 +1,64 @@
-/// [ReportDateTimeException] is thrown when there is a parsing error occurred
-/// during the creation of [ReportDateTime] object.
-class ReportDateTimeException implements Exception {
-  final String message;
+import '../common/regexp_decorator.dart';
 
-  const ReportDateTimeException(this.message);
-
-  String errMsg() => this.message;
-}
-
-/// Actual time of a report.
-class ReportDateTime {
+/// The class represents actual time of a [Report].
+class DateTime {
   final String _dateTime;
 
-  /// Constructor of [ReportDateTime] object, provided string is in YYGGggZ
-  /// format, where YY is a day, GG is a hour, gg is a minute, Z is an
-  /// identification of Zulu time (or UTC).
-  const ReportDateTime(this._dateTime);
+  /// Constructs a [DateTime] object from string representation.
+  ///
+  /// Provided string is in YYGGggZ format, where YY is a day, GG is a hour,
+  /// gg is a minute, Z is an identification of Zulu time (or UTC).
+  /// Throws [FormatException] if the provided value is not within described
+  /// format.
+  DateTime(this._dateTime) {
+    var regExp = RegExpDecorator('^\\d{6}Z\$');
+    regExp.verifySingleMatch(_dateTime, this.runtimeType.toString());
+  }
 
-  /// Returns day of actual time when report is noted.
+  /// The day of actual time when report is noted.
   int get day {
-    _checkDateTimeFormat();
-    int value = _integer('day', _dateTime.substring(0, 2));
+    int value = int.parse(_dateTime.substring(0, 2));
     _checkBoundaries('day', value, 1, 31);
     return value;
   }
 
-  /// Returns hour of actual time when report is noted.
+  /// The hour of actual time when report is noted.
   int get hour {
-    _checkDateTimeFormat();
-    int value = _integer('hour', _dateTime.substring(2, 4));
+    int value = int.parse(_dateTime.substring(2, 4));
     _checkBoundaries('hour', value, 0, 23);
     return value;
   }
 
-  /// Returns minute of actual time when report is noted.
+  /// The minute of actual time when report is noted.
   int get minute {
-    _checkDateTimeFormat();
-    int value = _integer('minute', _dateTime.substring(4, 6));
+    int value = int.parse(_dateTime.substring(4, 6));
     _checkBoundaries('minute', value, 0, 59);
     return value;
   }
-
-  @override
-  bool operator ==(Object other) {
-    return other is ReportDateTime && this.hashCode == other.hashCode;
-  }
-
-  @override
-  int get hashCode => _dateTime.hashCode;
 
   @override
   String toString() {
     return '${_format(day)}${_format(hour)}${_format(minute)}Z';
   }
 
-  static String _format(int num) {
-    return num.toString().padLeft(2, '0');
+  @override
+  bool operator ==(Object other) {
+    return other is DateTime && this.hashCode == other.hashCode;
   }
 
-  int _integer(String name, String value) {
-    try {
-      return int.parse(value);
-    } on FormatException catch (e) {
-      throw ReportDateTimeException('Could not parse report $name part '
-          '`$value` of `$_dateTime`, error: `$e`');
-    }
+  @override
+  int get hashCode => _dateTime.hashCode;
+
+  static String _format(int num) {
+    return num.toString().padLeft(2, '0');
   }
 
   void _checkBoundaries(
       String name, int value, int minLimitInclusive, int maxLimitInclusive) {
     if (value < minLimitInclusive || value > maxLimitInclusive) {
-      throw ReportDateTimeException('Report $name value must be within '
+      throw FormatException('Report $name value must be within '
           '[$minLimitInclusive; $maxLimitInclusive] range, provided: `$value` '
           'from `$_dateTime`');
-    }
-  }
-
-  void _checkDateTimeFormat() {
-    if (_dateTime.length != 7) {
-      throw ReportDateTimeException('Report datetime must have length equal '
-          'to 7, provided: `$_dateTime`');
-    }
-    if (_dateTime[6] != 'Z') {
-      throw ReportDateTimeException('Report datetime must be in Zulu format '
-          '(ends with `Z` symbol), provided: `$_dateTime`');
     }
   }
 }
