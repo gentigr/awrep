@@ -2,7 +2,7 @@ import 'distance_qualifier.dart';
 import 'regexp_decorator.dart';
 import 'visual_range.dart';
 
-/// The class represents varying visual range used within [Report].
+/// The class represents varying visual range used within [Metar].
 class VaryingVisualRange implements VisualRange {
   final String _varyingVisualRange;
 

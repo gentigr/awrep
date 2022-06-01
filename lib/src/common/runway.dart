@@ -2,7 +2,7 @@ import 'regexp_decorator.dart';
 import 'runway_approach_direction.dart';
 import 'runway_number.dart';
 
-/// The class represents runway identification used within [Report].
+/// The class represents runway identification used within [Metar].
 class Runway {
   final String _runway;
 

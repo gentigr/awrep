@@ -1,6 +1,6 @@
 import '../common/regexp_decorator.dart';
 
-/// The class represents wind group within [Report].
+/// The class represents wind group within [Metar].
 class Wind {
   final String _wind;
 

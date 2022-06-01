@@ -1,4 +1,4 @@
-/// The class represents remarks section of a [Report].
+/// The class represents remarks section of a [Metar].
 class Remarks {
   final String _remarks;
 

@@ -1,30 +1,22 @@
-import 'package:awrep/body/body.dart';
-import 'package:awrep/remarks/remarks.dart';
+import 'body/body.dart';
+import 'remarks/remarks.dart';
 
-/// The primary report class that holds [body] and [remarks] sections of report.
-/// This implementation follows the following technique of writing Dart code:
-/// [AVOID storing what you can calculate.](https://dart.dev/guides/language/effective-dart/usage#avoid-storing-what-you-can-calculate)
+/// The class represents METAR/SPECI type of report.
+///
+/// The class holds [Body] and [Remarks] sections of a report. The
+/// implementation follows the technique of writing Dart code:
+/// [AVOID storing what you can calculate.](https://dart.dev/guides/language/effective-dart/usage#avoid-storing-what-you-can-calculate).
 /// As a result it may have additional performance penalty in comparison to the
 /// libraries that parses provided METAR/SPECI report completely during object
 /// construction phase.
-class Report {
-  static const String _remarksToken = " RMK ";
+class Metar {
+  static const String _remarksToken = ' RMK ';
   final String _report;
 
-  /// Initializes Report class with string representation of METAR/SPECI report.
-  const Report(this._report);
+  /// Constructs a [Metar] object from string representation of METAR/SPECI.
+  const Metar(this._report);
 
-  /// Compares Report objects for logical equality.
-  @override
-  bool operator ==(Object other) {
-    return other is Report && this.hashCode == other.hashCode;
-  }
-
-  /// Provides hashCode of Report object based on internal content.
-  @override
-  int get hashCode => _report.hashCode;
-
-  /// Creates [Body] initialized with body part of the report.
+  /// The body section of a [Metar].
   Body get body {
     var body = _report;
     var index = _report.indexOf(_remarksToken);
@@ -34,7 +26,7 @@ class Report {
     return Body(body);
   }
 
-  /// Creates [Remarks] initialized with remarks part of the report.
+  /// The [Remarks] section of a [Metar].
   Remarks get remarks {
     var remarks = '';
     var index = _report.indexOf(_remarksToken);
@@ -44,9 +36,9 @@ class Report {
     return Remarks(remarks);
   }
 
-  /// Generates string representation of the report.
+  /// Returns string representation of a [Metar] object.
   ///
-  /// This method intentionally re-creates string representation of METAR/SPECI
+  /// The method intentionally re-creates string representation of METAR/SPECI
   /// report for additional cross-check whether all report's fields were parsed
   /// and recognized as expected.
   @override
@@ -54,6 +46,14 @@ class Report {
     if (remarks.toString().isEmpty) {
       return body.toString();
     }
-    return "$body $remarks";
+    return '$body $remarks';
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Metar && this.hashCode == other.hashCode;
+  }
+
+  @override
+  int get hashCode => _report.hashCode;
 }

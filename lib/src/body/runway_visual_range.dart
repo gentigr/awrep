@@ -5,7 +5,7 @@ import '../common/visual_range.dart';
 // TODO: combine parsing of ReportVisibility and visual range
 // Both are following similar RegExp, such as [M|P]\d{4}
 
-/// The class represents runway visual range group within [Report].
+/// The class represents runway visual range group within [Metar].
 class RunwayVisualRange {
   final String _runwayVisualRange;
 

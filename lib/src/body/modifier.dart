@@ -1,4 +1,4 @@
-/// The modifier of a [Report].
+/// The modifier of a [Metar].
 enum Modifier {
   /// The value represents situation when no specific type is provided.
   none._instance(''),

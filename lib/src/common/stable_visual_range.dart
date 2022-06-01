@@ -2,7 +2,7 @@ import 'distance_qualifier.dart';
 import 'regexp_decorator.dart';
 import 'visual_range.dart';
 
-/// The class represents stable visual range used within [Report].
+/// The class represents stable visual range used within [Metar].
 class StableVisualRange implements VisualRange {
   final String _stableVisualRange;
 

@@ -1,6 +1,6 @@
 import '../common/regexp_decorator.dart';
 
-/// The class represents actual time of a [Report].
+/// The class represents actual time of a [Metar].
 class DateTime {
   final String _dateTime;
 

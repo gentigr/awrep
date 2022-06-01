@@ -3,7 +3,7 @@ import 'package:fraction/fraction.dart';
 import '../common/distance_qualifier.dart';
 import '../common/regexp_decorator.dart';
 
-/// The class represents visibility group description within [Report].
+/// The class represents visibility group description within [Metar].
 class Visibility {
   final String _visibility;
 

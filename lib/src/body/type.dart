@@ -1,4 +1,4 @@
-/// The type of a [Report].
+/// The type of a [Metar].
 enum Type {
   /// The value represents situation when no specific type is provided.
   none._instance(''),
