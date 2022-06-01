@@ -1,8 +1,13 @@
-// Remarks section of METAR/SPECI report.
+/// The class represents remarks section of a [Report].
 class Remarks {
-  String _remarks;
+  final String _remarks;
 
-  Remarks(this._remarks);
+  const Remarks(this._remarks);
+
+  @override
+  String toString() {
+    return this._remarks;
+  }
 
   @override
   bool operator ==(Object other) {
@@ -11,9 +16,4 @@ class Remarks {
 
   @override
   int get hashCode => _remarks.hashCode;
-
-  @override
-  String toString() {
-    return this._remarks;
-  }
 }
