@@ -1,60 +1,56 @@
-import 'package:awrep/body/report_date_time.dart';
-import 'package:awrep/body/report_modifier.dart';
-import 'package:awrep/body/report_visibility.dart';
-import 'package:awrep/body/report_wind.dart';
+import 'date_time.dart';
+import 'modifier.dart';
+import 'type.dart';
+import 'visibility.dart';
+import 'wind.dart';
+import '../common/regexp_decorator.dart';
 
-import 'report_type.dart';
-
-/// [BodyException] is thrown when there is a report parsing issue.
-class BodyException implements Exception {
-  final String message;
-
-  const BodyException(this.message);
-
-  String errMsg() => this.message;
-}
-
-/// Body section of METAR/SPECI report.
+/// The class represents body section of a [Report].
 class Body {
-  String _body;
+  final String _body;
 
-  Body(this._body);
+  const Body(this._body);
 
-  /// Returns type of report in [ReportType] format.
-  ReportType get type {
-    var regExp = RegExp('^(?<report_type>[^ ]{5} )?(.*)\$');
-    return stringAsReportType(_regexMatchOptional(regExp, 'report_type'));
+  /// The type of a [Report] body.
+  Type get type {
+    var regExp = RegExpDecorator('^((?<report_type>[^ ]{5}) )?');
+    return Type(regExp.getMatchByNameOptional(_body, 'report_type'));
   }
 
-  /// Returns station identifier from report.
+  /// The station identifier from a [Report] body.
   String get stationId {
-    var regExp = RegExp('^([^ ]{5} )?(?<station_id>[A-Za-z]{4} )(.*)\$');
-    return _regexMatch(regExp, 'station_id').trim();
+    var regExp = RegExpDecorator('^([^ ]{5} )?(?<station_id>[A-Za-z]{4} )');
+    return regExp.getMatchByName(_body, 'station_id').trim();
   }
 
-  /// Returns date and time of the report.
-  ReportDateTime get dateTime {
-    var regExp = RegExp('(?<date_time>\\d{6}Z)');
-    return ReportDateTime(_regexMatch(regExp, 'date_time'));
+  /// The date and time of the a [Report] body.
+  DateTime get dateTime {
+    var regExp = RegExpDecorator('(?<date_time>\\d{6}Z)');
+    return DateTime(regExp.getMatchByName(_body, 'date_time'));
   }
 
-  /// Returns modifier of report in [ReportModifier] format.
-  ReportModifier get modifier {
-    var regExp = RegExp(' (?<modifier>AUTO|COR) ');
-    return stringAsReportModifier(_regexMatchOptional(regExp, 'modifier'));
+  /// The modifier of a [Report] body.
+  Modifier get modifier {
+    var regExp = RegExpDecorator(' (?<modifier>AUTO|COR) ');
+    return Modifier(regExp.getMatchByNameOptional(_body, 'modifier'));
   }
 
-  /// Returns wind of report in [ReportWind] format.
-  ReportWind get wind {
-    var regExp = RegExp('(?<wind>(\\d{3}|VRB)\\d{2,3}'
+  /// The wind section of a [Report] body.
+  Wind get wind {
+    var regExp = RegExpDecorator('(?<wind>(\\d{3}|VRB)\\d{2,3}'
         '(G\\d{2,3})?KT( \\d{3}V\\d{3})?)');
-    return ReportWind(_regexMatch(regExp, 'wind'));
+    return Wind(regExp.getMatchByName(_body, 'wind'));
   }
 
-  /// Returns visibility of report in [ReportVisibility] format.
-  ReportVisibility get visibility {
-    var regExp = RegExp(' (?<visibility>[0-9 \/pPmM]{1,5}SM) ');
-    return ReportVisibility(_regexMatch(regExp, 'visibility'));
+  /// The visibility of a [Report] body.
+  Visibility get visibility {
+    var regExp = RegExpDecorator(' (?<visibility>[0-9 \/PM]{1,5}SM) ');
+    return Visibility(regExp.getMatchByName(_body, 'visibility'));
+  }
+
+  @override
+  String toString() {
+    return this._body;
   }
 
   @override
@@ -64,49 +60,4 @@ class Body {
 
   @override
   int get hashCode => _body.hashCode;
-
-  @override
-  String toString() {
-    return this._body;
-  }
-
-  bool _checkRegexHasMatch(RegExp regExp, {bool noThrow = false}) {
-    if (regExp.hasMatch(_body)) {
-      return true;
-    }
-    if (noThrow) {
-      return false;
-    }
-    var err = 'Failed to find RegEx `$regExp` in report body `$_body`';
-    print(err);
-    throw BodyException(err);
-  }
-
-  bool _checkRegexHasOnlyOneMatch(RegExp regExp, {bool noThrow = false}) {
-    if (regExp.allMatches(_body).length == 1) {
-      return true;
-    }
-    if (noThrow) {
-      return false;
-    }
-    var err = 'Too many matches were found by RegEx `$regExp` '
-        'in report body `$_body`';
-    print(err);
-    throw BodyException(err);
-  }
-
-  String _regexMatch(RegExp regExp, String name) {
-    _checkRegexHasMatch(regExp);
-    _checkRegexHasOnlyOneMatch(regExp);
-    return regExp.firstMatch(_body)!.namedGroup(name)!;
-  }
-
-  String? _regexMatchOptional(RegExp regExp, String name) {
-    bool hasMatch = _checkRegexHasMatch(regExp, noThrow: true);
-    if (!hasMatch) {
-      return null;
-    }
-    _checkRegexHasOnlyOneMatch(regExp);
-    return regExp.firstMatch(_body)!.namedGroup(name);
-  }
 }

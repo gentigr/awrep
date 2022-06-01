@@ -46,6 +46,10 @@ class RegExpDecorator {
   }
 
   String? _getMatchByNameOptional(String input, String groupName) {
-    return _regExp.firstMatch(input)!.namedGroup(groupName);
+    var value = _regExp.firstMatch(input)!.namedGroup(groupName);
+    if (value != null) {
+      verifySingleMatch(input, groupName);
+    }
+    return value;
   }
 }
