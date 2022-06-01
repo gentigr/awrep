@@ -1,42 +1,42 @@
-/// Modifier of [Report]
-///
-/// [none] determines situation when no specific type is provided by report.
-enum ReportModifier {
-  none,
-  auto,
-  cor,
-}
+/// The modifier of a [Report].
+enum Modifier {
+  /// The value represents situation when no specific type is provided.
+  none._instance(''),
 
-/// [ReportModifierException] is thrown when there is no corresponding Report
-/// Modifier for provided string representation.
-class ReportModifierException implements Exception {
-  final String message;
+  /// The value represents situation when 'AUTO' type is provided.
+  auto._instance('AUTO'),
 
-  const ReportModifierException(this.message);
+  /// The value represents situation when 'COR' type is provided.
+  cor._instance('COR');
 
-  String errMsg() => this.message;
-}
+  final String _value;
 
-/// The extension adds [string] getter to represent [ReportModifier] enum value.
-extension ReportModifierExtension on ReportModifier {
-  String get string {
-    if (this == ReportModifier.none) {
-      return '';
+  const Modifier._instance(this._value);
+
+  /// Creates [Modifier] enum object from its string representation.
+  ///
+  /// Throws a [FormatException] if specified [modifier] value does not
+  /// correspond to expected format (such as null, empty or AUTO/COR).
+  factory Modifier(String? modifier) {
+    if (modifier == null) {
+      return none;
     }
-    return this.name.toUpperCase();
+    if (modifier.isEmpty) {
+      return none;
+    }
+    switch (modifier) {
+      case 'AUTO':
+        return auto;
+      case 'COR':
+        return cor;
+      default:
+        throw FormatException(
+            'Unexpected report modifier, provided: `$modifier`');
+    }
   }
-}
 
-/// This is a constructor method for [ReportModifier] from String.
-ReportModifier stringAsReportModifier(String? modifier) {
-  if (modifier == null || modifier.trim().isEmpty) {
-    return ReportModifier.none;
-  }
-  try {
-    return ReportModifier.values.byName(modifier.trim().toLowerCase());
-  } on ArgumentError catch (e) {
-    print('Unexpected report modifier value: `$modifier`, error: `$e`');
-    throw ReportModifierException(
-        'Unexpected report modifier value: `$modifier`, error: `$e`');
+  @override
+  String toString() {
+    return _value;
   }
 }
