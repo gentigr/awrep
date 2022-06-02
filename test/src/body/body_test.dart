@@ -1,10 +1,10 @@
-import 'package:awrep/src/body/body.dart';
-import 'package:awrep/src/body/date_time.dart';
-import 'package:awrep/src/body/modifier.dart';
-import 'package:awrep/src/body/runway_visual_range.dart';
-import 'package:awrep/src/body/type.dart';
-import 'package:awrep/src/body/visibility.dart';
-import 'package:awrep/src/body/wind.dart';
+import 'package:metar/src/body/body.dart';
+import 'package:metar/src/body/date_time.dart';
+import 'package:metar/src/body/modifier.dart';
+import 'package:metar/src/body/runway_visual_range.dart';
+import 'package:metar/src/body/type.dart';
+import 'package:metar/src/body/visibility.dart';
+import 'package:metar/src/body/wind.dart';
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';

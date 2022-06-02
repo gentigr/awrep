@@ -1,6 +1,6 @@
-import 'package:awrep/src/body/runway_visual_range.dart';
-import 'package:awrep/src/common/runway.dart';
-import 'package:awrep/src/common/visual_range.dart';
+import 'package:metar/src/body/runway_visual_range.dart';
+import 'package:metar/src/common/runway.dart';
+import 'package:metar/src/common/visual_range.dart';
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';

@@ -1,4 +1,4 @@
-import 'package:awrep/src/common/runway_approach_direction.dart';
+import 'package:metar/src/common/runway_approach_direction.dart';
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';

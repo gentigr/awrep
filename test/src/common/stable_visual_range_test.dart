@@ -1,5 +1,5 @@
-import 'package:awrep/src/common/stable_visual_range.dart';
-import 'package:awrep/src/common/distance_qualifier.dart';
+import 'package:metar/src/common/stable_visual_range.dart';
+import 'package:metar/src/common/distance_qualifier.dart';
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';

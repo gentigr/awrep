@@ -1,6 +1,6 @@
-import 'package:awrep/src/body/body.dart';
-import 'package:awrep/src/remarks/remarks.dart';
-import 'package:awrep/src/metar.dart';
+import 'package:metar/src/body/body.dart';
+import 'package:metar/src/remarks/remarks.dart';
+import 'package:metar/src/metar.dart';
 import 'package:test/test.dart';
 
 void main() {

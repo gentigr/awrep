@@ -1,4 +1,4 @@
-import 'package:awrep/src/remarks/remarks.dart';
+import 'package:metar/src/remarks/remarks.dart';
 import 'package:test/test.dart';
 
 void main() {

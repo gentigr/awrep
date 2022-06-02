@@ -1,4 +1,4 @@
-import 'package:awrep/src/common/runway_number.dart';
+import 'package:metar/src/common/runway_number.dart';
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';

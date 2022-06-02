@@ -1,4 +1,4 @@
-import 'package:awrep/src/body/date_time.dart';
+import 'package:metar/src/body/date_time.dart';
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';

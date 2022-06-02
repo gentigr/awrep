@@ -1,4 +1,4 @@
-import 'package:awrep/src/body/modifier.dart';
+import 'package:metar/src/body/modifier.dart';
 import 'package:test/test.dart';
 
 import '../../test_utils.dart';
