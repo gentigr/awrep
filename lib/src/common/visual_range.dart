@@ -1,6 +1,6 @@
-import 'distance_qualifier.dart';
-import 'stable_visual_range.dart';
-import 'varying_visual_range.dart';
+import 'package:metar/src/common/distance_qualifier.dart';
+import 'package:metar/src/common/stable_visual_range.dart';
+import 'package:metar/src/common/varying_visual_range.dart';
 
 abstract class VisualRange {
   factory VisualRange(String visualRange) {

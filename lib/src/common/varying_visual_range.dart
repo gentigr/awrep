@@ -1,6 +1,6 @@
-import 'distance_qualifier.dart';
-import 'regexp_decorator.dart';
-import 'visual_range.dart';
+import 'package:metar/src/common/distance_qualifier.dart';
+import 'package:metar/src/common/regexp_decorator.dart';
+import 'package:metar/src/common/visual_range.dart';
 
 /// The class represents varying visual range used within [Metar].
 class VaryingVisualRange implements VisualRange {

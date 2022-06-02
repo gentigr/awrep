@@ -1,5 +1,5 @@
-import 'body/body.dart';
-import 'remarks/remarks.dart';
+import 'package:metar/src/body/body.dart';
+import 'package:metar/src/remarks/remarks.dart';
 
 /// The class represents METAR/SPECI type of report.
 ///

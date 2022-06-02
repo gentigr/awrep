@@ -1,6 +1,6 @@
-import '../common/regexp_decorator.dart';
-import '../common/runway.dart';
-import '../common/visual_range.dart';
+import 'package:metar/src/common/regexp_decorator.dart';
+import 'package:metar/src/common/runway.dart';
+import 'package:metar/src/common/visual_range.dart';
 
 // TODO: combine parsing of ReportVisibility and visual range
 // Both are following similar RegExp, such as [M|P]\d{4}

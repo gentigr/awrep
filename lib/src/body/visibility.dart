@@ -1,7 +1,6 @@
 import 'package:fraction/fraction.dart';
-
-import '../common/distance_qualifier.dart';
-import '../common/regexp_decorator.dart';
+import 'package:metar/src/common/distance_qualifier.dart';
+import 'package:metar/src/common/regexp_decorator.dart';
 
 /// The class represents visibility group description within [Metar].
 class Visibility {

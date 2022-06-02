@@ -1,4 +1,4 @@
-import '../common/regexp_decorator.dart';
+import 'package:metar/src/common/regexp_decorator.dart';
 
 /// The class represents wind group within [Metar].
 class Wind {

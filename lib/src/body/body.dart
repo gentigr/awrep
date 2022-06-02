@@ -1,10 +1,10 @@
-import 'date_time.dart';
-import 'modifier.dart';
-import 'runway_visual_range.dart';
-import 'type.dart';
-import 'visibility.dart';
-import 'wind.dart';
-import '../common/regexp_decorator.dart';
+import 'package:metar/src/body/date_time.dart';
+import 'package:metar/src/body/modifier.dart';
+import 'package:metar/src/body/runway_visual_range.dart';
+import 'package:metar/src/body/type.dart';
+import 'package:metar/src/body/visibility.dart';
+import 'package:metar/src/body/wind.dart';
+import 'package:metar/src/common/regexp_decorator.dart';
 
 /// The class represents body section of a [Metar].
 class Body {

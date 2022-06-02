@@ -1,6 +1,6 @@
-import 'regexp_decorator.dart';
-import 'runway_approach_direction.dart';
-import 'runway_number.dart';
+import 'package:metar/src/common/regexp_decorator.dart';
+import 'package:metar/src/common/runway_approach_direction.dart';
+import 'package:metar/src/common/runway_number.dart';
 
 /// The class represents runway identification used within [Metar].
 class Runway {
