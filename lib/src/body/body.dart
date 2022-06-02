@@ -1,5 +1,6 @@
 import 'date_time.dart';
 import 'modifier.dart';
+import 'runway_visual_range.dart';
 import 'type.dart';
 import 'visibility.dart';
 import 'wind.dart';
@@ -46,6 +47,17 @@ class Body {
   Visibility get visibility {
     var regExp = RegExpDecorator(' (?<visibility>[0-9 \/PM]{1,5}SM) ');
     return Visibility(regExp.getMatchByName(_body, 'visibility'));
+  }
+
+  /// The runway visual ranges of a [Metar] body.
+  List<RunwayVisualRange> get runwayVisualRanges {
+    var regExp = RegExpDecorator('(?<runway_visual_range>R[^ .]*FT)');
+    var rangeMatches = regExp.getMatchesByName(_body, 'runway_visual_range');
+    var ranges = <RunwayVisualRange>[];
+    for (var rangeStr in rangeMatches) {
+      ranges.add(RunwayVisualRange(rangeStr));
+    }
+    return ranges;
   }
 
   @override

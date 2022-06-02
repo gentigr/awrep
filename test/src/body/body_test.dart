@@ -1,6 +1,7 @@
 import 'package:awrep/src/body/body.dart';
 import 'package:awrep/src/body/date_time.dart';
 import 'package:awrep/src/body/modifier.dart';
+import 'package:awrep/src/body/runway_visual_range.dart';
 import 'package:awrep/src/body/type.dart';
 import 'package:awrep/src/body/visibility.dart';
 import 'package:awrep/src/body/wind.dart';
@@ -27,6 +28,9 @@ void main() {
     });
     group('visibility', () {
       bodyVisibility();
+    });
+    group('runwayVisualRanges', () {
+      bodyRunwayVisualRanges();
     });
     group('toString', () {
       bodyToString();
@@ -303,6 +307,59 @@ void bodyVisibility() {
     final body = 'METAR KJFK 190351Z AUTO 18004KT M30SM BR OVC002 08/08 A3002';
 
     expect(Body(body).visibility, Visibility('M30SM'));
+  });
+}
+
+void bodyRunwayVisualRanges() {
+  test('Test no runway visual range', () {
+    final body = 'KJFK 190351Z 18004KT 10SM BR OVC002 08/08 A3002';
+
+    expect(Body(body).runwayVisualRanges, List.empty());
+  });
+
+  test('Test standard runway visual range', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/2000FT BR OVC002 08/08 A3002';
+
+    RunwayVisualRange range = RunwayVisualRange('R04/2000FT');
+    List<RunwayVisualRange> ranges = [range];
+    expect(Body(body).runwayVisualRanges, ranges);
+  });
+
+  test('Test standard runway visual range - left', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04L/2000FT BR OVC002 08/08 A3002';
+
+    RunwayVisualRange range = RunwayVisualRange('R04L/2000FT');
+    List<RunwayVisualRange> ranges = [range];
+    expect(Body(body).runwayVisualRanges, ranges);
+  });
+
+  test('Test standard runway visual range - minus', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/M2000FT BR OVC002 08/08 A3002';
+
+    RunwayVisualRange range = RunwayVisualRange('R04/M2000FT');
+    List<RunwayVisualRange> ranges = [range];
+    expect(Body(body).runwayVisualRanges, ranges);
+  });
+
+  test('Test variable runway visual range', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/2000V3000FT '
+        'BR OVC002 08/08 A3002';
+
+    RunwayVisualRange range = RunwayVisualRange('R04/2000V3000FT');
+    List<RunwayVisualRange> ranges = [range];
+    expect(Body(body).runwayVisualRanges, ranges);
+  });
+
+  test('Test multiple runway visual ranges', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT '
+        'R17C/M0100FT BR OVC002 08/08 A3002';
+
+    List<RunwayVisualRange> ranges = [
+      RunwayVisualRange('R04/M2000VP3000FT'),
+      RunwayVisualRange('R10/0200FT'),
+      RunwayVisualRange('R17C/M0100FT'),
+    ];
+    expect(Body(body).runwayVisualRanges, ranges);
   });
 }
 

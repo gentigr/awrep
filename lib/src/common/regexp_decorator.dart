@@ -41,6 +41,22 @@ class RegExpDecorator {
     return _getMatchByNameOptional(input, groupName);
   }
 
+  /// Returns all matches by [groupName] from [input], empty list if no matches.
+  ///
+  /// It is expected that initially provided regular expression does not have
+  /// any optional groups defined.
+  List<String> getMatchesByName(String input, String groupName) {
+    var matches = <String>[];
+    for (var match in _regExp.allMatches(input)) {
+      String? value = match.namedGroup(groupName);
+      if (value != null) {
+        matches.add(value);
+      }
+    }
+    return matches;
+  }
+
+  @override
   String toString() {
     return _regExp.toString();
   }
