@@ -3,6 +3,7 @@ import 'package:metar/src/body/date_time.dart';
 import 'package:metar/src/body/modifier.dart';
 import 'package:metar/src/body/present_weather_group/present_weather_group.dart';
 import 'package:metar/src/body/runway_visual_range.dart';
+import 'package:metar/src/body/sky_condition_group/sky_condition_group.dart';
 import 'package:metar/src/body/type.dart';
 import 'package:metar/src/body/visibility.dart';
 import 'package:metar/src/body/wind.dart';
@@ -35,6 +36,9 @@ void main() {
     });
     group('presentWeatherGroups', () {
       bodyPresentWeatherGroups();
+    });
+    group('skyConditionGroups', () {
+      bodySkyConditionGroups();
     });
     group('toString', () {
       bodyToString();
@@ -391,6 +395,33 @@ void bodyPresentWeatherGroups() {
       PresentWeatherGroup('+BLSS'),
     ];
     expect(Body(body).presentWeatherGroups, groups);
+  });
+}
+
+void bodySkyConditionGroups() {
+  test('Test no sky condition groups', () {
+    final body = 'KJFK 190351Z 18004KT 10SM 08/08 A3002';
+
+    expect(Body(body).skyConditionGroups, List.empty());
+  });
+
+  test('Test single sky condition group', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/2000FT BR OVC002 08/08 A3002';
+
+    List<SkyConditionGroup> groups = [SkyConditionGroup('OVC002')];
+    expect(Body(body).skyConditionGroups, groups);
+  });
+
+  test('Test multiple sky condition groups', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT '
+        'R17C/M0100FT -RA VCIC +BLSS OVC200 SCT010TCU FEW001 08/08 A3002';
+
+    List<SkyConditionGroup> groups = [
+      SkyConditionGroup('OVC200'),
+      SkyConditionGroup('SCT010TCU'),
+      SkyConditionGroup('FEW001'),
+    ];
+    expect(Body(body).skyConditionGroups, groups);
   });
 }
 

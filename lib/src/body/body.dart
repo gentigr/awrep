@@ -2,6 +2,7 @@ import 'package:metar/src/body/date_time.dart';
 import 'package:metar/src/body/modifier.dart';
 import 'package:metar/src/body/present_weather_group/present_weather_group.dart';
 import 'package:metar/src/body/runway_visual_range.dart';
+import 'package:metar/src/body/sky_condition_group/sky_condition_group.dart';
 import 'package:metar/src/body/type.dart';
 import 'package:metar/src/body/visibility.dart';
 import 'package:metar/src/body/wind.dart';
@@ -70,6 +71,18 @@ class Body {
     var groups = <PresentWeatherGroup>[];
     for (var groupStr in groupMatches) {
       groups.add(PresentWeatherGroup(groupStr));
+    }
+    return groups;
+  }
+
+  /// The sky condition groups of a [Metar] body.
+  List<SkyConditionGroup> get skyConditionGroups {
+    var regExp = RegExpDecorator(
+        '(?<sky_group>(VV|SKC|CLR|FEW|SCT|BKN|OVC)(\\d{3}(CB|TCU)?)?)');
+    var groupMatches = regExp.getMatchesByName(_body, 'sky_group');
+    var groups = <SkyConditionGroup>[];
+    for (var groupStr in groupMatches) {
+      groups.add(SkyConditionGroup(groupStr));
     }
     return groups;
   }
