@@ -49,7 +49,7 @@ class Visibility {
     if (fraction.numerator == 0) {
       distanceStr = fraction.toFraction().toString();
     }
-    return '${qualifier.toString()}${distanceStr}SM';
+    return '$qualifier${distanceStr}SM';
   }
 
   @override

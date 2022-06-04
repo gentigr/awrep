@@ -33,7 +33,7 @@ class Runway {
 
   @override
   String toString() {
-    return '${number.toString()}${direction.toString()}';
+    return '$number$direction';
   }
 
   @override

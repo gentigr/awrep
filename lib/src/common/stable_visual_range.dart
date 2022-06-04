@@ -45,7 +45,7 @@ class StableVisualRange implements VisualRange {
 
   @override
   String toString() {
-    return '${qualifier.toString()}${distance.toString().padLeft(4, '0')}FT';
+    return '$qualifier${distance.toString().padLeft(4, '0')}FT';
   }
 
   @override
