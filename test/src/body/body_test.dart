@@ -1,6 +1,7 @@
 import 'package:metar/src/body/body.dart';
 import 'package:metar/src/body/date_time.dart';
 import 'package:metar/src/body/modifier.dart';
+import 'package:metar/src/body/present_weather_group/present_weather_group.dart';
 import 'package:metar/src/body/runway_visual_range.dart';
 import 'package:metar/src/body/type.dart';
 import 'package:metar/src/body/visibility.dart';
@@ -31,6 +32,9 @@ void main() {
     });
     group('runwayVisualRanges', () {
       bodyRunwayVisualRanges();
+    });
+    group('presentWeatherGroups', () {
+      bodyPresentWeatherGroups();
     });
     group('toString', () {
       bodyToString();
@@ -360,6 +364,33 @@ void bodyRunwayVisualRanges() {
       RunwayVisualRange('R17C/M0100FT'),
     ];
     expect(Body(body).runwayVisualRanges, ranges);
+  });
+}
+
+void bodyPresentWeatherGroups() {
+  test('Test no weather groups', () {
+    final body = 'KJFK 190351Z 18004KT 10SM OVC002 08/08 A3002';
+
+    expect(Body(body).presentWeatherGroups, List.empty());
+  });
+
+  test('Test single weather group', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/2000FT BR OVC002 08/08 A3002';
+
+    List<PresentWeatherGroup> groups = [PresentWeatherGroup('BR')];
+    expect(Body(body).presentWeatherGroups, groups);
+  });
+
+  test('Test multiple weather groups', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT '
+        'R17C/M0100FT -RA VCIC +BLSS OVC002 08/08 A3002';
+
+    List<PresentWeatherGroup> groups = [
+      PresentWeatherGroup('-RA'),
+      PresentWeatherGroup('VCIC'),
+      PresentWeatherGroup('+BLSS'),
+    ];
+    expect(Body(body).presentWeatherGroups, groups);
   });
 }
 

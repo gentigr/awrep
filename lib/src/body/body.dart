@@ -1,5 +1,6 @@
 import 'package:metar/src/body/date_time.dart';
 import 'package:metar/src/body/modifier.dart';
+import 'package:metar/src/body/present_weather_group/present_weather_group.dart';
 import 'package:metar/src/body/runway_visual_range.dart';
 import 'package:metar/src/body/type.dart';
 import 'package:metar/src/body/visibility.dart';
@@ -58,6 +59,19 @@ class Body {
       ranges.add(RunwayVisualRange(rangeStr));
     }
     return ranges;
+  }
+
+  /// The present weather groups of a [Metar] body.
+  List<PresentWeatherGroup> get presentWeatherGroups {
+    var regExp = RegExpDecorator(r'(?<weather_group>(-|\+|VC)?'
+        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP)|'
+        '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)))');
+    var groupMatches = regExp.getMatchesByName(_body, 'weather_group');
+    var groups = <PresentWeatherGroup>[];
+    for (var groupStr in groupMatches) {
+      groups.add(PresentWeatherGroup(groupStr));
+    }
+    return groups;
   }
 
   @override
