@@ -1,4 +1,4 @@
-import 'package:metar/src/body/present_weather_group/phenomena/precipitation.dart';
+import 'package:metar/src/body/present_weather/phenomena/precipitation.dart';
 import 'package:test/test.dart';
 
 import '../../../../test_utils.dart';

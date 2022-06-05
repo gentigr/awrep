@@ -2,9 +2,10 @@ import 'package:metar/src/body/altimeter.dart';
 import 'package:metar/src/body/body.dart';
 import 'package:metar/src/body/date_time.dart';
 import 'package:metar/src/body/modifier.dart';
-import 'package:metar/src/body/present_weather_group/present_weather_group.dart';
+import 'package:metar/src/body/present_weather/present_weather.dart';
 import 'package:metar/src/body/runway_visual_range.dart';
-import 'package:metar/src/body/sky_condition_group/sky_condition_group.dart';
+import 'package:metar/src/body/sky_condition/sky_condition.dart';
+import 'package:metar/src/body/temperature_dew_point.dart';
 import 'package:metar/src/body/type.dart';
 import 'package:metar/src/body/visibility.dart';
 import 'package:metar/src/body/wind.dart';
@@ -35,14 +36,14 @@ void main() {
     group('runwayVisualRanges', () {
       bodyRunwayVisualRanges();
     });
-    group('presentWeatherGroups', () {
-      bodyPresentWeatherGroups();
+    group('presentWeather', () {
+      bodyPresentWeather();
     });
-    group('skyConditionGroups', () {
-      bodySkyConditionGroups();
+    group('skyCondition', () {
+      bodySkyCondition();
     });
-    group('temperatureDewPointGroup', () {
-      bodyTemperatureDewPointGroup();
+    group('temperatureDewPoint', () {
+      bodyTemperatureDewPoint();
     });
     group('altimeter', () {
       bodyAltimeter();
@@ -378,77 +379,77 @@ void bodyRunwayVisualRanges() {
   });
 }
 
-void bodyPresentWeatherGroups() {
+void bodyPresentWeather() {
   test('Test no weather groups', () {
     final body = 'KJFK 190351Z 18004KT 10SM OVC002 08/08 A3002';
 
-    expect(Body(body).presentWeatherGroups, List.empty());
+    expect(Body(body).presentWeather, List.empty());
   });
 
   test('Test single weather group', () {
     final body = 'KJFK 190351Z 18004KT 10SM R04/2000FT BR OVC002 08/08 A3002';
 
-    List<PresentWeatherGroup> groups = [PresentWeatherGroup('BR')];
-    expect(Body(body).presentWeatherGroups, groups);
+    List<PresentWeather> groups = [PresentWeather('BR')];
+    expect(Body(body).presentWeather, groups);
   });
 
   test('Test multiple weather groups', () {
     final body = 'KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT '
         'R17C/M0100FT -RA VCIC +BLSS OVC002 08/08 A3002';
 
-    List<PresentWeatherGroup> groups = [
-      PresentWeatherGroup('-RA'),
-      PresentWeatherGroup('VCIC'),
-      PresentWeatherGroup('+BLSS'),
+    List<PresentWeather> groups = [
+      PresentWeather('-RA'),
+      PresentWeather('VCIC'),
+      PresentWeather('+BLSS'),
     ];
-    expect(Body(body).presentWeatherGroups, groups);
+    expect(Body(body).presentWeather, groups);
   });
 }
 
-void bodySkyConditionGroups() {
+void bodySkyCondition() {
   test('Test no sky condition groups', () {
     final body = 'KJFK 190351Z 18004KT 10SM 08/08 A3002';
 
-    expect(Body(body).skyConditionGroups, List.empty());
+    expect(Body(body).skyCondition, List.empty());
   });
 
   test('Test single sky condition group', () {
     final body = 'KJFK 190351Z 18004KT 10SM R04/2000FT BR OVC002 08/08 A3002';
 
-    List<SkyConditionGroup> groups = [SkyConditionGroup('OVC002')];
-    expect(Body(body).skyConditionGroups, groups);
+    List<SkyCondition> groups = [SkyCondition('OVC002')];
+    expect(Body(body).skyCondition, groups);
   });
 
   test('Test multiple sky condition groups', () {
     final body = 'KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT '
         'R17C/M0100FT -RA VCIC +BLSS OVC200 SCT010TCU FEW001 08/08 A3002';
 
-    List<SkyConditionGroup> groups = [
-      SkyConditionGroup('OVC200'),
-      SkyConditionGroup('SCT010TCU'),
-      SkyConditionGroup('FEW001'),
+    List<SkyCondition> groups = [
+      SkyCondition('OVC200'),
+      SkyCondition('SCT010TCU'),
+      SkyCondition('FEW001'),
     ];
-    expect(Body(body).skyConditionGroups, groups);
+    expect(Body(body).skyCondition, groups);
   });
 }
 
-void bodyTemperatureDewPointGroup() {
+void bodyTemperatureDewPoint() {
   test('Test positive temperature dew point group', () {
     final body = 'KJFK 190351Z 18004KT 0SM R04R/2000V3000FT BR 08/08 A3002';
 
-    expect(Body(body).visibility, Visibility('0SM'));
+    expect(Body(body).temperatureDewPoint, TemperatureDewPoint('08/08'));
   });
 
   test('Test negative temperature dew point group', () {
     final body = 'KJFK 190351Z 18004KT 1 1/4SM R04R/2000FT M08/M08 A3002';
 
-    expect(Body(body).visibility, Visibility('1 1/4SM'));
+    expect(Body(body).temperatureDewPoint, TemperatureDewPoint('M08/M08'));
   });
 
   test('Test partial temperature dew point group', () {
     final body = 'METAR KJFK 190351Z AUTO 18004KT 30SM BR OVC002 08/ A3002';
 
-    expect(Body(body).visibility, Visibility('30SM'));
+    expect(Body(body).temperatureDewPoint, TemperatureDewPoint('08/'));
   });
 }
 

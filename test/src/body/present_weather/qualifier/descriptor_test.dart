@@ -1,4 +1,4 @@
-import 'package:metar/src/body/present_weather_group/qualifier/descriptor.dart';
+import 'package:metar/src/body/present_weather/qualifier/descriptor.dart';
 import 'package:test/test.dart';
 
 import '../../../../test_utils.dart';

@@ -1,4 +1,4 @@
-import 'package:metar/src/body/sky_condition_group/vertical_air_flow_activity.dart';
+import 'package:metar/src/body/sky_condition/vertical_air_flow_activity.dart';
 import 'package:test/test.dart';
 
 import '../../../test_utils.dart';

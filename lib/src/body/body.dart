@@ -1,10 +1,10 @@
 import 'package:metar/src/body/altimeter.dart';
 import 'package:metar/src/body/date_time.dart';
 import 'package:metar/src/body/modifier.dart';
-import 'package:metar/src/body/present_weather_group/present_weather_group.dart';
+import 'package:metar/src/body/present_weather/present_weather.dart';
 import 'package:metar/src/body/runway_visual_range.dart';
-import 'package:metar/src/body/sky_condition_group/sky_condition_group.dart';
-import 'package:metar/src/body/temperature_dew_point_group.dart';
+import 'package:metar/src/body/sky_condition/sky_condition.dart';
+import 'package:metar/src/body/temperature_dew_point.dart';
 import 'package:metar/src/body/type.dart';
 import 'package:metar/src/body/visibility.dart';
 import 'package:metar/src/body/wind.dart';
@@ -65,35 +65,34 @@ class Body {
   }
 
   /// The present weather groups of a [Metar] body.
-  List<PresentWeatherGroup> get presentWeatherGroups {
-    var regExp = RegExpDecorator(r'(?<weather_group>(-|\+|VC)?'
+  List<PresentWeather> get presentWeather {
+    var regExp = RegExpDecorator(r'(?<present_weather>(-|\+|VC)?'
         '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP)|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)))');
-    var groupMatches = regExp.getMatchesByName(_body, 'weather_group');
-    var groups = <PresentWeatherGroup>[];
+    var groupMatches = regExp.getMatchesByName(_body, 'present_weather');
+    var groups = <PresentWeather>[];
     for (var groupStr in groupMatches) {
-      groups.add(PresentWeatherGroup(groupStr));
+      groups.add(PresentWeather(groupStr));
     }
     return groups;
   }
 
   /// The sky condition groups of a [Metar] body.
-  List<SkyConditionGroup> get skyConditionGroups {
+  List<SkyCondition> get skyCondition {
     var regExp = RegExpDecorator(
-        '(?<sky_group>(VV|SKC|CLR|FEW|SCT|BKN|OVC)(\\d{3}(CB|TCU)?)?)');
-    var groupMatches = regExp.getMatchesByName(_body, 'sky_group');
-    var groups = <SkyConditionGroup>[];
+        '(?<sky_condition>(VV|SKC|CLR|FEW|SCT|BKN|OVC)(\\d{3}(CB|TCU)?)?)');
+    var groupMatches = regExp.getMatchesByName(_body, 'sky_condition');
+    var groups = <SkyCondition>[];
     for (var groupStr in groupMatches) {
-      groups.add(SkyConditionGroup(groupStr));
+      groups.add(SkyCondition(groupStr));
     }
     return groups;
   }
 
   /// The temperature/dew point group of a [Metar] body.
-  TemperatureDewPointGroup get temperatureDewPointGroup {
+  TemperatureDewPoint get temperatureDewPoint {
     var regExp = RegExpDecorator(' (?<temp_dew_point>M?\\d{2}\\/(M?\\d{2})?)');
-    return TemperatureDewPointGroup(
-        regExp.getMatchByName(_body, 'temp_dew_point'));
+    return TemperatureDewPoint(regExp.getMatchByName(_body, 'temp_dew_point'));
   }
 
   /// The altimeter group of a [Metar] body.

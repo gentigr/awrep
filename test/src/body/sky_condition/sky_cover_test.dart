@@ -1,4 +1,4 @@
-import 'package:metar/src/body/sky_condition_group/sky_cover.dart';
+import 'package:metar/src/body/sky_condition/sky_cover.dart';
 import 'package:test/test.dart';
 
 import '../../../test_utils.dart';

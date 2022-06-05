@@ -1,4 +1,4 @@
-import 'package:metar/src/body/present_weather_group/qualifier/proximity.dart';
+import 'package:metar/src/body/present_weather/qualifier/proximity.dart';
 import 'package:test/test.dart';
 
 import '../../../../test_utils.dart';

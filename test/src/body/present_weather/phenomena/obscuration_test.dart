@@ -1,4 +1,4 @@
-import 'package:metar/src/body/present_weather_group/phenomena/obscuration.dart';
+import 'package:metar/src/body/present_weather/phenomena/obscuration.dart';
 import 'package:test/test.dart';
 
 import '../../../../test_utils.dart';
