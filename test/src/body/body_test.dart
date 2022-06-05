@@ -40,6 +40,9 @@ void main() {
     group('skyConditionGroups', () {
       bodySkyConditionGroups();
     });
+    group('temperatureDewPointGroup', () {
+      bodyTemperatureDewPointGroup();
+    });
     group('toString', () {
       bodyToString();
     });
@@ -422,6 +425,26 @@ void bodySkyConditionGroups() {
       SkyConditionGroup('FEW001'),
     ];
     expect(Body(body).skyConditionGroups, groups);
+  });
+}
+
+void bodyTemperatureDewPointGroup() {
+  test('Test positive temperature dew point group', () {
+    final body = 'KJFK 190351Z 18004KT 0SM R04R/2000V3000FT BR 08/08 A3002';
+
+    expect(Body(body).visibility, Visibility('0SM'));
+  });
+
+  test('Test negative temperature dew point group', () {
+    final body = 'KJFK 190351Z 18004KT 1 1/4SM R04R/2000FT M08/M08 A3002';
+
+    expect(Body(body).visibility, Visibility('1 1/4SM'));
+  });
+
+  test('Test partial temperature dew point group', () {
+    final body = 'METAR KJFK 190351Z AUTO 18004KT 30SM BR OVC002 08/ A3002';
+
+    expect(Body(body).visibility, Visibility('30SM'));
   });
 }
 

@@ -3,6 +3,7 @@ import 'package:metar/src/body/modifier.dart';
 import 'package:metar/src/body/present_weather_group/present_weather_group.dart';
 import 'package:metar/src/body/runway_visual_range.dart';
 import 'package:metar/src/body/sky_condition_group/sky_condition_group.dart';
+import 'package:metar/src/body/temperature_dew_point_group.dart';
 import 'package:metar/src/body/type.dart';
 import 'package:metar/src/body/visibility.dart';
 import 'package:metar/src/body/wind.dart';
@@ -85,6 +86,13 @@ class Body {
       groups.add(SkyConditionGroup(groupStr));
     }
     return groups;
+  }
+
+  /// The temperature/dew point group of a [Metar] body.
+  TemperatureDewPointGroup get temperatureDewPointGroup {
+    var regExp = RegExpDecorator(' (?<temp_dew_point>M?\\d{2}\\/(M?\\d{2})?)');
+    return TemperatureDewPointGroup(
+        regExp.getMatchByName(_body, 'temp_dew_point'));
   }
 
   @override
