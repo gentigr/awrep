@@ -103,7 +103,13 @@ class Body {
 
   @override
   String toString() {
-    return this._body;
+    String typeStr = (type == Type.none ? '' : '$type ');
+    String modifierStr = (modifier == Modifier.none ? '' : '$modifier ');
+    return '$typeStr$stationId $dateTime $modifierStr$wind $visibility '
+        '${_format(runwayVisualRanges)}'
+        '${_format(presentWeather)}'
+        '${_format(skyCondition)}'
+        '$temperatureDewPoint $altimeter';
   }
 
   @override
@@ -113,4 +119,12 @@ class Body {
 
   @override
   int get hashCode => _body.hashCode;
+
+  String _format<T>(List<T> list) {
+    String str = '';
+    for (var item in list) {
+      str += '$item ';
+    }
+    return str;
+  }
 }

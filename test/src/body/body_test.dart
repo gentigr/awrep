@@ -462,9 +462,49 @@ void bodyAltimeter() {
 }
 
 void bodyToString() {
-  test('Test basic string output format', () {
+  test('Test basic string output format, option 1', () {
     final body = 'SPECI KJFK 190351Z AUTO 18004KT 1/4SM R04R/2000V3000FT '
         'BR OVC002 08/08 A3002';
+
+    expect(Body(body).toString(), body);
+  });
+
+  test('Test basic string output format, option 2', () {
+    final body = 'KJFK 142009Z 00000KT 2SM R04R/3000VP6000FT -RA BR FEW004 '
+        'BKN075 OVC095 16/16 A3003';
+
+    expect(Body(body).toString(), body);
+  });
+
+  test('Test basic string output format, option 3', () {
+    final body = 'KJFK 141951Z 17004KT 2SM BR BKN004 BKN031 OVC050 16/16 A3004';
+
+    expect(Body(body).toString(), body);
+  });
+
+  test('Test basic string output format, option 4', () {
+    final body = 'KJFK 141937Z 15007KT 1/2SM R04R/P6000FT +RA BR '
+        'BKN004 OVC034 16/16 A3006';
+
+    expect(Body(body).toString(), body);
+  });
+
+  test('Test basic string output format, option 5', () {
+    final body = 'KJFK 141913Z 13014G18KT 1/2SM R04R/P6000FT -RA OVC006 '
+        '18/16 A3006';
+
+    expect(Body(body).toString(), body);
+  });
+
+  test('Test basic string output format, option 6', () {
+    final body = 'KJFK 141851Z 12008KT 10SM OVC006 19/17 A3006';
+
+    expect(Body(body).toString(), body);
+  });
+
+  test('Test basic string output format, option 7', () {
+    final body = 'KJFK 190351Z 18004KT 1 1/4SM R04/M2000VP3000FT R10/0200FT '
+        'R17C/M0100FT BR OVC002 08/08 A3002';
 
     expect(Body(body).toString(), body);
   });
