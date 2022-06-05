@@ -1,3 +1,4 @@
+import 'package:metar/src/body/altimeter.dart';
 import 'package:metar/src/body/body.dart';
 import 'package:metar/src/body/date_time.dart';
 import 'package:metar/src/body/modifier.dart';
@@ -42,6 +43,9 @@ void main() {
     });
     group('temperatureDewPointGroup', () {
       bodyTemperatureDewPointGroup();
+    });
+    group('altimeter', () {
+      bodyAltimeter();
     });
     group('toString', () {
       bodyToString();
@@ -445,6 +449,14 @@ void bodyTemperatureDewPointGroup() {
     final body = 'METAR KJFK 190351Z AUTO 18004KT 30SM BR OVC002 08/ A3002';
 
     expect(Body(body).visibility, Visibility('30SM'));
+  });
+}
+
+void bodyAltimeter() {
+  test('Test altimeter parsed as expected', () {
+    final body = 'KJFK 190351Z 18004KT 0SM R04R/2000V3000FT BR 08/08 A3002';
+
+    expect(Body(body).altimeter, Altimeter('A3002'));
   });
 }
 

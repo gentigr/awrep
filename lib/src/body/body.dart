@@ -1,3 +1,4 @@
+import 'package:metar/src/body/altimeter.dart';
 import 'package:metar/src/body/date_time.dart';
 import 'package:metar/src/body/modifier.dart';
 import 'package:metar/src/body/present_weather_group/present_weather_group.dart';
@@ -93,6 +94,12 @@ class Body {
     var regExp = RegExpDecorator(' (?<temp_dew_point>M?\\d{2}\\/(M?\\d{2})?)');
     return TemperatureDewPointGroup(
         regExp.getMatchByName(_body, 'temp_dew_point'));
+  }
+
+  /// The altimeter group of a [Metar] body.
+  Altimeter get altimeter {
+    var regExp = RegExpDecorator('(?<altimeter>A\\d{4})');
+    return Altimeter(regExp.getMatchByName(_body, 'altimeter'));
   }
 
   @override
