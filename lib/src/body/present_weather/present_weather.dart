@@ -18,7 +18,7 @@ class PresentWeather {
   PresentWeather(this._presentWeather) {
     var regExp = RegExpDecorator(r'^(-|\+|VC)?'
         '(MI|PR|BC|DR|BL|SH|TS|FZ)?'
-        '((DZ|RA|SN|SG|IC|PL|GR|GS|UP)|'
+        '((DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|'
         '(PO|SQ|FC|SS|DS)){1}\$');
     regExp.verifySingleMatch(_presentWeather, this.runtimeType.toString());
@@ -46,12 +46,20 @@ class PresentWeather {
         regExp.getMatchByNameOptional(_presentWeather, 'descriptor'));
   }
 
-  /// The precipitation of a weather phenomena.
-  Precipitation get precipitation {
+  /// The precipitations of a weather phenomena.
+  List<Precipitation> get precipitation {
     var regExp =
-        RegExpDecorator('(?<precipitation>(DZ|RA|SN|SG|IC|PL|GR|GS|UP))\$');
-    return Precipitation(
-        regExp.getMatchByNameOptional(_presentWeather, 'precipitation'));
+        RegExpDecorator('(?<precipitation>(DZ|RA|SN|SG|IC|PL|GR|GS|UP))');
+    List<String> phenomenas = _split(_presentWeather);
+    var precipitations = <Precipitation>[];
+    for (var phenomena in phenomenas) {
+      var precipitation = Precipitation(
+          regExp.getMatchByNameOptional(phenomena, 'precipitation'));
+      if (precipitation != Precipitation.none) {
+        precipitations.add(precipitation);
+      }
+    }
+    return precipitations;
   }
 
   /// The obscuration of a weather phenomena.
@@ -70,7 +78,7 @@ class PresentWeather {
 
   @override
   String toString() {
-    return '$intensity$proximity$descriptor$precipitation$obscuration$other';
+    return '$intensity$proximity$descriptor${precipitation.join()}$obscuration$other';
   }
 
   @override
@@ -80,4 +88,13 @@ class PresentWeather {
 
   @override
   int get hashCode => _presentWeather.hashCode;
+
+  static List<String> _split(String input) {
+    int start = input.length % 2;
+    var items = <String>[];
+    for (int i = start; i < input.length; i += 2) {
+      items.add('${input[i]}${input[i + 1]}');
+    }
+    return items;
+  }
 }

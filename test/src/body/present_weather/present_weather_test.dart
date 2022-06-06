@@ -48,7 +48,7 @@ void presentWeatherConstructor() {
   test('Test compliance with format, negative', () {
     var err = 'Expected to find one match of `PresentWeather` format '
         'in `10010G1KT`, but found `0` using `RegExp: pattern=^(-|\\+|VC)?'
-        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP)|'
+        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)){1}\$ flags=`';
     expectFormatException(() => PresentWeather('10010G1KT'), err);
   });
@@ -56,7 +56,7 @@ void presentWeatherConstructor() {
   test('Test compliance with format, negative with multiple', () {
     var err = 'Expected to find one match of `PresentWeather` format in '
         '`RA BR`, but found `0` using `RegExp: pattern=^(-|\\+|VC)?'
-        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP)|'
+        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)){1}\$ flags=`';
     expectFormatException(() => PresentWeather('RA BR'), err);
   });
@@ -102,11 +102,18 @@ void presentWeatherDescriptor() {
 
 void presentWeatherPrecipitation() {
   test('Test no precipitation', () {
-    expect(PresentWeather('+DU').precipitation, Precipitation.none);
+    expect(PresentWeather('+DU').precipitation, <Precipitation>[]);
   });
 
   test('Test presence of precipitation', () {
-    expect(PresentWeather('DZ').precipitation, Precipitation.drizzle);
+    expect(PresentWeather('DZ').precipitation, [Precipitation.drizzle]);
+  });
+
+  test('Test presence of multiple precipitations', () {
+    expect(PresentWeather('-PLRA').precipitation, [
+      Precipitation.icePellets,
+      Precipitation.rain,
+    ]);
   });
 }
 
