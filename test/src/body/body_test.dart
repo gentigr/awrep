@@ -490,6 +490,12 @@ void bodyAltimeter() {
 
     expect(Body(body).altimeter, Altimeter('A3002'));
   });
+
+  test('Test altimeter is not specified', () {
+    final body = 'KJFK 190351Z 18004KT 0SM R04R/2000V3000FT BR 08/08';
+
+    expect(Body(body).altimeter, null);
+  });
 }
 
 void bodyToString() {
@@ -556,6 +562,13 @@ void bodyToString() {
   // WARN: special case not covered by specification, but reported in reality
   test('Test basic string output format, option 11', () {
     final body = 'METAR KJFK 061851Z 10004KT FEW024 BKN033 A3035';
+
+    expect(Body(body).toString(), body);
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test basic string output format, option 12', () {
+    final body = 'KJFK 211439Z 18017KT 10SM FEW018 FEW030CB BKN0 12/09';
 
     expect(Body(body).toString(), body);
   });

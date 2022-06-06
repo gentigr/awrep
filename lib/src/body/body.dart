@@ -107,9 +107,13 @@ class Body {
   }
 
   /// The altimeter group of a [Metar] body.
-  Altimeter get altimeter {
+  Altimeter? get altimeter {
     var regExp = RegExpDecorator('(?<altimeter>A\\d{4})');
-    return Altimeter(regExp.getMatchByName(_body, 'altimeter'));
+    var value = regExp.getMatchByNameOptional(_body, 'altimeter');
+    if (value == null) {
+      return null;
+    }
+    return Altimeter(value);
   }
 
   @override
@@ -118,11 +122,12 @@ class Body {
     String modifierStr = (modifier == Modifier.none ? '' : '$modifier ');
     String visibilityStr = _formatOptional(visibility);
     String temperatureDewPointStr = _formatOptional(temperatureDewPoint);
+    String altimeterStr = _formatOptional(altimeter);
     return '$typeStr$stationId $dateTime $modifierStr$wind $visibilityStr'
         '${_format(runwayVisualRanges)}'
         '${_format(presentWeather)}'
         '${_format(skyCondition)}'
-        '$temperatureDewPointStr$altimeter';
+        '$temperatureDewPointStr$altimeterStr'.trim();
   }
 
   @override
