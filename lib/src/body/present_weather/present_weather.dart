@@ -18,7 +18,8 @@ class PresentWeather {
   PresentWeather(this._presentWeather) {
     var regExp = RegExpDecorator(r'^(-|\+|VC)?'
         '(MI|PR|BC|DR|BL|SH|TS|FZ)?'
-        '((DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
+        '((MI|PR|BC|DR|BL|SH|TS|FZ)|'
+        '(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|'
         '(PO|SQ|FC|SS|DS)){1}\$');
     regExp.verifySingleMatch(_presentWeather, this.runtimeType.toString());

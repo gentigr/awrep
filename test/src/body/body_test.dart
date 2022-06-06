@@ -393,6 +393,13 @@ void bodyPresentWeather() {
     expect(Body(body).presentWeather, groups);
   });
 
+  test('Test single weather group without phenomena', () {
+    final body = 'KJFK 190351Z 18004KT 10SM R04/2000FT VCTS OVC002 08/08 A3002';
+
+    List<PresentWeather> groups = [PresentWeather('VCTS')];
+    expect(Body(body).presentWeather, groups);
+  });
+
   test('Test single weather group collocated', () {
     final body = 'KJFK 012101Z 08003KT 10SM -PLRA FEW030 OVC090 04/M02 A3038';
 

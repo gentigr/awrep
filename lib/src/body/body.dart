@@ -67,7 +67,8 @@ class Body {
   /// The present weather groups of a [Metar] body.
   List<PresentWeather> get presentWeather {
     var regExp = RegExpDecorator(r'(?<present_weather>(-|\+|VC)?'
-        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
+        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((MI|PR|BC|DR|BL|SH|TS|FZ)|'
+        '(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)))');
     var groupMatches = regExp.getMatchesByName(_body, 'present_weather');
     var groups = <PresentWeather>[];

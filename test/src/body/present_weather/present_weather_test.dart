@@ -46,9 +46,10 @@ void main() {
 
 void presentWeatherConstructor() {
   test('Test compliance with format, negative', () {
-    var err = 'Expected to find one match of `PresentWeather` format '
-        'in `10010G1KT`, but found `0` using `RegExp: pattern=^(-|\\+|VC)?'
-        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
+    var err = 'Expected to find one match of `PresentWeather` format in '
+        '`10010G1KT`, but found `0` using `RegExp: '
+        'pattern=^(-|\\+|VC)?(MI|PR|BC|DR|BL|SH|TS|FZ)?'
+        '((MI|PR|BC|DR|BL|SH|TS|FZ)|(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)){1}\$ flags=`';
     expectFormatException(() => PresentWeather('10010G1KT'), err);
   });
@@ -56,8 +57,9 @@ void presentWeatherConstructor() {
   test('Test compliance with format, negative with multiple', () {
     var err = 'Expected to find one match of `PresentWeather` format in '
         '`RA BR`, but found `0` using `RegExp: pattern=^(-|\\+|VC)?'
-        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
-        '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)){1}\$ flags=`';
+        '(MI|PR|BC|DR|BL|SH|TS|FZ)?((MI|PR|BC|DR|BL|SH|TS|FZ)|'
+        '(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|(BR|FG|FU|VA|DU|SA|HZ|PY)|'
+        '(PO|SQ|FC|SS|DS)){1}\$ flags=`';
     expectFormatException(() => PresentWeather('RA BR'), err);
   });
 
@@ -88,6 +90,10 @@ void presentWeatherProximity() {
   test('Test presence of proximity', () {
     expect(PresentWeather('VCFG').proximity, Proximity.vicinity);
   });
+
+  test('Test presence of proximity, descriptor only', () {
+    expect(PresentWeather('VCTS').proximity, Proximity.vicinity);
+  });
 }
 
 void presentWeatherDescriptor() {
@@ -97,6 +103,14 @@ void presentWeatherDescriptor() {
 
   test('Test presence of descriptor', () {
     expect(PresentWeather('TSGR').descriptor, Descriptor.thunderstorm);
+  });
+
+  test('Test presence of descriptor in vicinity only', () {
+    expect(PresentWeather('VCTS').descriptor, Descriptor.thunderstorm);
+  });
+
+  test('Test presence of descriptor only', () {
+    expect(PresentWeather('TS').descriptor, Descriptor.thunderstorm);
   });
 }
 
@@ -156,6 +170,14 @@ void presentWeatherToString() {
 
   test('Test combination 5', () {
     expect(PresentWeather('GS').toString(), 'GS');
+  });
+
+  test('Test combination 6', () {
+    expect(PresentWeather('VCTS').toString(), 'VCTS');
+  });
+
+  test('Test combination 7', () {
+    expect(PresentWeather('TS').toString(), 'TS');
   });
 }
 
