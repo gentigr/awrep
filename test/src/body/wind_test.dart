@@ -65,10 +65,14 @@ void windDirection() {
   });
 
   test('Test upper limit of direction', () {
-    var err = 'Report direction value must be within [0; 359] range, '
-        'provided: `360` from `360010KT`';
+    var err = 'Report direction value must be within [0; 360] range, '
+        'provided: `361` from `361010KT`';
 
-    expectFormatException(() => Wind('360010KT').direction, err);
+    expectFormatException(() => Wind('361010KT').direction, err);
+  });
+
+  test('Test 360 direction is passed', () {
+    expect(Wind('36015KT').direction, 360);
   });
 }
 
@@ -110,11 +114,15 @@ void windDirectionVrbRangeStart() {
   });
 
   test('Test upper limit of vrb direction', () {
-    var err = 'Report vrb_range_start value must be within [0; 359] range, '
+    var err = 'Report vrb_range_start value must be within [0; 360] range, '
         'provided: `400` from `360010KT 400V460`';
 
     expectFormatException(
         () => Wind('360010KT 400V460').directionVrbRangeStart, err);
+  });
+
+  test('Test 360 is successful parse', () {
+    expect(Wind('06015G54KT 360V120').directionVrbRangeStart, 360);
   });
 }
 
@@ -140,11 +148,15 @@ void windDirectionVrbRangeEnd() {
   });
 
   test('Test upper limit of vrb direction', () {
-    var err = 'Report vrb_range_end value must be within [0; 359] range, '
+    var err = 'Report vrb_range_end value must be within [0; 360] range, '
         'provided: `460` from `360010KT 400V460`';
 
     expectFormatException(
         () => Wind('360010KT 400V460').directionVrbRangeEnd, err);
+  });
+
+  test('Test 360 is successful of vrb direction', () {
+    expect(Wind('30015G54KT 240V360').directionVrbRangeEnd, 360);
   });
 }
 

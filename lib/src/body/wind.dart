@@ -25,7 +25,7 @@ class Wind {
       return null;
     }
     int value = int.parse(parsedValue);
-    _checkBoundaries('direction', value, 0, 359);
+    _checkBoundaries('direction', value, 0, 360);
     return value;
   }
 
@@ -59,7 +59,7 @@ class Wind {
     }
 
     int value = int.parse(rangeStart);
-    _checkBoundaries('vrb_range_start', value, 0, 359);
+    _checkBoundaries('vrb_range_start', value, 0, 360);
     return value;
   }
 
@@ -74,7 +74,7 @@ class Wind {
       return null;
     }
     int value = int.parse(rangeEnd);
-    _checkBoundaries('vrb_range_end', value, 0, 359);
+    _checkBoundaries('vrb_range_end', value, 0, 360);
     return value;
   }
 
