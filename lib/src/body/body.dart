@@ -48,9 +48,15 @@ class Body {
   }
 
   /// The visibility of a [Metar] body.
-  Visibility get visibility {
+  ///
+  /// Returns null if there is no visibility reported.
+  Visibility? get visibility {
     var regExp = RegExpDecorator(' (?<visibility>[0-9 \/PM]{1,5}SM) ');
-    return Visibility(regExp.getMatchByName(_body, 'visibility'));
+    var value = regExp.getMatchByNameOptional(_body, 'visibility');
+    if (value == null) {
+      return null;
+    }
+    return Visibility(value);
   }
 
   /// The runway visual ranges of a [Metar] body.
@@ -106,7 +112,11 @@ class Body {
   String toString() {
     String typeStr = (type == Type.none ? '' : '$type ');
     String modifierStr = (modifier == Modifier.none ? '' : '$modifier ');
-    return '$typeStr$stationId $dateTime $modifierStr$wind $visibility '
+    String visibilityStr = visibility?.toString() ?? '';
+    if (visibilityStr.isNotEmpty) {
+      visibilityStr += ' ';
+    }
+    return '$typeStr$stationId $dateTime $modifierStr$wind $visibilityStr'
         '${_format(runwayVisualRanges)}'
         '${_format(presentWeather)}'
         '${_format(skyCondition)}'

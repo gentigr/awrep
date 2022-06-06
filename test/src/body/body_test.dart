@@ -284,14 +284,6 @@ void bodyWind() {
 }
 
 void bodyVisibility() {
-  test('Test no visibility specified', () {
-    final body = '190351Z COR 18004KT R04R/2000V3000FT BR OVC002 08/08 A3002';
-    var err = 'Expected to find one match of `visibility` format in `190351Z '
-        'COR 18004KT R04R/2000V3000FT BR OVC002 08/08 A3002`, but found `0` '
-        'using `RegExp: pattern= (?<visibility>[0-9 /PM]{1,5}SM)  flags=`';
-    expectFormatException(() => Body(body).visibility, err);
-  });
-
   test('Test zero visibility', () {
     final body =
         'KJFK 190351Z CCC 18004KT 0SM R04R/2000V3000FT BR OVC002 08/08 A3002';
@@ -323,6 +315,13 @@ void bodyVisibility() {
     final body = 'METAR KJFK 190351Z AUTO 18004KT M30SM BR OVC002 08/08 A3002';
 
     expect(Body(body).visibility, Visibility('M30SM'));
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test no visibility', () {
+    final body = 'METAR KJFK 190351Z AUTO 18004KT BR OVC002 08/08 A3002';
+
+    expect(Body(body).visibility, null);
   });
 }
 
@@ -536,6 +535,13 @@ void bodyToString() {
 
   test('Test basic string output format, option 8', () {
     final body = 'KJFK 211439Z 18017KT 10SM FEW018 FEW030CB BKN0 12/09 A2968';
+
+    expect(Body(body).toString(), body);
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test basic string output format, option 10', () {
+    final body = 'METAR KJFK 061851Z 10004KT FEW024 BKN033 22/14 A3035';
 
     expect(Body(body).toString(), body);
   });
