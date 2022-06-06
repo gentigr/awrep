@@ -61,7 +61,7 @@ class Body {
 
   /// The runway visual ranges of a [Metar] body.
   List<RunwayVisualRange> get runwayVisualRanges {
-    var regExp = RegExpDecorator('(?<runway_visual_range>R[^ .]*FT)');
+    var regExp = RegExpDecorator('(?<runway_visual_range>(R[^ .]*FT)|(RVRNO))');
     var rangeMatches = regExp.getMatchesByName(_body, 'runway_visual_range');
     var ranges = <RunwayVisualRange>[];
     for (var rangeStr in rangeMatches) {
@@ -124,10 +124,11 @@ class Body {
     String temperatureDewPointStr = _formatOptional(temperatureDewPoint);
     String altimeterStr = _formatOptional(altimeter);
     return '$typeStr$stationId $dateTime $modifierStr$wind $visibilityStr'
-        '${_format(runwayVisualRanges)}'
-        '${_format(presentWeather)}'
-        '${_format(skyCondition)}'
-        '$temperatureDewPointStr$altimeterStr'.trim();
+            '${_format(runwayVisualRanges)}'
+            '${_format(presentWeather)}'
+            '${_format(skyCondition)}'
+            '$temperatureDewPointStr$altimeterStr'
+        .trim();
   }
 
   @override

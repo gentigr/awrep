@@ -16,24 +16,43 @@ class RunwayVisualRange {
   /// digital representation of range.
   /// Throws [FormatException] if the provided value is not by format.
   RunwayVisualRange(this._runwayVisualRange) {
-    var expr = RegExpDecorator('^R\\d{2}[LCR]?\\/[M|P]?\\d{4}(VP?\\d{4})?FT\$');
+    var expr = RegExpDecorator(
+        '^(R\\d{2}[LCR]?\\/[M|P]?\\d{4}(VP?\\d{4})?FT)|(RVRNO)\$');
     expr.verifySingleMatch(_runwayVisualRange, this.runtimeType.toString());
   }
 
   /// The runway for which the visual range group is reported.
-  Runway get runway {
-    var regExp = RegExpDecorator('^R(?<runway>\\d{2}[LCR]?)');
-    return Runway(regExp.getMatchByName(_runwayVisualRange, 'runway'));
+  ///
+  /// Returns null when runway visual range equipment is present, but
+  /// information is not available (RVRNO code)
+  Runway? get runway {
+    var regExp = RegExpDecorator('^R(?<runway>(\\d{2}[LCR]?)|(VRNO))');
+    var value = regExp.getMatchByName(_runwayVisualRange, 'runway');
+    if (value == 'VRNO') {
+      return null;
+    }
+    return Runway(value);
   }
 
   /// The runway visual range descriptor.
-  VisualRange get visualRange {
-    var regExp = RegExpDecorator('(?<range>[M|P]?\\d{4}(VP?\\d{4})?FT)\$');
+  ///
+  /// Returns null when runway visual range equipment is present, but
+  /// information is not available (RVRNO code)
+  VisualRange? get visualRange {
+    var regExp =
+        RegExpDecorator('(?<range>([M|P]?\\d{4}(VP?\\d{4})?FT)|(RVRNO))\$');
+    var value = regExp.getMatchByName(_runwayVisualRange, 'range');
+    if (value == 'RVRNO') {
+      return null;
+    }
     return VisualRange(regExp.getMatchByName(_runwayVisualRange, 'range'));
   }
 
   @override
   String toString() {
+    if (runway == null && visualRange == null) {
+      return 'RVRNO';
+    }
     return 'R$runway/$visualRange';
   }
 

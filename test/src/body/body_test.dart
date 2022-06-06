@@ -365,6 +365,14 @@ void bodyRunwayVisualRanges() {
     expect(Body(body).runwayVisualRanges, ranges);
   });
 
+  test('Test no runway visual range information', () {
+    final body = 'KJFK 190351Z 18004KT 10SM RVRNO BR OVC002 08/08 A3002';
+
+    RunwayVisualRange range = RunwayVisualRange('RVRNO');
+    List<RunwayVisualRange> ranges = [range];
+    expect(Body(body).runwayVisualRanges, ranges);
+  });
+
   test('Test multiple runway visual ranges', () {
     final body = 'KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT '
         'R17C/M0100FT BR OVC002 08/08 A3002';
@@ -569,6 +577,13 @@ void bodyToString() {
   // WARN: special case not covered by specification, but reported in reality
   test('Test basic string output format, option 12', () {
     final body = 'KJFK 211439Z 18017KT 10SM FEW018 FEW030CB BKN0 12/09';
+
+    expect(Body(body).toString(), body);
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test basic string output format, option 13', () {
+    final body = 'METAR KJFK 270451Z 33009KT RVRNO';
 
     expect(Body(body).toString(), body);
   });

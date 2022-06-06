@@ -32,14 +32,16 @@ void runwayVisualRangeConstructor() {
   test('Test compliance with format, negative (no visual range)', () {
     var err = 'Expected to find one match of `RunwayVisualRange` format in '
         '`R01/`, but found `0` using `RegExp: '
-        'pattern=^R\\d{2}[LCR]?\\/[M|P]?\\d{4}(VP?\\d{4})?FT\$ flags=`';
+        'pattern=^(R\\d{2}[LCR]?\\/[M|P]?\\d{4}(VP?\\d{4})?FT)|(RVRNO)\$ '
+        'flags=`';
     expectFormatException(() => RunwayVisualRange('R01/'), err);
   });
 
   test('Test compliance with format, negative (no runway)', () {
     var err = 'Expected to find one match of `RunwayVisualRange` format in '
         '`1000FT`, but found `0` using `RegExp: '
-        'pattern=^R\\d{2}[LCR]?\\/[M|P]?\\d{4}(VP?\\d{4})?FT\$ flags=`';
+        'pattern=^(R\\d{2}[LCR]?\\/[M|P]?\\d{4}(VP?\\d{4})?FT)|(RVRNO)\$ '
+        'flags=`';
     expectFormatException(() => RunwayVisualRange('1000FT'), err);
   });
 
@@ -68,6 +70,10 @@ void runwayVisualRangeRunway() {
   test('Test with approach, varying range', () {
     expect(RunwayVisualRange('R10L/0100V0200FT').runway, Runway('10L'));
   });
+
+  test('Test RVRNO', () {
+    expect(RunwayVisualRange('RVRNO').runway, null);
+  });
 }
 
 void runwayVisualRangeVisualRange() {
@@ -94,6 +100,10 @@ void runwayVisualRangeVisualRange() {
     expect(RunwayVisualRange('R01/2000VP3000FT').visualRange,
         VisualRange('2000VP3000FT'));
   });
+
+  test('Test RVRNO', () {
+    expect(RunwayVisualRange('RVRNO').visualRange, null);
+  });
 }
 
 void runwayVisualRangeToString() {
@@ -108,6 +118,10 @@ void runwayVisualRangeToString() {
   test('Test varying with with approach, qualifier, leading zeros', () {
     expect(
         RunwayVisualRange('R01L/0100VP0500FT').toString(), 'R01L/0100VP0500FT');
+  });
+
+  test('Test RVRNO', () {
+    expect(RunwayVisualRange('RVRNO').toString(), 'RVRNO');
   });
 }
 
