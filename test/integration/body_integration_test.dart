@@ -28,7 +28,7 @@ void createTest(int number, String metar) {
     String bodyProcessed = Metar(metar).body.toString();
 
     expect(bodyRaw, bodyProcessed);
-  }, skip: 'TODO: fix all parsing issues found');
+  });
 }
 
 void createTestGroup(File file) {
