@@ -475,6 +475,13 @@ void bodyTemperatureDewPoint() {
 
     expect(Body(body).temperatureDewPoint, TemperatureDewPoint('08/'));
   });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test no temperature dew point group', () {
+    final body = 'METAR KJFK 190351Z AUTO 18004KT 30SM BR OVC002 A3002';
+
+    expect(Body(body).temperatureDewPoint, null);
+  });
 }
 
 void bodyAltimeter() {
@@ -542,6 +549,13 @@ void bodyToString() {
   // WARN: special case not covered by specification, but reported in reality
   test('Test basic string output format, option 10', () {
     final body = 'METAR KJFK 061851Z 10004KT FEW024 BKN033 22/14 A3035';
+
+    expect(Body(body).toString(), body);
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test basic string output format, option 11', () {
+    final body = 'METAR KJFK 061851Z 10004KT FEW024 BKN033 A3035';
 
     expect(Body(body).toString(), body);
   });

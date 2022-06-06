@@ -97,9 +97,13 @@ class Body {
   }
 
   /// The temperature/dew point group of a [Metar] body.
-  TemperatureDewPoint get temperatureDewPoint {
+  TemperatureDewPoint? get temperatureDewPoint {
     var regExp = RegExpDecorator(' (?<temp_dew_point>M?\\d{2}\\/(M?\\d{2})?)');
-    return TemperatureDewPoint(regExp.getMatchByName(_body, 'temp_dew_point'));
+    var value = regExp.getMatchByNameOptional(_body, 'temp_dew_point');
+    if (value == null) {
+      return null;
+    }
+    return TemperatureDewPoint(value);
   }
 
   /// The altimeter group of a [Metar] body.
@@ -112,15 +116,13 @@ class Body {
   String toString() {
     String typeStr = (type == Type.none ? '' : '$type ');
     String modifierStr = (modifier == Modifier.none ? '' : '$modifier ');
-    String visibilityStr = visibility?.toString() ?? '';
-    if (visibilityStr.isNotEmpty) {
-      visibilityStr += ' ';
-    }
+    String visibilityStr = _formatOptional(visibility);
+    String temperatureDewPointStr = _formatOptional(temperatureDewPoint);
     return '$typeStr$stationId $dateTime $modifierStr$wind $visibilityStr'
         '${_format(runwayVisualRanges)}'
         '${_format(presentWeather)}'
         '${_format(skyCondition)}'
-        '$temperatureDewPoint $altimeter';
+        '$temperatureDewPointStr$altimeter';
   }
 
   @override
@@ -135,6 +137,14 @@ class Body {
     String str = '';
     for (var item in list) {
       str += '$item ';
+    }
+    return str;
+  }
+
+  String _formatOptional<T>(T? object) {
+    String str = object?.toString() ?? '';
+    if (str.isNotEmpty) {
+      str += ' ';
     }
     return str;
   }
