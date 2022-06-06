@@ -112,6 +112,21 @@ void skyConditionToString() {
   test('Test combination 4', () {
     expect(SkyCondition('VV010CB').toString(), 'VV010CB');
   });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test combination 5', () {
+    expect(SkyCondition('BKN0').toString(), 'BKN0');
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test combination 6', () {
+    expect(SkyCondition('FEW000').toString(), 'FEW000');
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test combination 7', () {
+    expect(SkyCondition('VV0').toString(), 'VV0');
+  });
 }
 
 void skyConditionEqualityOperator() {

@@ -427,6 +427,17 @@ void bodySkyCondition() {
     expect(Body(body).skyCondition, groups);
   });
 
+  test('Test multiple sky condition groups with zero height', () {
+    final body = 'KJFK 211439Z 18017KT 10SM FEW018 FEW030CB BKN 12/09 A2968';
+
+    List<SkyCondition> groups = [
+      SkyCondition('FEW018'),
+      SkyCondition('FEW030CB'),
+      SkyCondition('BKN'),
+    ];
+    expect(Body(body).skyCondition, groups);
+  });
+
   test('Test multiple sky condition groups', () {
     final body = 'KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT '
         'R17C/M0100FT -RA VCIC +BLSS OVC200 SCT010TCU FEW001 08/08 A3002';
@@ -512,6 +523,12 @@ void bodyToString() {
   test('Test basic string output format, option 7', () {
     final body = 'KJFK 190351Z 18004KT 1 1/4SM R04/M2000VP3000FT R10/0200FT '
         'R17C/M0100FT BR OVC002 08/08 A3002';
+
+    expect(Body(body).toString(), body);
+  });
+
+  test('Test basic string output format, option 8', () {
+    final body = 'KJFK 211439Z 18017KT 10SM FEW018 FEW030CB BKN0 12/09 A2968';
 
     expect(Body(body).toString(), body);
   });

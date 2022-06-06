@@ -12,6 +12,7 @@ class SkyCondition {
   /// NsNsNs is the amount of sky cover,
   /// HsHsHs is the height of the layer,
   /// VV is the vertical visibility.
+  /// WARN: special case NsNsNsHs is covered here, but not with specification.
   /// Throws [FormatException] if the provided value is not comply with format.
   SkyCondition(this._skyCondition) {
     var regExp =
@@ -27,7 +28,7 @@ class SkyCondition {
 
   /// The height of sky cover of a sky condition group.
   int? get height {
-    var regExp = RegExpDecorator('(?<height>\\d{3})');
+    var regExp = RegExpDecorator('(?<height>\\d{1,3})');
     var value = regExp.getMatchByNameOptional(_skyCondition, 'height');
     if (value == null) {
       return null;
@@ -46,7 +47,7 @@ class SkyCondition {
   String toString() {
     String heightStr = '';
     if (height != null) {
-      heightStr = (height! ~/ 100).toString().padLeft(3, '0');
+      heightStr = (height! ~/ 100).toString().padLeft(_heightGroupWidth, '0');
     }
     return '$skyCover$heightStr$verticalAirFlowActivity';
   }
@@ -58,4 +59,20 @@ class SkyCondition {
 
   @override
   int get hashCode => _skyCondition.hashCode;
+
+  /// The width of height group of sky condition group.
+  ///
+  /// METAR can be reported with one digit which determines height, such as 0,
+  /// however in other scenario it is reported with 000, so the possible cases
+  /// are FEW0 and FEW000, in order to reproduce the same METAR that it used to
+  /// be during the creation (primarily to verify that everything is parsed
+  /// properly in integration test) it is necessary to handle both cases and
+  /// reproduce METAR record accordingly.
+  /// WARN: this is special case not covered by specification, the proper format
+  /// is considered to be NsNsNsHsHsHs
+  int get _heightGroupWidth {
+    return _skyCondition.length -
+        skyCover.toString().length -
+        verticalAirFlowActivity.toString().length;
+  }
 }

@@ -80,7 +80,7 @@ class Body {
   /// The sky condition groups of a [Metar] body.
   List<SkyCondition> get skyCondition {
     var regExp = RegExpDecorator(
-        '(?<sky_condition>(VV|SKC|CLR|FEW|SCT|BKN|OVC)(\\d{3}(CB|TCU)?)?)');
+        '(?<sky_condition>(VV|SKC|CLR|FEW|SCT|BKN|OVC)(\\d{1,3}(CB|TCU)?)?)');
     var groupMatches = regExp.getMatchesByName(_body, 'sky_condition');
     var groups = <SkyCondition>[];
     for (var groupStr in groupMatches) {
