@@ -24,7 +24,7 @@ String decode(String path) {
 
 void createTest(int number, String metar) {
   test('Test ${number.toString().padLeft(5, '0')}: `$metar`', () {
-    String bodyRaw = metar.split(' RMK ')[0];
+    String bodyRaw = metar.split(' RMK')[0];
     String bodyProcessed = Metar(metar).body.toString();
 
     expect(bodyRaw, bodyProcessed);
