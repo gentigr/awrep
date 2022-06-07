@@ -27,7 +27,7 @@ void createTest(int number, String metar) {
     String bodyRaw = metar.split(' RMK')[0];
     String bodyProcessed = Metar(metar).body.toString();
 
-    expect(bodyRaw, bodyProcessed);
+    expect(bodyRaw, bodyProcessed, reason: '`$metar`');
   });
 }
 
