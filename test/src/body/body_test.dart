@@ -193,13 +193,8 @@ void bodyModifier() {
 
 void bodyWind() {
   test('Test no wind specified', () {
-    final body = 'KJFK 101010Z 1/4SM BR OVC002 08/08 A3002';
-    var err = 'Expected to find one match of `wind` format in '
-        '`KJFK 101010Z 1/4SM BR OVC002 08/08 A3002`, but found `0` using '
-        '`RegExp: pattern=(?<wind>(\\d{3}|VRB)\\d{2,3}(G\\d{2,3})?KT'
-        '( \\d{3}V\\d{3})?) flags=`';
-
-    expectFormatException(() => Body(body).wind, err);
+    final body = 'SPECI KATL 221447Z KT 10SM SCT012 SCT026 26/23 A2999';
+    expect(Body(body).wind, null);
   });
 
   test('Test more than one wind specified', () {
@@ -591,6 +586,13 @@ void bodyToString() {
   // WARN: special case not covered by specification, but reported in reality
   test('Test basic string output format, option 13', () {
     final body = 'METAR KJFK 270451Z 33009KT RVRNO';
+
+    expect(Body(body).toString(), body);
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test basic string output format, option 14', () {
+    final body = 'SPECI KATL 221447Z 10SM SCT012 SCT026 26/23 A2999';
 
     expect(Body(body).toString(), body);
   });

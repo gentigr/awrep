@@ -41,10 +41,13 @@ class Body {
   }
 
   /// The wind section of a [Metar] body.
-  Wind get wind {
+  ///
+  /// Returns null if there is no wind reported.
+  Wind? get wind {
     var regExp = RegExpDecorator('(?<wind>(\\d{3}|VRB)\\d{2,3}'
         '(G\\d{2,3})?KT( \\d{3}V\\d{3})?)');
-    return Wind(regExp.getMatchByName(_body, 'wind'));
+    var value = regExp.getMatchByNameOptional(_body, 'wind');
+    return value == null ? null : Wind(value);
   }
 
   /// The visibility of a [Metar] body.
@@ -120,10 +123,11 @@ class Body {
   String toString() {
     String typeStr = (type == Type.none ? '' : '$type ');
     String modifierStr = (modifier == Modifier.none ? '' : '$modifier ');
+    String windStr = _formatOptional(wind);
     String visibilityStr = _formatOptional(visibility);
     String temperatureDewPointStr = _formatOptional(temperatureDewPoint);
     String altimeterStr = _formatOptional(altimeter);
-    return '$typeStr$stationId $dateTime $modifierStr$wind $visibilityStr'
+    return '$typeStr$stationId $dateTime $modifierStr$windStr$visibilityStr'
             '${_format(runwayVisualRanges)}'
             '${_format(presentWeather)}'
             '${_format(skyCondition)}'
