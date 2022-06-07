@@ -119,6 +119,13 @@ class Body {
     return Altimeter(value);
   }
 
+  /// The true value if end of message sign is present in a [Metar] body.
+  bool get endOfMessage {
+    var regExp = RegExpDecorator('(?<end_of_message>=)\$');
+    var value = regExp.getMatchByNameOptional(_body, 'end_of_message');
+    return value != null;
+  }
+
   @override
   String toString() {
     String typeStr = (type == Type.none ? '' : '$type ');
@@ -128,11 +135,12 @@ class Body {
     String temperatureDewPointStr = _formatOptional(temperatureDewPoint);
     String altimeterStr = _formatOptional(altimeter);
     return '$typeStr$stationId $dateTime $modifierStr$windStr$visibilityStr'
-            '${_format(runwayVisualRanges)}'
-            '${_format(presentWeather)}'
-            '${_format(skyCondition)}'
-            '$temperatureDewPointStr$altimeterStr'
-        .trim();
+                '${_format(runwayVisualRanges)}'
+                '${_format(presentWeather)}'
+                '${_format(skyCondition)}'
+                '$temperatureDewPointStr$altimeterStr'
+            .trim() +
+        '${endOfMessage ? '=' : ''}';
   }
 
   @override

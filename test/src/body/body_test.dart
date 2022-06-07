@@ -48,6 +48,9 @@ void main() {
     group('altimeter', () {
       bodyAltimeter();
     });
+    group('endOfMessage', () {
+      bodyEndOfMessage();
+    });
     group('toString', () {
       bodyToString();
     });
@@ -508,6 +511,20 @@ void bodyAltimeter() {
   });
 }
 
+void bodyEndOfMessage() {
+  test('Test end of message parsed as expected', () {
+    final body = 'KJFK 190351Z 18004KT 0SM R04R/2000V3000FT BR 08/08 A3002=';
+
+    expect(Body(body).endOfMessage, true);
+  });
+
+  test('Test end of message is not specified', () {
+    final body = 'KJFK 190351Z 18004KT 0SM R04R/2000V3000FT BR 08/08';
+
+    expect(Body(body).endOfMessage, false);
+  });
+}
+
 void bodyToString() {
   test('Test basic string output format, option 1', () {
     final body = 'SPECI KJFK 190351Z AUTO 18004KT 1/4SM R04R/2000V3000FT '
@@ -593,6 +610,13 @@ void bodyToString() {
   // WARN: special case not covered by specification, but reported in reality
   test('Test basic string output format, option 14', () {
     final body = 'SPECI KATL 221447Z 10SM SCT012 SCT026 26/23 A2999';
+
+    expect(Body(body).toString(), body);
+  });
+
+  // WARN: special case not covered by specification, but reported in reality
+  test('Test basic string output format, option 15', () {
+    final body = 'METAR KGTF 190301Z 33010G14KT 10SM CLR 07/00 A3005=';
 
     expect(Body(body).toString(), body);
   });
