@@ -414,6 +414,13 @@ void bodyPresentWeather() {
     expect(Body(body).presentWeather, groups);
   });
 
+  test('Test single weather group trio', () {
+    final body = 'KATL 062213Z 06012KT 8SM -RASNPL FEW014 OVC065 04/02 A3002';
+
+    List<PresentWeather> groups = [PresentWeather('-RASNPL')];
+    expect(Body(body).presentWeather, groups);
+  });
+
   test('Test multiple weather groups', () {
     final body = 'KJFK 190351Z 18004KT 10SM R04/M2000VP3000FT R10/0200FT '
         'R17C/M0100FT -RA VCIC +BLSS OVC002 08/08 A3002';

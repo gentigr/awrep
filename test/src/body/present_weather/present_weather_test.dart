@@ -49,7 +49,7 @@ void presentWeatherConstructor() {
     var err = 'Expected to find one match of `PresentWeather` format in '
         '`10010G1KT`, but found `0` using `RegExp: '
         'pattern=^(-|\\+|VC)?(MI|PR|BC|DR|BL|SH|TS|FZ)?'
-        '((MI|PR|BC|DR|BL|SH|TS|FZ)|(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
+        '((MI|PR|BC|DR|BL|SH|TS|FZ)|(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,3}|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)){1}\$ flags=`';
     expectFormatException(() => PresentWeather('10010G1KT'), err);
   });
@@ -58,7 +58,7 @@ void presentWeatherConstructor() {
     var err = 'Expected to find one match of `PresentWeather` format in '
         '`RA BR`, but found `0` using `RegExp: pattern=^(-|\\+|VC)?'
         '(MI|PR|BC|DR|BL|SH|TS|FZ)?((MI|PR|BC|DR|BL|SH|TS|FZ)|'
-        '(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|(BR|FG|FU|VA|DU|SA|HZ|PY)|'
+        '(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,3}|(BR|FG|FU|VA|DU|SA|HZ|PY)|'
         '(PO|SQ|FC|SS|DS)){1}\$ flags=`';
     expectFormatException(() => PresentWeather('RA BR'), err);
   });
@@ -127,6 +127,14 @@ void presentWeatherPrecipitation() {
     expect(PresentWeather('-PLRA').precipitation, [
       Precipitation.icePellets,
       Precipitation.rain,
+    ]);
+  });
+
+  test('Test presence of three precipitations', () {
+    expect(PresentWeather('-RASNPL').precipitation, [
+      Precipitation.rain,
+      Precipitation.snow,
+      Precipitation.icePellets,
     ]);
   });
 }

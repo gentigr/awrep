@@ -74,7 +74,7 @@ class Body {
   List<PresentWeather> get presentWeather {
     var regExp = RegExpDecorator(r'(?<present_weather>(-|\+|VC)?'
         '(MI|PR|BC|DR|BL|SH|TS|FZ)?((MI|PR|BC|DR|BL|SH|TS|FZ)|'
-        '(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,2}|'
+        '(DZ|RA|SN|SG|IC|PL|GR|GS|UP){1,3}|'
         '(BR|FG|FU|VA|DU|SA|HZ|PY)|(PO|SQ|FC|SS|DS)))');
     var groupMatches = regExp.getMatchesByName(_body, 'present_weather');
     var groups = <PresentWeather>[];
